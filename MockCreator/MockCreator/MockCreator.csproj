@@ -65,7 +65,9 @@
     <Compile Include="DefaultValueHelper.cs" />
     <Compile Include="InvokeMethodHelper.cs" />
     <Compile Include="SubstituteExtensions.cs" />
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="TestComplexTypes.cs" />
+    <Compile Include="TestEnumeration.cs" />
+    <Compile Include="TestPrimitveTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Choose>
