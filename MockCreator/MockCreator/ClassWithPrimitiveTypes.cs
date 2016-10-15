@@ -53,6 +53,5 @@ namespace MockCreator
         public decimal DecimalValue { get; }
         public string StringValue { get; }
         public DateTime DateTimeValue { get; }
-
     }
 }

@@ -1,13 +1,11 @@
-﻿using System.Globalization;
-
-namespace MockCreator
+﻿namespace MockCreator
 {
     public class Container
     {
         public Container(ClassWithInterfaces classWithInterfaces,
-             ClassWithPrimitiveTypes classWithPrimitiveTypes,
-             ClassAbstract classAbstract
-             )
+            ClassWithPrimitiveTypes classWithPrimitiveTypes,
+            ClassAbstract classAbstract
+        )
         {
             ClassWithInterfaces = classWithInterfaces;
             ClassWithPrimitiveTypes = classWithPrimitiveTypes;

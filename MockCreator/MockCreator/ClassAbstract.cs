@@ -4,7 +4,8 @@ namespace MockCreator
 {
     public abstract class ClassAbstract
     {
-        protected ClassAbstract(ICloneable cloneable, bool boolValue, object objectValue, DateTime dateTime, string stringValue)
+        protected ClassAbstract(ICloneable cloneable, bool boolValue, object objectValue, DateTime dateTime,
+            string stringValue)
         {
             Cloneable = cloneable;
             BoolValue = boolValue;
