@@ -24,13 +24,9 @@ namespace MockCreator
             {typeof(DateTime), new DateTime(2016, 10, 15)}
         };
 
-        public static object GetDefaultValue(Type type)
+        public static object GetDefaultValue(this Type type)
         {
-            if (DefaultValues.ContainsKey(type))
-            {
-                return DefaultValues[type];
-            }
-            return null;
+            return DefaultValues.ContainsKey(type) ? DefaultValues[type] : null;
         }
     }
 }

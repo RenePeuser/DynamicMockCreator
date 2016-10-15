@@ -11,16 +11,15 @@ namespace MockCreator
         public static object For<T>()
         {
             var type = typeof(T);
-            var defaultValue = DefaultValueHelper.GetDefaultValue(type);
-
-            if (defaultValue != null)
-            {
-                return defaultValue;
-            }
-
             if (type.IsInterface)
             {
                 return CreateFromInterface(type);
+            }
+
+            var defaultValue = type.GetDefaultValue();
+            if (defaultValue != null)
+            {
+                return defaultValue;
             }
 
             if (type.IsAbstract)
