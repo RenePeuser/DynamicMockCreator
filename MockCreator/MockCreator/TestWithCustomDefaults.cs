@@ -7,30 +7,30 @@ namespace MockCreator
     [TestClass]
     public class TestWithCustomDefaults
     {
-        private static DefaultData _defaultData;
-
         private const sbyte ExpectedSByte = 1;
         private const byte ExpectedByte = 2;
         private const short ExpectedShort = 3;
         private const ushort ExpectedUShort = 4;
         private const int ExpectedInt = 5;
         private const uint ExpectedUInt = 6;
-        private const long ExpectedLong = (long)1.1;
-        private const ulong ExpectedULong = (ulong)1.2;
+        private const long ExpectedLong = (long) 1.1;
+        private const ulong ExpectedULong = (ulong) 1.2;
         private const char ExpectedChar = '?';
-        private const float ExpectedFloat = (float)1.3;
+        private const float ExpectedFloat = (float) 1.3;
         private const double ExpectedDouble = 1.4;
         private const bool ExpectedBool = true;
         private const string ExpectedString = "15102016";
-        private static readonly decimal ExpectedDecimal = new decimal(1.5);        
+        private static DefaultData _defaultData;
+        private static readonly decimal ExpectedDecimal = new decimal(1.5);
         private static readonly DateTime ExpectedDateTime = new DateTime(2016, 10, 15);
-        private static readonly List<string> ExpectedList = new List<string> { "A", "B", "C" };
+        private static readonly List<string> ExpectedList = new List<string> {"A", "B", "C"};
 
         [ClassInitialize]
         public static void Init(TestContext testContext)
         {
             _defaultData = new DefaultData(ExpectedSByte, ExpectedByte, ExpectedShort, ExpectedUShort, ExpectedInt,
-                ExpectedUInt, ExpectedLong, ExpectedULong, ExpectedChar, ExpectedFloat, ExpectedDouble, ExpectedBool, ExpectedDecimal,
+                ExpectedUInt, ExpectedLong, ExpectedULong, ExpectedChar, ExpectedFloat, ExpectedDouble, ExpectedBool,
+                ExpectedDecimal,
                 ExpectedString, ExpectedDateTime, ExpectedList);
         }
 
@@ -129,6 +129,5 @@ namespace MockCreator
         {
             Assert.AreEqual(ExpectedList, SubstituteExtensions.For<List<string>>(_defaultData));
         }
-
     }
 }

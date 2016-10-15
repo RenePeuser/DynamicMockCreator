@@ -14,6 +14,12 @@ namespace MockCreator
             return ctor;
         }
 
+        public static T InvokeGenericMethod<T>(this Type classType, string methodName, Type[] argumentTypes,
+            object[] agruments)
+        {
+            return (T) InvokeGenericMethod(classType, methodName, argumentTypes, agruments);
+        }
+
         public static object InvokeGenericMethod(this Type classType, string methodName, Type[] argumentTypes,
             object[] agruments)
         {

@@ -13,7 +13,7 @@ namespace MockCreator
             var defaultValue = type.GetDefaultValue(defaultData);
             if (defaultValue != null)
             {
-                return (T)defaultValue;
+                return (T) defaultValue;
             }
 
             if (type.IsInterface)
@@ -31,20 +31,20 @@ namespace MockCreator
 
         private static object For(this Type type, params object[] args)
         {
-            return typeof(SubstituteExtensions).InvokeGenericMethod(nameof(SubstituteExtensions.For), new[] { type }, args);
+            return typeof(SubstituteExtensions).InvokeGenericMethod(nameof(SubstituteExtensions.For), new[] {type}, args);
         }
 
         private static T CreateFromAbstractClass<T>(this Type type, DefaultData defaultData)
         {
             var args = type.CreateCtorArguments(defaultData);
-            return (T)typeof(Substitute).InvokeGenericMethod(nameof(Substitute.ForPartsOf), new[] { type },
-                new object[] { args });
+            return typeof(Substitute).InvokeGenericMethod<T>(nameof(Substitute.ForPartsOf), new[] {type},
+                new object[] {args});
         }
 
         private static T CreateDynamicFrom<T>(this Type type, DefaultData defaultData)
         {
             var args = type.CreateCtorArguments(defaultData);
-            return (T)Activator.CreateInstance(type, args);
+            return (T) Activator.CreateInstance(type, args);
         }
 
         private static object[] CreateCtorArguments(this Type type, DefaultData defaultData)
@@ -62,8 +62,8 @@ namespace MockCreator
 
         private static T CreateFromInterface<T>(this Type argumentType)
         {
-            return (T)typeof(Substitute).InvokeGenericMethod(nameof(Substitute.For), new[] { argumentType },
-                new object[] { new object[] { } });
+            return typeof(Substitute).InvokeGenericMethod<T>(nameof(Substitute.For), new[] {argumentType},
+                new object[] {new object[] {}});
         }
     }
 }
