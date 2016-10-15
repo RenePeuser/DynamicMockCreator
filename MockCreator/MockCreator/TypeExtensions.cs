@@ -15,13 +15,13 @@ namespace MockCreator
         }
 
         public static T InvokeGenericMethod<T>(this Type classType, string methodName, Type[] argumentTypes,
-            object[] agruments)
+            params object[] agruments)
         {
-            return (T) InvokeGenericMethod(classType, methodName, argumentTypes, agruments);
+            return (T)InvokeGenericMethod(classType, methodName, argumentTypes, agruments);
         }
 
         public static object InvokeGenericMethod(this Type classType, string methodName, Type[] argumentTypes,
-            object[] agruments)
+            params object[] agruments)
         {
             var expectedMethod = classType.GetMethods().First(m => m.Name == methodName);
             var genericMethod = expectedMethod.MakeGenericMethod(argumentTypes);
