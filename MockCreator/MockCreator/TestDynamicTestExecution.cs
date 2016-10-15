@@ -45,10 +45,8 @@ namespace MockCreator
         public void TestFor()
         {
             var errors = Analyze(_dictionary);
-            var stringBuilder = new StringBuilder();
-            errors.ForEach(e => stringBuilder.AppendLine(e));
 
-            Assert.IsFalse(errors.Any(), stringBuilder.ToString());
+            Assert.IsFalse(errors.Any(), ToErrorString(errors));
         }
 
         private static IEnumerable<string> Analyze(Dictionary<Type, object> dictionary)
@@ -63,6 +61,13 @@ namespace MockCreator
                     yield return $"Expected type:{keyValuePair.Key} has not expected {result}";
                 }
             }
+        }
+
+        private static string ToErrorString(IEnumerable<string> errors)
+        {
+            var stringBuilder = new StringBuilder();
+            errors.ForEach(e => stringBuilder.AppendLine(e));
+            return stringBuilder.ToString();
         }
     }
 }
