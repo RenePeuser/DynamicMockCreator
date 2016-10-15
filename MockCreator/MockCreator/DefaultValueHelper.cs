@@ -1,32 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace MockCreator
 {
     public static class DefaultValueHelper
     {
-        private static readonly Dictionary<Type, object> DefaultValues = new Dictionary<Type, object>
-        {
-            {typeof(sbyte), (sbyte) 42},
-            {typeof(byte), (byte) 43},
-            {typeof(short), (short) 44},
-            {typeof(ushort), (ushort) 45},
-            {typeof(int), 46},
-            {typeof(uint), (uint) 47},
-            {typeof(long), (long) 48.1},
-            {typeof(ulong), (ulong) 49.2},
-            {typeof(char), 'c'},
-            {typeof(float), (float) 50.3},
-            {typeof(double), 51.4},
-            {typeof(bool), true},
-            {typeof(decimal), new decimal(52.5)},
-            {typeof(string), "MyString"},
-            {typeof(DateTime), new DateTime(2016, 10, 15)}
-        };
+        private static readonly DefaultData DefaultData = new DefaultData(
+            (sbyte)1,
+            (byte)1,
+            (short)1,
+            (ushort)1,
+            (int)1,
+            (uint)1,
+            (long)1.1,
+            (ulong)1.2,
+            (char)'c',
+            (float)1.3,
+            (double)1.4,
+            (bool)true,
+            new decimal(1.5),
+            "MyString",
+            new DateTime(2016, 10, 15));
 
-        public static object GetDefaultValue(this Type type)
+        public static object GetDefaultValue(this Type type, DefaultData customDefaultData)
         {
-            return DefaultValues.ContainsKey(type) ? DefaultValues[type] : null;
+            var defaultValue = DefaultData.GetDefaultValue(type);
+            if (customDefaultData == null)
+            {
+                return defaultValue;
+            }
+
+            var customValue = customDefaultData.GetDefaultValue(type);
+            return customValue ?? defaultValue;
         }
     }
 }

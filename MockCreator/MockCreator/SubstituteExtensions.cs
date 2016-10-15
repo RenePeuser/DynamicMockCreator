@@ -7,63 +7,63 @@ namespace MockCreator
 {
     public static class SubstituteExtensions
     {
-        public static object For<T>()
+        public static T For<T>(DefaultData defaultData = null)
         {
             var type = typeof(T);
-            var defaultValue = type.GetDefaultValue();
+            var defaultValue = type.GetDefaultValue(defaultData);
             if (defaultValue != null)
             {
-                return defaultValue;
+                return (T)defaultValue;
             }
 
             if (type.IsInterface)
             {
-                return CreateFromInterface(type);
+                return CreateFromInterface<T>(type);
             }
 
             if (type.IsAbstract)
             {
-                return CreateFromAbstractClass(type);
+                return CreateFromAbstractClass<T>(type, defaultData);
             }
 
-            return CreateDynamicFrom(type);
+            return CreateDynamicFrom<T>(type, defaultData);
         }
 
         private static object For(this Type type, params object[] args)
         {
-            return typeof(SubstituteExtensions).InvokeGenericMethod(nameof(Substitute.For), new[] {type}, args);
+            return typeof(SubstituteExtensions).InvokeGenericMethod(nameof(SubstituteExtensions.For), new[] { type }, args);
         }
 
-        private static object CreateFromAbstractClass(this Type type)
+        private static T CreateFromAbstractClass<T>(this Type type, DefaultData defaultData)
         {
-            var args = type.CreateCtorArguments();
-            return typeof(Substitute).InvokeGenericMethod(nameof(Substitute.ForPartsOf), new[] {type},
-                new object[] {args});
+            var args = type.CreateCtorArguments(defaultData);
+            return (T)typeof(Substitute).InvokeGenericMethod(nameof(Substitute.ForPartsOf), new[] { type },
+                new object[] { args });
         }
 
-        private static object CreateDynamicFrom(this Type type)
+        private static T CreateDynamicFrom<T>(this Type type, DefaultData defaultData)
         {
-            var args = type.CreateCtorArguments();
-            return Activator.CreateInstance(type, args);
+            var args = type.CreateCtorArguments(defaultData);
+            return (T)Activator.CreateInstance(type, args);
         }
 
-        private static object[] CreateCtorArguments(this Type type)
+        private static object[] CreateCtorArguments(this Type type, DefaultData defaultData)
         {
             var ctor = type.GetConstructor();
-            return ctor.CreateArguments();
+            return ctor.CreateArguments(defaultData);
         }
 
-        private static object[] CreateArguments(this ConstructorInfo constructorInfo)
+        private static object[] CreateArguments(this ConstructorInfo constructorInfo, DefaultData defaultData)
         {
             var parameterInfos = constructorInfo.GetParameters();
-            var arguments = parameterInfos.Select(item => For(item.ParameterType));
+            var arguments = parameterInfos.Select(item => For(item.ParameterType, defaultData));
             return arguments.ToArray();
         }
 
-        private static object CreateFromInterface(this Type argumentType)
+        private static T CreateFromInterface<T>(this Type argumentType)
         {
-            return typeof(Substitute).InvokeGenericMethod(nameof(Substitute.For), new[] {argumentType},
-                new object[] {new object[] {}});
+            return (T)typeof(Substitute).InvokeGenericMethod(nameof(Substitute.For), new[] { argumentType },
+                new object[] { new object[] { } });
         }
     }
 }
