@@ -60,5 +60,21 @@ namespace MockCreator.Test
         {
             Assert.IsNotNull(_mock.PrimitivePropertyInterface);
         }
+
+        [TestMethod]
+        public void TestDeepSetup()
+        {
+            var properties = typeof(IPrimitivePropertyInterface).GetProperties();
+            var expectedMock = _mock.PrimitivePropertyInterface;
+            var typeOfMock = expectedMock.GetType();
+
+            foreach (var propertyInfo in properties)
+            {
+                var propertyInfoPropertyType = propertyInfo.PropertyType;
+                var expectedValue = _dictionary[propertyInfoPropertyType];
+                var currentValue = typeOfMock.GetProperty(propertyInfo.Name).GetValue(expectedMock);
+                Assert.AreEqual(expectedValue, currentValue);
+            }
+        }
     }
 }
