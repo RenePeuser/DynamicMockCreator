@@ -63,7 +63,7 @@
     <Compile Include="DataClasses\ClassWithInterfaces.cs" />
     <Compile Include="DataClasses\ClassWithPrimitiveTypes.cs" />
     <Compile Include="DataClasses\Container.cs" />
-    <Compile Include="DataClasses\ITestInterface.cs" />
+    <Compile Include="DataClasses\IPrimitivePropertyInterface.cs" />
     <Compile Include="Helper\DefaultData.cs" />
     <Compile Include="Helper\DefaultValueHelper.cs" />
     <Compile Include="Test\TestDynamicMockData.cs" />
