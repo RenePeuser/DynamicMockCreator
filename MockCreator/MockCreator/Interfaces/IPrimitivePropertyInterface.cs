@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace MockCreator.DataClasses
+namespace MockCreator.Interfaces
 {
     public interface IPrimitivePropertyInterface
     {

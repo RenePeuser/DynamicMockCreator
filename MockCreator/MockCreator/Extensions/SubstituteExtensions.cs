@@ -14,7 +14,7 @@ namespace MockCreator.Extensions
             var defaultValue = type.GetDefaultValue(defaultData);
             if (defaultValue != null)
             {
-                return (T)defaultValue;
+                return (T) defaultValue;
             }
 
             if (type.IsInterface)
@@ -32,20 +32,20 @@ namespace MockCreator.Extensions
 
         private static object For(this Type type, params object[] args)
         {
-            return typeof(SubstituteExtensions).InvokeGenericMethod(nameof(SubstituteExtensions.For), new[] { type }, args);
+            return typeof(SubstituteExtensions).InvokeGenericMethod(nameof(SubstituteExtensions.For), new[] {type}, args);
         }
 
         private static T CreateFromAbstractClass<T>(this Type type, DefaultData defaultData)
         {
             var args = type.CreateCtorArguments(defaultData);
-            return typeof(Substitute).InvokeGenericMethod<T>(nameof(Substitute.ForPartsOf), new[] { type },
-                new object[] { args });
+            return typeof(Substitute).InvokeGenericMethod<T>(nameof(Substitute.ForPartsOf), new[] {type},
+                new object[] {args});
         }
 
         private static T CreateDynamicFrom<T>(this Type type, DefaultData defaultData)
         {
             var args = type.CreateCtorArguments(defaultData);
-            return (T)Activator.CreateInstance(type, args);
+            return (T) Activator.CreateInstance(type, args);
         }
 
         private static object[] CreateCtorArguments(this Type type, DefaultData defaultData)
@@ -64,14 +64,22 @@ namespace MockCreator.Extensions
         private static object[] CreateAnyArgs(this MethodBase methodBase)
         {
             var parameterInfos = methodBase.GetParameters();
-            var arguments = parameterInfos.Select(param => typeof(Arg).InvokeGenericMethod(nameof(Arg.Any), new[] { param.ParameterType }));
+            var arguments =
+                parameterInfos.Select(
+                    param => typeof(Arg).InvokeGenericMethod(nameof(Arg.Any), new[] {param.ParameterType}));
             return arguments.ToArray();
         }
 
         private static T CreateFromInterface<T>(this Type argumentType, DefaultData defaultData)
         {
-            var mock = typeof(Substitute).InvokeGenericMethod<T>(nameof(Substitute.For), new[] { argumentType },
-                new object[] { new object[] { } });
+            var mock = typeof(Substitute).InvokeGenericMethod<T>(nameof(Substitute.For), new[] {argumentType},
+                new object[] {new object[] {}});
+
+            return mock;
+
+            // This is really crazy, but worked right now not in all Situation
+            // Has to de differnce between Interface for .NET and own Implementations.
+            // Some tests are not running. But base functionality is working.
 
             mock.SetupProperties(defaultData);
             mock.SetupMethods(defaultData);
@@ -85,27 +93,29 @@ namespace MockCreator.Extensions
             foreach (var propertyInfo in properties)
             {
                 var propertyType = propertyInfo.PropertyType;
-                var returnValue = propertyType.GetDefaultValue(defaultData);
+                var returnValue = For(propertyType, defaultData);
                 var propertyValue = propertyInfo.GetValue(mock);
                 var array = Array.CreateInstance(propertyType, 0);
 
                 typeof(NSubstitute.SubstituteExtensions).InvokeGenericMethod(
-                    nameof(NSubstitute.SubstituteExtensions.Returns), new[] { propertyType }, propertyValue, returnValue, array);
+                    nameof(NSubstitute.SubstituteExtensions.Returns), new[] {propertyType}, propertyValue, returnValue,
+                    array);
             }
         }
 
         private static void SetupMethods<T>(this T mock, DefaultData defaultData)
         {
-            var methods = typeof(T).GetMethods().Where(m => m.ReturnType != typeof(void) && !m.IsSpecialName);
+            var methods = typeof(T).GetMethods().Where(m => (m.ReturnType != typeof(void)) && !m.IsSpecialName);
             foreach (var methodInfo in methods)
             {
                 var methodReturnType = methodInfo.ReturnType;
-                var returnValue = methodReturnType.GetDefaultValue(defaultData);
+                var returnValue = For(methodReturnType, defaultData);
                 var arguments = methodInfo.CreateAnyArgs();
                 var methodResturnValue = methodInfo.Invoke(mock, arguments);
                 var array = Array.CreateInstance(methodReturnType, 0);
                 typeof(NSubstitute.SubstituteExtensions).InvokeGenericMethod(
-                    nameof(NSubstitute.SubstituteExtensions.Returns), new[] { methodReturnType }, methodResturnValue, returnValue, array);
+                    nameof(NSubstitute.SubstituteExtensions.Returns), new[] {methodReturnType}, methodResturnValue,
+                    returnValue, array);
             }
         }
     }

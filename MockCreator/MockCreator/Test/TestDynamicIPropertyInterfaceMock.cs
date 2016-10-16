@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MockCreator.DataClasses;
+using MockCreator.Extensions;
 using MockCreator.Helper;
+using MockCreator.Interfaces;
 using TestExtension;
-using SubstituteExtensions = MockCreator.Extensions.SubstituteExtensions;
 
 namespace MockCreator.Test
 {
@@ -16,24 +16,24 @@ namespace MockCreator.Test
     public class TestDynamicIPropertyInterfaceMock
     {
         private static readonly DefaultData CustomData = new DefaultData(
-            (sbyte)2,
-            (byte)2,
-            (short)2,
-            (ushort)2,
+            (sbyte) 2,
+            (byte) 2,
+            (short) 2,
+            (ushort) 2,
             2,
-            (uint)2,
-            (long)2.2,
-            (ulong)2.2,
+            (uint) 2,
+            (long) 2.2,
+            (ulong) 2.2,
             '?',
-            (float)2.3,
+            (float) 2.3,
             2.4,
             false,
             new decimal(2.5),
             "Next",
             new DateTime(),
             new object(),
-            new[] { "B..C" },
-            new Collection<int> { 2, 2 });
+            new[] {"B..C"},
+            new Collection<int> {2, 2});
 
         private Dictionary<Type, object> _dictionary;
 
@@ -64,7 +64,9 @@ namespace MockCreator.Test
 
                 if (expectedPropertyValue.NotEqualityEquals(propertyValue))
                 {
-                    yield return $"Expected property:{propertyInfo.Name} has not expected value {expectedPropertyValue} current value {propertyValue}";
+                    yield return
+                        $"Expected property:{propertyInfo.Name} has not expected value {expectedPropertyValue} current value {propertyValue}"
+                        ;
                 }
             }
         }
@@ -76,21 +78,4 @@ namespace MockCreator.Test
             return stringBuilder.ToString();
         }
     }
-
-    //[TestClass]
-    //public class TestReturnInitializationOfMethods
-    //{
-    //    [TestMethod]
-    //    public void TestString()
-    //    {
-    //        var defaultData = new DefaultData("YEAH !!!");
-    //        var mock = SubstituteExtensions.For<IPropertyInterface>(defaultData);
-
-    //        Assert.AreEqual(defaultData.GetDefaultValue(typeof(string)), mock.DoSomethingReturn());
-    //        Assert.AreEqual(defaultData.GetDefaultValue(typeof(string)), mock.DoSomethingReturn(3));
-    //        Assert.AreEqual(defaultData.GetDefaultValue(typeof(string)), mock.DoSomethingReturn(0, "b"));
-    //        Assert.AreEqual(defaultData.GetDefaultValue(typeof(string)), mock.DoSomethingReturn(0, "a", Substitute.For<ICloneable>()));
-    //    }
-
-    //}
 }
