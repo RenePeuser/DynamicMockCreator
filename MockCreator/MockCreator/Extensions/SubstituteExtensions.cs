@@ -75,11 +75,17 @@ namespace MockCreator.Extensions
             var mock = typeof(Substitute).InvokeGenericMethod<T>(nameof(Substitute.For), new[] {argumentType},
                 new object[] {new object[] {}});
 
-            return mock;
+            // return mock;
 
             // This is really crazy, but worked right now not in all Situation
             // Has to de differnce between Interface for .NET and own Implementations.
             // Some tests are not running. But base functionality is working.
+            
+            // Check solution for that case and all scenarios.
+            if (typeof(T).FullName.StartsWith("System"))
+            {
+                return mock;
+            }
 
             mock.SetupProperties(defaultData);
             mock.SetupMethods(defaultData);
