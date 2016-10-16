@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MockCreator.Extensions;
 
-namespace MockCreator
+namespace MockCreator.Test
 {
     [TestClass]
     public class TestEnumeration

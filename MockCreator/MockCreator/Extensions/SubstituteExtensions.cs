@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Reflection;
+using MockCreator.Helper;
 using NSubstitute;
 
-namespace MockCreator
+namespace MockCreator.Extensions
 {
     public static class SubstituteExtensions
     {

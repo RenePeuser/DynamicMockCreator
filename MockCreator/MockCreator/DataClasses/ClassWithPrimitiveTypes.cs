@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MockCreator
+namespace MockCreator.DataClasses
 {
     public class ClassWithPrimitiveTypes
     {

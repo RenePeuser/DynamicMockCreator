@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Reflection;
 
-namespace MockCreator
+namespace MockCreator.Extensions
 {
     public static class TypeExtensions
     {

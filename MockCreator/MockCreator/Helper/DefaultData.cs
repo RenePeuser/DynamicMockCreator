@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Extensions;
 
-namespace MockCreator
+namespace MockCreator.Helper
 {
     public class DefaultData
     {

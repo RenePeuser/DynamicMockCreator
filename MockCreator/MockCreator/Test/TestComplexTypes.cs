@@ -1,7 +1,10 @@
 using System.ComponentModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MockCreator.DataClasses;
+using MockCreator.Extensions;
+using Container = MockCreator.DataClasses.Container;
 
-namespace MockCreator
+namespace MockCreator.Test
 {
     [TestClass]
     public class TestComplexTypes
