@@ -17,7 +17,7 @@ namespace MockCreator.Extensions
         public static T InvokeGenericMethod<T>(this Type classType, string methodName, Type[] argumentTypes,
             params object[] agruments)
         {
-            return (T)InvokeGenericMethod(classType, methodName, argumentTypes, agruments);
+            return (T) InvokeGenericMethod(classType, methodName, argumentTypes, agruments);
         }
 
         public static object InvokeGenericMethod(this Type classType, string methodName, Type[] argumentTypes,

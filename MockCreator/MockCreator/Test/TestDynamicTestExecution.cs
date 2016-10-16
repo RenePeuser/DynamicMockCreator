@@ -15,24 +15,24 @@ namespace MockCreator.Test
     public class TestDynamicTestExecution
     {
         private static readonly DefaultData CustomData = new DefaultData(
-            (sbyte)1,
-            (byte)1,
-            (short)1,
-            (ushort)1,
+            (sbyte) 1,
+            (byte) 1,
+            (short) 1,
+            (ushort) 1,
             1,
-            (uint)1,
-            (long)1.1,
-            (ulong)1.2,
+            (uint) 1,
+            (long) 1.1,
+            (ulong) 1.2,
             'c',
-            (float)1.3,
+            (float) 1.3,
             1.4,
             true,
             new decimal(1.5),
             "MyString",
             new DateTime(2016, 10, 15),
             new object(),
-            new[] { "A..Z" },
-            new Collection<int> { 1, 2 });
+            new[] {"A..Z"},
+            new Collection<int> {1, 2});
 
         private Dictionary<Type, object> _dictionary;
 
@@ -56,7 +56,7 @@ namespace MockCreator.Test
             foreach (var keyValuePair in dictionary)
             {
                 var result = typeof(SubstituteExtensions).InvokeGenericMethod(nameof(SubstituteExtensions.For),
-                    new[] { keyValuePair.Key }, CustomData);
+                    new[] {keyValuePair.Key}, CustomData);
 
                 if (CustomData.GetDefaultValue(keyValuePair.Key).NotEqualityEquals(result))
                 {
