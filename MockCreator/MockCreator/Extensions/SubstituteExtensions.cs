@@ -127,5 +127,6 @@ namespace MockCreator.Extensions
     }
 
     public static class SubstituteSetupExtensions
-    { }
+    {
+    }
 }

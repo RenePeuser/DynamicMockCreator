@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -13,7 +13,7 @@ using TestExtension;
 namespace MockCreator.Test
 {
     [TestClass]
-    public class TestDynamicIPropertyInterfaceMock
+    public class TestIMethodWithPrimitiveTypeInterface
     {
         private static readonly DefaultData CustomData = new DefaultData(
             (sbyte) 2,
@@ -47,7 +47,7 @@ namespace MockCreator.Test
         [TestMethod]
         public void TestFor()
         {
-            var mock = SubstituteExtensions.For<IPrimitivePropertyInterface>(CustomData);
+            var mock = SubstituteExtensions.For<IMethodWithPrimitiveTypesInterface>(CustomData);
             var errors = Analyze(mock, _dictionary);
 
             Assert.IsFalse(errors.Any(), ToErrorString(errors));
@@ -55,17 +55,17 @@ namespace MockCreator.Test
 
         private static IEnumerable<string> Analyze<T>(T mock, Dictionary<Type, object> dictionary)
         {
-            var properties = typeof(T).GetProperties();
+            var methods = typeof(T).GetMethods().Where(m => (m.ReturnType != typeof(void)) && !m.IsSpecialName);
 
-            foreach (var propertyInfo in properties)
+            foreach (var methodInfo in methods)
             {
-                var expectedPropertyValue = dictionary[propertyInfo.PropertyType];
-                var propertyValue = mock.GetType().GetProperty(propertyInfo.Name).GetValue(mock);
+                var expectedValue = dictionary[methodInfo.ReturnType];
+                var currentValue = mock.GetType().GetMethod(methodInfo.Name).Invoke(mock, new object[] {});
 
-                if (expectedPropertyValue.NotEqualityEquals(propertyValue))
+                if (expectedValue.NotEqualityEquals(currentValue))
                 {
                     yield return
-                        $"Expected property:{propertyInfo.Name} has not expected value {expectedPropertyValue} current value {propertyValue}"
+                        $"Expected method:{methodInfo.Name} has not expected return value {expectedValue} current return value {currentValue}"
                         ;
                 }
             }

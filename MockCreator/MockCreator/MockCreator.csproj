@@ -64,11 +64,13 @@
     <Compile Include="DataClasses\ClassWithPrimitiveTypes.cs" />
     <Compile Include="DataClasses\Container.cs" />
     <Compile Include="Interfaces\IInterfaceWithInterfaces.cs" />
+    <Compile Include="Interfaces\IMethodWithPrimitiveTypesInterface.cs" />
     <Compile Include="Interfaces\IPrimitivePropertyInterface.cs" />
     <Compile Include="Helper\DefaultData.cs" />
     <Compile Include="Helper\DefaultValueHelper.cs" />
-    <Compile Include="Test\TestDynamicIInterfaceWithInterfaces.cs" />
-    <Compile Include="Test\TestDynamicIPropertyInterfaceMock.cs" />
+    <Compile Include="Test\TestIInterfaceWithInterfaces.cs" />
+    <Compile Include="Test\TestIMethodWithPrimitiveTypeInterface.cs" />
+    <Compile Include="Test\TestIPropertyInterfaceMock.cs" />
     <Compile Include="Test\TestDynamicTestExecution.cs" />
     <Compile Include="Extensions\SubstituteExtensions.cs" />
     <Compile Include="Test\TestComplexTypes.cs" />

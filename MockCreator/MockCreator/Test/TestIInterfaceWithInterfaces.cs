@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -10,7 +10,7 @@ using TestExtension;
 namespace MockCreator.Test
 {
     [TestClass]
-    public class TestDynamicIInterfaceWithInterfaces
+    public class TestIInterfaceWithInterfaces
     {
         private static readonly DefaultData CustomData = new DefaultData(
             (sbyte) 2,
