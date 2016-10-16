@@ -59,20 +59,20 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="ClassAbstract.cs" />
-    <Compile Include="ClassWithInterfaces.cs" />
-    <Compile Include="ClassWithPrimitiveTypes.cs" />
-    <Compile Include="Container.cs" />
-    <Compile Include="DefaultData.cs" />
-    <Compile Include="DefaultValueHelper.cs" />
-    <Compile Include="TestDynamicTestExecution.cs" />
-    <Compile Include="SubstituteExtensions.cs" />
-    <Compile Include="TestComplexTypes.cs" />
-    <Compile Include="TestWithCustomDefaults.cs" />
-    <Compile Include="TestEnumeration.cs" />
-    <Compile Include="TestPrimitveTypes.cs" />
+    <Compile Include="DataClasses\ClassAbstract.cs" />
+    <Compile Include="DataClasses\ClassWithInterfaces.cs" />
+    <Compile Include="DataClasses\ClassWithPrimitiveTypes.cs" />
+    <Compile Include="DataClasses\Container.cs" />
+    <Compile Include="Helper\DefaultData.cs" />
+    <Compile Include="Helper\DefaultValueHelper.cs" />
+    <Compile Include="Test\TestDynamicTestExecution.cs" />
+    <Compile Include="Extensions\SubstituteExtensions.cs" />
+    <Compile Include="Test\TestComplexTypes.cs" />
+    <Compile Include="Test\TestWithCustomDefaults.cs" />
+    <Compile Include="Test\TestEnumeration.cs" />
+    <Compile Include="Test\TestPrimitveTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TypeExtensions.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
