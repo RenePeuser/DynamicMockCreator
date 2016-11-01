@@ -143,4 +143,4 @@ Sample with an interface view model "MainWindowViewModel"
 
 Result
 
-![alt tag](https://raw.githubusercontent.com/username/projectname/branch/path/to/img.png)
+![alt tag](https://github.com/RenePeuser/DynamicMockCreator/blob/master/DesignTimeDataResult.png)
