@@ -1,3 +1,4 @@
+
 # DynamicMockCreator
 
 This project was made to simplify unit test. The problem which we have in our daily work is, that you have to create big data structures to test some components. If you only interesting in, that this data container goes from component A to component B. Your are not interesting of the specific data of that container.
@@ -44,11 +45,12 @@ public void CreateFromAbstractClass()
 Another possibility is to generate the data by random process.
 The first thing what we need is an random data creator.
 
-private static readonly RandomDefaultData RandomDefaultData = new RandomDefaultData();
 
+```csharp
+private static readonly RandomDefaultData RandomDefaultData = new RandomDefaultData();
+```
 If we has this creator we can use it as an parameter for the "Create<>" method. With this way
 the data structures will be initialized with randomized data.
-
 
 ```csharp
 [TestMethod]
@@ -58,12 +60,12 @@ public void CreateFromInterfaceType()
 }
 ```
 
-
 ```csharp
 [TestMethod]
 public void CreateFromClassWithPrimitiveArguments()
 {
-    Assert.IsNotNull(ObjectCreatorExtensions.Create<ClassWithPrimitiveTypes>(RandomDefaultData));
+
+Assert.IsNotNull(ObjectCreatorExtensions.Create<ClassWithPrimitiveTypes>(RandomDefaultData));
 }
 ```
 
@@ -87,7 +89,11 @@ The solution for such problems is, that you can combine this object creator with
 
 To solve this quite easy, i have written a very small attached property which sets the DataContext ONLY at design time with the expected type.
 
-DesignTimeAttachedProperties.DesignTimeType="{ExpectedType}" in the brackets you has to put in your type which has to be the design time DataContext.
+```xaml
+DesignTimeAttachedProperties.DesignTimeType="{x:Type MyType}" 
+```
+
+in the brackets you has to put in your type which has to be the design time DataContext.
 
 Sample with a concrete view model "MainWindowViewModel"
 
