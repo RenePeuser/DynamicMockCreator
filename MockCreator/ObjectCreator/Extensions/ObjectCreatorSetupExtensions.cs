@@ -6,7 +6,7 @@ using ObjectCreator.Interfaces;
 
 namespace ObjectCreator.Extensions
 {
-    public static class SubstituteSetupExtensions
+    public static class ObjectCreatorSetupExtensions
     {
         public static void InitProperties<T>(this T source, IDefaultData defaultData)
         {
@@ -19,7 +19,7 @@ namespace ObjectCreator.Extensions
             foreach (var propertyInfo in properties)
             {
                 var propertyType = propertyInfo.PropertyType;
-                var newValue = propertyType.For(defaultData);
+                var newValue = propertyType.Create(defaultData);
                 propertyInfo.SetValue(source, newValue);
             }
         }
@@ -30,7 +30,7 @@ namespace ObjectCreator.Extensions
             foreach (var propertyInfo in properties)
             {
                 var propertyType = propertyInfo.PropertyType;
-                var returnValue = propertyType.For(defaultData);
+                var returnValue = propertyType.Create(defaultData);
                 var propertyValue = propertyInfo.GetValue(mock);
                 var array = Array.CreateInstance(propertyType, 0);
 
@@ -46,7 +46,7 @@ namespace ObjectCreator.Extensions
             foreach (var methodInfo in methods)
             {
                 var methodReturnType = methodInfo.ReturnType;
-                var returnValue = methodReturnType.For(defaultData);
+                var returnValue = methodReturnType.Create(defaultData);
                 var arguments = methodInfo.CreateAnyArgs();
                 var methodReturnValue = methodInfo.Invoke(mock, arguments);
                 var array = Array.CreateInstance(methodReturnType, 0);

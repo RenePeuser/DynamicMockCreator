@@ -47,7 +47,7 @@ namespace ObjectCreatorTest.Test
         [TestMethod]
         public void TestFor()
         {
-            var mock = SubstituteExtensions.For<IMethodWithPrimitiveTypesInterface>(CustomData);
+            var mock = ObjectCreatorExtensions.Create<IMethodWithPrimitiveTypesInterface>(CustomData);
             var errors = Analyze(mock, _dictionary);
 
             Assert.IsFalse(errors.Any(), ToErrorString(errors));

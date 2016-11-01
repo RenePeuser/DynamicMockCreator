@@ -10,13 +10,13 @@ namespace ObjectCreatorTest.Test
         [TestMethod]
         public void TestStruct()
         {
-            Assert.IsNotNull(SubstituteExtensions.For<StructWithoutCtor>());
+            Assert.IsNotNull(ObjectCreatorExtensions.Create<StructWithoutCtor>());
         }
 
         [TestMethod]
         public void TestStructWithoutCtor()
         {
-            Assert.IsNotNull(SubstituteExtensions.For<StructWithoutCtor>());
+            Assert.IsNotNull(ObjectCreatorExtensions.Create<StructWithoutCtor>());
         }
     }
 }

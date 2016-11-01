@@ -40,7 +40,7 @@ namespace ObjectCreatorTest.Test
         {
             var privateObject = CustomData.ToPrivateObject();
             _dictionary = privateObject.GetField<Dictionary<Type, object>>("_defaultData");
-            _mock = SubstituteExtensions.For<IInterfaceWithInterfaces>(CustomData);
+            _mock = ObjectCreatorExtensions.Create<IInterfaceWithInterfaces>(CustomData);
         }
 
         [TestMethod]

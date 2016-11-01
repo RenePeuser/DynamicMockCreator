@@ -50,8 +50,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\SubstituteSetupExtensions.cs" />
-    <Compile Include="Extensions\SubstituteExtensions.cs" />
+    <Compile Include="Extensions\ObjectCreatorSetupExtensions.cs" />
+    <Compile Include="Extensions\ObjectCreatorExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Helper\DefaultData.cs" />
     <Compile Include="Helper\DefaultDataItem.cs" />

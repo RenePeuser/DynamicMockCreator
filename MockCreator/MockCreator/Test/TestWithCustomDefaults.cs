@@ -39,97 +39,97 @@ namespace ObjectCreatorTest.Test
         [TestMethod]
         public void TestSByte()
         {
-            Assert.AreEqual(ExpectedSByte, SubstituteExtensions.For<sbyte>(_defaultData));
+            Assert.AreEqual(ExpectedSByte, ObjectCreatorExtensions.Create<sbyte>(_defaultData));
         }
 
         [TestMethod]
         public void TestByte()
         {
-            Assert.AreEqual(ExpectedByte, SubstituteExtensions.For<byte>(_defaultData));
+            Assert.AreEqual(ExpectedByte, ObjectCreatorExtensions.Create<byte>(_defaultData));
         }
 
         [TestMethod]
         public void TestShort()
         {
-            Assert.AreEqual(ExpectedShort, SubstituteExtensions.For<short>(_defaultData));
+            Assert.AreEqual(ExpectedShort, ObjectCreatorExtensions.Create<short>(_defaultData));
         }
 
         [TestMethod]
         public void TestUShort()
         {
-            Assert.AreEqual(ExpectedUShort, SubstituteExtensions.For<ushort>(_defaultData));
+            Assert.AreEqual(ExpectedUShort, ObjectCreatorExtensions.Create<ushort>(_defaultData));
         }
 
         [TestMethod]
         public void TestInt()
         {
-            Assert.AreEqual(ExpectedInt, SubstituteExtensions.For<int>(_defaultData));
+            Assert.AreEqual(ExpectedInt, ObjectCreatorExtensions.Create<int>(_defaultData));
         }
 
         [TestMethod]
         public void TestUInt()
         {
-            Assert.AreEqual(ExpectedUInt, SubstituteExtensions.For<uint>(_defaultData));
+            Assert.AreEqual(ExpectedUInt, ObjectCreatorExtensions.Create<uint>(_defaultData));
         }
 
         [TestMethod]
         public void TestLong()
         {
-            Assert.AreEqual(ExpectedLong, SubstituteExtensions.For<long>(_defaultData));
+            Assert.AreEqual(ExpectedLong, ObjectCreatorExtensions.Create<long>(_defaultData));
         }
 
         [TestMethod]
         public void TestULong()
         {
-            Assert.AreEqual(ExpectedULong, SubstituteExtensions.For<ulong>(_defaultData));
+            Assert.AreEqual(ExpectedULong, ObjectCreatorExtensions.Create<ulong>(_defaultData));
         }
 
         [TestMethod]
         public void TestChar()
         {
-            Assert.AreEqual(ExpectedChar, SubstituteExtensions.For<char>(_defaultData));
+            Assert.AreEqual(ExpectedChar, ObjectCreatorExtensions.Create<char>(_defaultData));
         }
 
         [TestMethod]
         public void TestFloat()
         {
-            Assert.AreEqual(ExpectedFloat, SubstituteExtensions.For<float>(_defaultData));
+            Assert.AreEqual(ExpectedFloat, ObjectCreatorExtensions.Create<float>(_defaultData));
         }
 
         [TestMethod]
         public void TestDouble()
         {
-            Assert.AreEqual(ExpectedDouble, SubstituteExtensions.For<double>(_defaultData));
+            Assert.AreEqual(ExpectedDouble, ObjectCreatorExtensions.Create<double>(_defaultData));
         }
 
         [TestMethod]
         public void TestBool()
         {
-            Assert.AreEqual(ExpectedBool, SubstituteExtensions.For<bool>(_defaultData));
+            Assert.AreEqual(ExpectedBool, ObjectCreatorExtensions.Create<bool>(_defaultData));
         }
 
         [TestMethod]
         public void TestDecimal()
         {
-            Assert.AreEqual(ExpectedDecimal, SubstituteExtensions.For<decimal>(_defaultData));
+            Assert.AreEqual(ExpectedDecimal, ObjectCreatorExtensions.Create<decimal>(_defaultData));
         }
 
         [TestMethod]
         public void TestString()
         {
-            Assert.AreEqual(ExpectedString, SubstituteExtensions.For<string>(_defaultData));
+            Assert.AreEqual(ExpectedString, ObjectCreatorExtensions.Create<string>(_defaultData));
         }
 
         [TestMethod]
         public void TestDateTime()
         {
-            Assert.AreEqual(ExpectedDateTime, SubstituteExtensions.For<DateTime>(_defaultData));
+            Assert.AreEqual(ExpectedDateTime, ObjectCreatorExtensions.Create<DateTime>(_defaultData));
         }
 
         [TestMethod]
         public void TestGenericList()
         {
-            Assert.AreEqual(ExpectedList, SubstituteExtensions.For<List<string>>(_defaultData));
+            Assert.AreEqual(ExpectedList, ObjectCreatorExtensions.Create<List<string>>(_defaultData));
         }
     }
 }

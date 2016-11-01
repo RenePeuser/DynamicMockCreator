@@ -10,91 +10,91 @@ namespace ObjectCreatorTest.Test
         [TestMethod]
         public void TestBool()
         {
-            Assert.AreNotEqual(default(bool), SubstituteExtensions.For<bool>());
+            Assert.AreNotEqual(default(bool), ObjectCreatorExtensions.Create<bool>());
         }
 
         [TestMethod]
         public void TestDateTime()
         {
-            Assert.AreNotEqual(default(DateTime), SubstituteExtensions.For<DateTime>());
+            Assert.AreNotEqual(default(DateTime), ObjectCreatorExtensions.Create<DateTime>());
         }
 
         [TestMethod]
         public void TestChar()
         {
-            Assert.AreNotEqual(default(char), SubstituteExtensions.For<char>());
+            Assert.AreNotEqual(default(char), ObjectCreatorExtensions.Create<char>());
         }
 
         [TestMethod]
         public void TestString()
         {
-            Assert.AreNotEqual(default(string), SubstituteExtensions.For<string>());
+            Assert.AreNotEqual(default(string), ObjectCreatorExtensions.Create<string>());
         }
 
         [TestMethod]
         public void TestDecimal()
         {
-            Assert.AreNotEqual(default(decimal), SubstituteExtensions.For<decimal>());
+            Assert.AreNotEqual(default(decimal), ObjectCreatorExtensions.Create<decimal>());
         }
 
         [TestMethod]
         public void TestByte()
         {
-            Assert.AreNotEqual(default(byte), SubstituteExtensions.For<byte>());
+            Assert.AreNotEqual(default(byte), ObjectCreatorExtensions.Create<byte>());
         }
 
         [TestMethod]
         public void TestShort()
         {
-            Assert.AreNotEqual(default(short), SubstituteExtensions.For<short>());
+            Assert.AreNotEqual(default(short), ObjectCreatorExtensions.Create<short>());
         }
 
         [TestMethod]
         public void TestInt()
         {
-            Assert.AreNotEqual(default(int), SubstituteExtensions.For<int>());
+            Assert.AreNotEqual(default(int), ObjectCreatorExtensions.Create<int>());
         }
 
         [TestMethod]
         public void TestLong()
         {
-            Assert.AreNotEqual(default(long), SubstituteExtensions.For<long>());
+            Assert.AreNotEqual(default(long), ObjectCreatorExtensions.Create<long>());
         }
 
         [TestMethod]
         public void TestFloat()
         {
-            Assert.AreNotEqual(default(float), SubstituteExtensions.For<float>());
+            Assert.AreNotEqual(default(float), ObjectCreatorExtensions.Create<float>());
         }
 
         [TestMethod]
         public void TestDouble()
         {
-            Assert.AreNotEqual(default(double), SubstituteExtensions.For<double>());
+            Assert.AreNotEqual(default(double), ObjectCreatorExtensions.Create<double>());
         }
 
         [TestMethod]
         public void TestSByte()
         {
-            Assert.AreNotEqual(default(sbyte), SubstituteExtensions.For<sbyte>());
+            Assert.AreNotEqual(default(sbyte), ObjectCreatorExtensions.Create<sbyte>());
         }
 
         [TestMethod]
         public void TestUShort()
         {
-            Assert.AreNotEqual(default(ushort), SubstituteExtensions.For<ushort>());
+            Assert.AreNotEqual(default(ushort), ObjectCreatorExtensions.Create<ushort>());
         }
 
         [TestMethod]
         public void TestUInt()
         {
-            Assert.AreNotEqual(default(uint), SubstituteExtensions.For<uint>());
+            Assert.AreNotEqual(default(uint), ObjectCreatorExtensions.Create<uint>());
         }
 
         [TestMethod]
         public void TestULong()
         {
-            Assert.AreNotEqual(default(ulong), SubstituteExtensions.For<ulong>());
+            Assert.AreNotEqual(default(ulong), ObjectCreatorExtensions.Create<ulong>());
         }
     }
 }

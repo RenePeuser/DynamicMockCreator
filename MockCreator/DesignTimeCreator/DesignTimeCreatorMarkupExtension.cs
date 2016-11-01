@@ -25,7 +25,7 @@ namespace DesignTimeCreator
             var frameworkElement = dependencyObject.Cast<FrameworkElement>();
             var newType = dependencyPropertyChangedEventArgs.NewValue.Cast<Type>();
 
-            var taskResult = await Task.Run(() => newType.For(RandomDefaultData));
+            var taskResult = await Task.Run(() => newType.Create(RandomDefaultData));
             frameworkElement.DataContext = taskResult;
         }
 

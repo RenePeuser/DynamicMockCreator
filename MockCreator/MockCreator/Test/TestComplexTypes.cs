@@ -12,31 +12,31 @@ namespace ObjectCreatorTest.Test
         [TestMethod]
         public void CreateFromInterfaceType()
         {
-            Assert.IsNotNull(SubstituteExtensions.For<INotifyPropertyChanged>());
+            Assert.IsNotNull(ObjectCreatorExtensions.Create<INotifyPropertyChanged>());
         }
 
         [TestMethod]
         public void CreateFromClassWithPrimitiveArguments()
         {
-            Assert.IsNotNull(SubstituteExtensions.For<ClassWithPrimitiveTypes>());
+            Assert.IsNotNull(ObjectCreatorExtensions.Create<ClassWithPrimitiveTypes>());
         }
 
         [TestMethod]
         public void CreateFromClassWithInterfacesArguments()
         {
-            Assert.IsNotNull(SubstituteExtensions.For<ClassWithInterfaces>());
+            Assert.IsNotNull(ObjectCreatorExtensions.Create<ClassWithInterfaces>());
         }
 
         [TestMethod]
         public void CreateFromAbstractClass()
         {
-            Assert.IsNotNull(SubstituteExtensions.For<ClassAbstract>());
+            Assert.IsNotNull(ObjectCreatorExtensions.Create<ClassAbstract>());
         }
 
         [TestMethod]
         public void CreateFromClassWithMultiLevelDepthArguments()
         {
-            Assert.IsNotNull(SubstituteExtensions.For<Container>());
+            Assert.IsNotNull(ObjectCreatorExtensions.Create<Container>());
         }
     }
 }

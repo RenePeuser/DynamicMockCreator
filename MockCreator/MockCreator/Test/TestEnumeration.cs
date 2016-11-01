@@ -12,49 +12,49 @@ namespace ObjectCreatorTest.Test
         [TestMethod]
         public void CreateIEnumerable()
         {
-            Assert.IsNotNull(SubstituteExtensions.For<IEnumerable>());
+            Assert.IsNotNull(ObjectCreatorExtensions.Create<IEnumerable>());
         }
 
         [TestMethod]
         public void CreateGenericIEnumerable()
         {
-            Assert.IsNotNull(SubstituteExtensions.For<IEnumerable<string>>());
+            Assert.IsNotNull(ObjectCreatorExtensions.Create<IEnumerable<string>>());
         }
 
         [TestMethod]
         public void CreateGenericList()
         {
-            Assert.IsNotNull(SubstituteExtensions.For<List<string>>());
+            Assert.IsNotNull(ObjectCreatorExtensions.Create<List<string>>());
         }
 
         [TestMethod]
         public void CreateGenericCollection()
         {
-            Assert.IsNotNull(SubstituteExtensions.For<Collection<string>>());
+            Assert.IsNotNull(ObjectCreatorExtensions.Create<Collection<string>>());
         }
 
         [TestMethod]
         public void CreateGenericICollection()
         {
-            Assert.IsNotNull(SubstituteExtensions.For<ICollection<string>>());
+            Assert.IsNotNull(ObjectCreatorExtensions.Create<ICollection<string>>());
         }
 
         [TestMethod]
         public void CreateGenericIList()
         {
-            Assert.IsNotNull(SubstituteExtensions.For<IList<string>>());
+            Assert.IsNotNull(ObjectCreatorExtensions.Create<IList<string>>());
         }
 
         [TestMethod]
         public void CreateArray()
         {
-            Assert.IsNotNull(SubstituteExtensions.For<string[]>());
+            Assert.IsNotNull(ObjectCreatorExtensions.Create<string[]>());
         }
 
         [TestMethod]
         public void CreateObservableCollection()
         {
-            Assert.IsNotNull(SubstituteExtensions.For<ObservableCollection<string>>());
+            Assert.IsNotNull(ObjectCreatorExtensions.Create<ObservableCollection<string>>());
         }
     }
 }

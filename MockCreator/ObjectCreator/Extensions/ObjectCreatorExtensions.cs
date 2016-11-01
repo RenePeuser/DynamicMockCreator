@@ -9,14 +9,14 @@ using ObjectCreator.Interfaces;
 
 namespace ObjectCreator.Extensions
 {
-    public static class SubstituteExtensions
+    public static class ObjectCreatorExtensions
     {
-        public static T For<T>()
+        public static T Create<T>()
         {
-            return For<T>(null);
+            return Create<T>(null);
         }
 
-        public static T For<T>(IDefaultData defaultData)
+        public static T Create<T>(IDefaultData defaultData)
         {
             var type = typeof(T);
             var defaultValue = type.GetDefaultValue(defaultData);
@@ -43,24 +43,24 @@ namespace ObjectCreator.Extensions
             return CreateDynamicFrom<T>(type, defaultData);
         }
 
-        public static object For(this Type type)
+        public static object Create(this Type type)
         {
             if (type == null)
             {
                 throw new ArgumentNullException(nameof(type));
             }
 
-            return For(type, null);
+            return type.Create(null);
         }
 
-        public static object For(this Type type, IDefaultData defaultData)
+        public static object Create(this Type type, IDefaultData defaultData)
         {
             if (type == null)
             {
                 throw new ArgumentNullException(nameof(type));
             }
 
-            return typeof(SubstituteExtensions).InvokeExpectedMethod(nameof(SubstituteExtensions.For), new[] { type }, defaultData);
+            return typeof(ObjectCreatorExtensions).InvokeExpectedMethod(nameof(ObjectCreatorExtensions.Create), new[] { type }, defaultData);
         }
 
         private static T CreateFromArray<T>(Type type, IDefaultData defaultData)
@@ -69,7 +69,7 @@ namespace ObjectCreator.Extensions
             var array = Array.CreateInstance(elementType, 5);
             for (var i = 0; i < 5; i++)
             {
-                var arrayItem = For(elementType, defaultData);
+                var arrayItem = elementType.Create(defaultData);
                 array.SetValue(arrayItem, i);
             }
             return (T)(object)array;
@@ -109,7 +109,7 @@ namespace ObjectCreator.Extensions
         private static object[] CreateArguments(this MethodBase methodBase, IDefaultData defaultData)
         {
             var parameterInfos = methodBase.GetParameters();
-            var arguments = parameterInfos.Select(item => For(item.ParameterType, defaultData));
+            var arguments = parameterInfos.Select(item => item.ParameterType.Create(defaultData));
             return arguments.ToArray();
         }
 
@@ -160,7 +160,7 @@ namespace ObjectCreator.Extensions
             var genericArgument = enumerationType.GetGenericArguments().First();
             for (var i = 0; i < 5; i++)
             {
-                var result = For(genericArgument, defaultData);
+                var result = genericArgument.Create(defaultData);
                 yield return result;
             }
         }
