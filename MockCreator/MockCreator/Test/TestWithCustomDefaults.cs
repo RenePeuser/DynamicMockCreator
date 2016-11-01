@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MockCreator.Extensions;
-using MockCreator.Helper;
+using ObjectCreator.Extensions;
+using ObjectCreator.Helper;
 
-namespace MockCreator.Test
+namespace MockCreatorTest.Test
 {
     [TestClass]
     public class TestWithCustomDefaults

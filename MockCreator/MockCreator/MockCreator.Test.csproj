@@ -6,8 +6,8 @@
     <ProjectGuid>{DA580529-DE60-4607-A6E4-37E0A4EA369D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MockCreator</RootNamespace>
-    <AssemblyName>MockCreator</AssemblyName>
+    <RootNamespace>MockCreatorTest</RootNamespace>
+    <AssemblyName>MockCreatorTest</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -41,10 +41,6 @@
       <HintPath>..\ExternalLibs\Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="NSubstitute, Version=1.10.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\ExternalLibs\NSubstitute.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="TestExtension">
       <HintPath>..\ExternalLibs\TestExtension.dll</HintPath>
@@ -65,20 +61,26 @@
     <Compile Include="DataClasses\Container.cs" />
     <Compile Include="Interfaces\IInterfaceWithInterfaces.cs" />
     <Compile Include="Interfaces\IMethodWithPrimitiveTypesInterface.cs" />
+    <Compile Include="Interfaces\InterfaceWithEnumerations.cs" />
     <Compile Include="Interfaces\IPrimitivePropertyInterface.cs" />
-    <Compile Include="Helper\DefaultData.cs" />
-    <Compile Include="Helper\DefaultValueHelper.cs" />
+    <Compile Include="Structs\StructWithoutCtor.cs" />
+    <Compile Include="Structs\StructWithCtor.cs" />
     <Compile Include="Test\TestIInterfaceWithInterfaces.cs" />
     <Compile Include="Test\TestIMethodWithPrimitiveTypeInterface.cs" />
     <Compile Include="Test\TestIPropertyInterfaceMock.cs" />
     <Compile Include="Test\TestDynamicTestExecution.cs" />
-    <Compile Include="Extensions\SubstituteExtensions.cs" />
     <Compile Include="Test\TestComplexTypes.cs" />
+    <Compile Include="Test\TestStructWihtoutCtor.cs" />
     <Compile Include="Test\TestWithCustomDefaults.cs" />
     <Compile Include="Test\TestEnumeration.cs" />
     <Compile Include="Test\TestPrimitveTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Extensions\TypeExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ObjectCreator\ObjectCreator.csproj">
+      <Project>{7833c2c1-4f55-4589-b905-340c373448da}</Project>
+      <Name>ObjectCreator</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

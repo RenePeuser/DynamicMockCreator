@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MockCreator.Extensions;
-using MockCreator.Helper;
-using MockCreator.Interfaces;
+using MockCreatorTest.Interfaces;
+using ObjectCreator.Extensions;
+using ObjectCreator.Helper;
 using TestExtension;
 
-namespace MockCreator.Test
+namespace MockCreatorTest.Test
 {
     [TestClass]
     public class TestIPropertyInterfaceMock

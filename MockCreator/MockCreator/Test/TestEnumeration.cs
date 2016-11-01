@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MockCreator.Extensions;
+using ObjectCreator.Extensions;
 
-namespace MockCreator.Test
+namespace MockCreatorTest.Test
 {
     [TestClass]
     public class TestEnumeration
@@ -34,6 +34,12 @@ namespace MockCreator.Test
         }
 
         [TestMethod]
+        public void CreateGenericICollection()
+        {
+            Assert.IsNotNull(SubstituteExtensions.For<ICollection<string>>());
+        }
+
+        [TestMethod]
         public void CreateGenericIList()
         {
             Assert.IsNotNull(SubstituteExtensions.For<IList<string>>());
@@ -43,6 +49,12 @@ namespace MockCreator.Test
         public void CreateArray()
         {
             Assert.IsNotNull(SubstituteExtensions.For<string[]>());
+        }
+
+        [TestMethod]
+        public void CreateObservableCollection()
+        {
+            Assert.IsNotNull(SubstituteExtensions.For<ObservableCollection<string>>());
         }
     }
 }

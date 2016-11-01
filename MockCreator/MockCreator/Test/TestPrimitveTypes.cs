@@ -1,8 +1,8 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MockCreator.Extensions;
+using ObjectCreator.Extensions;
 
-namespace MockCreator.Test
+namespace MockCreatorTest.Test
 {
     [TestClass]
     public class TestPrimitveTypes

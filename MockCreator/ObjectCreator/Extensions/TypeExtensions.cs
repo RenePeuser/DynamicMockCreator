@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 
-namespace MockCreator.Extensions
+namespace ObjectCreator.Extensions
 {
     public static class TypeExtensions
     {
@@ -10,23 +10,39 @@ namespace MockCreator.Extensions
         {
             var ctor = type.GetConstructors(BindingFlags.Public | BindingFlags.Static |
                                             BindingFlags.NonPublic | BindingFlags.Instance)
+
                 .First(item => !item.GetParameters().Any(p => p.ParameterType.IsPointer));
             return ctor;
         }
 
         public static T InvokeGenericMethod<T>(this Type classType, string methodName, Type[] argumentTypes,
-            params object[] agruments)
+            params object[] arguments)
         {
-            return (T) InvokeGenericMethod(classType, methodName, argumentTypes, agruments);
+            return (T)InvokeGenericMethod(classType, methodName, argumentTypes, arguments);
         }
 
         public static object InvokeGenericMethod(this Type classType, string methodName, Type[] argumentTypes,
-            params object[] agruments)
+            params object[] arguments)
         {
             var expectedMethod = classType.GetMethods().First(m => m.Name == methodName);
             var genericMethod = expectedMethod.MakeGenericMethod(argumentTypes);
-            var result = genericMethod.Invoke(null, agruments);
+            var result = genericMethod.Invoke(null, arguments);
             return result;
+        }
+
+        public static bool IsSystemType(this Type type)
+        {
+            return type.FullName.StartsWith("System");
+        }
+
+        public static bool IsNotSystemType(this Type type)
+        {
+            return !type.IsSystemType();
+        }
+
+        public static bool IsNotArray(this Type type)
+        {
+            return !type.IsArray;
         }
     }
 }

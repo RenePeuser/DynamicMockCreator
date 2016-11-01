@@ -1,6 +1,6 @@
 using System;
 
-namespace MockCreator.Helper
+namespace ObjectCreator.Helper
 {
     public static class DefaultValueHelper
     {

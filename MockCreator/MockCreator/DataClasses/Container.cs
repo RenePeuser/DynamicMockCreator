@@ -1,4 +1,4 @@
-﻿namespace MockCreator.DataClasses
+﻿namespace MockCreatorTest.DataClasses
 {
     public class Container
     {

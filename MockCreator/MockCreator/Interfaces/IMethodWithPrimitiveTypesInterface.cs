@@ -1,6 +1,6 @@
 using System;
 
-namespace MockCreator.Interfaces
+namespace MockCreatorTest.Interfaces
 {
     public interface IMethodWithPrimitiveTypesInterface
     {
