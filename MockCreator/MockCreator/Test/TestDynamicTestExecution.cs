@@ -55,7 +55,7 @@ namespace ObjectCreatorTest.Test
         {
             foreach (var keyValuePair in dictionary)
             {
-                var result = typeof(SubstituteExtensions).InvokeGenericMethod(nameof(SubstituteExtensions.For),
+                var result = typeof(SubstituteExtensions).InvokeExpectedMethod(nameof(SubstituteExtensions.For),
                     new[] {keyValuePair.Key}, CustomData);
 
                 if (CustomData.GetDefaultValue(keyValuePair.Key).NotEqualityEquals(result))

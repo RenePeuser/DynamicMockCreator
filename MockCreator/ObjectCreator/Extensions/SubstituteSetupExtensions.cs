@@ -15,7 +15,7 @@ namespace ObjectCreator.Extensions
                 return;
             }
 
-            var properties = source.GetType().GetProperties();
+            var properties = source.GetType().GetProperties().Where(prop => prop.CanWrite);
             foreach (var propertyInfo in properties)
             {
                 var propertyType = propertyInfo.PropertyType;
