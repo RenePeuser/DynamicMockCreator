@@ -31,6 +31,11 @@ namespace ObjectCreator.Extensions
 
         public static bool IsFunc(this Type type)
         {
+            if (!type.GetGenericArguments().Any())
+            {
+                return false;
+            }
+
             var genericTypeDefintion = type.GetGenericTypeDefinition();
             return FuncDeclarations.Contains(genericTypeDefintion);
         }
@@ -63,7 +68,7 @@ namespace ObjectCreator.Extensions
         {
             var outputArgument = funcType.GetGenericArguments().Last();
             var returnValue = Expression.Constant(outputArgument.Create(defaultValue));
-            var labelTarget = Expression.Label(typeof(string));
+            var labelTarget = Expression.Label(outputArgument);
             var expressionBlock = Expression.Block(Expression.Label(labelTarget, returnValue));
             return expressionBlock;
         }

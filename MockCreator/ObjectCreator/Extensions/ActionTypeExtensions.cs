@@ -36,6 +36,11 @@ namespace ObjectCreator.Extensions
                 return true;
             }
 
+            if (!type.GetGenericArguments().Any())
+            {
+                return false;
+            }
+
             var genericTypeDefintion = type.GetGenericTypeDefinition();
             return ActionDeclarations.Contains(genericTypeDefintion);
         }
