@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Extensions;
+using ObjectCreator.Interfaces;
 
 namespace ObjectCreator.Helper
 {
-    public class DefaultData
+    public class DefaultData : IDefaultData
     {
         private readonly Dictionary<Type, object> _defaultData;
 
@@ -14,15 +15,6 @@ namespace ObjectCreator.Helper
 
             // ToDo: Dictionary.AddRange Extensions => AddRange(this Dictionary dictionary, Func<TKey> keySelector, Func<TValue> valueSelector)
             defaultData.ForEach(item => _defaultData.Add(item.GetType(), item));
-        }
-
-        public void Add<T>(T item)
-        {
-            var expectedType = typeof(T);
-            if (!_defaultData.ContainsKey(expectedType))
-            {
-                _defaultData.Add(expectedType, item);
-            }
         }
 
         public object GetDefaultValue(Type type)

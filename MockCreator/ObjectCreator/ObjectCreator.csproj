@@ -50,11 +50,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\SubstituteSetupExtensions.cs" />
     <Compile Include="Extensions\SubstituteExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Helper\DefaultData.cs" />
     <Compile Include="Helper\DefaultDataItem.cs" />
     <Compile Include="Helper\DefaultValueHelper.cs" />
+    <Compile Include="Helper\RandomDefaultData.cs" />
+    <Compile Include="Interfaces\IDefaultData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

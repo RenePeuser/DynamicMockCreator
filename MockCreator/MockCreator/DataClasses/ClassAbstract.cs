@@ -1,6 +1,6 @@
 using System;
 
-namespace MockCreatorTest.DataClasses
+namespace ObjectCreatorTest.DataClasses
 {
     public abstract class ClassAbstract
     {

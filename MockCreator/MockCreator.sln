@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MockCreator.Test", "MockCreator\MockCreator.Test.csproj", "{DA580529-DE60-4607-A6E4-37E0A4EA369D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectCreator.Test", "MockCreator\ObjectCreator.Test.csproj", "{DA580529-DE60-4607-A6E4-37E0A4EA369D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesignTimeCreator", "DesignTimeCreator\DesignTimeCreator.csproj", "{0E0B35AB-F334-46D9-904E-3ABFCB637636}"
 EndProject

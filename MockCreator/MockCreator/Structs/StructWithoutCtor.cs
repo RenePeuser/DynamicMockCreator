@@ -1,4 +1,4 @@
-﻿namespace MockCreatorTest.Structs
+﻿namespace ObjectCreatorTest.Structs
 {
     public struct StructWithoutCtor
     {

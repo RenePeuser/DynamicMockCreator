@@ -5,12 +5,18 @@ using System.Reflection;
 using Extensions;
 using NSubstitute;
 using ObjectCreator.Helper;
+using ObjectCreator.Interfaces;
 
 namespace ObjectCreator.Extensions
 {
     public static class SubstituteExtensions
     {
-        public static T For<T>(DefaultData defaultData = null)
+        public static T For<T>()
+        {
+            return For<T>(null);
+        }
+
+        public static T For<T>(IDefaultData defaultData)
         {
             var type = typeof(T);
             var defaultValue = type.GetDefaultValue(defaultData);
@@ -44,104 +50,70 @@ namespace ObjectCreator.Extensions
                 throw new ArgumentNullException(nameof(type));
             }
 
-            return For(type, new object[] { null });
+            return For(type, null);
         }
 
-        public static object For(this Type type, params object[] args)
+        public static object For(this Type type, IDefaultData defaultData)
         {
             if (type == null)
             {
                 throw new ArgumentNullException(nameof(type));
             }
 
-            if (args == null)
-            {
-                throw new ArgumentNullException(nameof(args));
-            }
-
-            return typeof(SubstituteExtensions).InvokeGenericMethod(nameof(SubstituteExtensions.For), new[] { type }, args);
+            return typeof(SubstituteExtensions).InvokeExpectedMethod(nameof(SubstituteExtensions.For), new[] { type }, defaultData);
         }
 
-        public static void InitPropertries<T>(this T source, DefaultData defaultData = null)
-        {
-            if (source.GetType().IsSystemType())
-            {
-                return;
-            }
-
-            var properties = source.GetType().GetProperties();
-            foreach (var propertyInfo in properties)
-            {
-                var propertyType = propertyInfo.PropertyType;
-                var newValue = For(propertyType, defaultData);
-                if (propertyInfo.PropertyType.IsNotSystemType() && propertyInfo.PropertyType.IsNotArray())
-                {
-                    newValue.InitPropertries();
-                }
-                propertyInfo.SetValue(source, newValue);
-            }
-        }
-
-        private static T CreateFromArray<T>(Type type, DefaultData defaultData)
+        private static T CreateFromArray<T>(Type type, IDefaultData defaultData)
         {
             var elementType = type.GetElementType();
             var array = Array.CreateInstance(elementType, 5);
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
                 var arrayItem = For(elementType, defaultData);
-                arrayItem.InitPropertries();
                 array.SetValue(arrayItem, i);
             }
             return (T)(object)array;
         }
 
-        private static T CreateFromAbstractClass<T>(this Type type, DefaultData defaultData)
+        private static T CreateFromAbstractClass<T>(this Type type, IDefaultData defaultData)
         {
             var args = type.CreateCtorArguments(defaultData);
             return typeof(Substitute).InvokeGenericMethod<T>(nameof(Substitute.ForPartsOf), new[] { type },
                 new object[] { args });
         }
 
-        private static T CreateDynamicFrom<T>(this Type type, DefaultData defaultData)
+        private static T CreateDynamicFrom<T>(this Type type, IDefaultData defaultData)
         {
             if (type.IsInterfaceImplemented<IEnumerable>())
             {
                 return CreateEnumeration<T>(type, defaultData);
             }
 
-            object[] args = { };
+            var args = new object[] { };
             if (type.GetConstructors().Any())
             {
                 args = type.CreateCtorArguments(defaultData);
             }
 
             var result = (T)Activator.CreateInstance(type, args);
+            result.InitProperties(defaultData);
             return result;
         }
 
-        private static object[] CreateCtorArguments(this Type type, DefaultData defaultData)
+        private static object[] CreateCtorArguments(this Type type, IDefaultData defaultData)
         {
             var ctor = type.GetConstructor();
             return ctor.CreateArguments(defaultData);
         }
 
-        private static object[] CreateArguments(this MethodBase methodBase, DefaultData defaultData)
+        private static object[] CreateArguments(this MethodBase methodBase, IDefaultData defaultData)
         {
             var parameterInfos = methodBase.GetParameters();
             var arguments = parameterInfos.Select(item => For(item.ParameterType, defaultData));
             return arguments.ToArray();
         }
 
-        private static object[] CreateAnyArgs(this MethodBase methodBase)
-        {
-            var parameterInfos = methodBase.GetParameters();
-            var arguments =
-                parameterInfos.Select(
-                    param => typeof(Arg).InvokeGenericMethod(nameof(Arg.Any), new[] { param.ParameterType }));
-            return arguments.ToArray();
-        }
-
-        private static T CreateFromInterface<T>(this Type argumentType, DefaultData defaultData)
+        private static T CreateFromInterface<T>(this Type argumentType, IDefaultData defaultData)
         {
             // This is special we dont need a proxy for interfaces of IEnumerable.
             if (typeof(T).IsInterfaceImplemented<IEnumerable>())
@@ -160,11 +132,10 @@ namespace ObjectCreator.Extensions
 
             mock.SetupProperties(defaultData);
             mock.SetupMethods(defaultData);
-
             return mock;
         }
 
-        private static T CreateEnumeration<T>(Type enumerationType, DefaultData defaultData)
+        private static T CreateEnumeration<T>(Type enumerationType, IDefaultData defaultData)
         {
             var genericArguments = enumerationType.GetGenericArguments();
             if (!genericArguments.Any())
@@ -184,46 +155,13 @@ namespace ObjectCreator.Extensions
             return (T)result;
         }
 
-        private static IEnumerable CreateEnumeration(Type enumerationType, DefaultData defaultData)
+        private static IEnumerable CreateEnumeration(Type enumerationType, IDefaultData defaultData)
         {
             var genericArgument = enumerationType.GetGenericArguments().First();
             for (var i = 0; i < 5; i++)
             {
                 var result = For(genericArgument, defaultData);
-                result.InitPropertries();
                 yield return result;
-            }
-        }
-
-        private static void SetupProperties<T>(this T mock, DefaultData defaultData)
-        {
-            var properties = typeof(T).GetProperties();
-            foreach (var propertyInfo in properties)
-            {
-                var propertyType = propertyInfo.PropertyType;
-                var returnValue = For(propertyType, defaultData);
-                var propertyValue = propertyInfo.GetValue(mock);
-                var array = Array.CreateInstance(propertyType, 0);
-
-                typeof(NSubstitute.SubstituteExtensions).InvokeGenericMethod(
-                    nameof(NSubstitute.SubstituteExtensions.Returns), new[] { propertyType }, propertyValue, returnValue,
-                    array);
-            }
-        }
-
-        private static void SetupMethods<T>(this T mock, DefaultData defaultData)
-        {
-            var methods = typeof(T).GetMethods().Where(m => (m.ReturnType != typeof(void)) && !m.IsSpecialName);
-            foreach (var methodInfo in methods)
-            {
-                var methodReturnType = methodInfo.ReturnType;
-                var returnValue = For(methodReturnType, defaultData);
-                var arguments = methodInfo.CreateAnyArgs();
-                var methodReturnValue = methodInfo.Invoke(mock, arguments);
-                var array = Array.CreateInstance(methodReturnType, 0);
-                typeof(NSubstitute.SubstituteExtensions).InvokeGenericMethod(
-                    nameof(NSubstitute.SubstituteExtensions.Returns), new[] { methodReturnType }, methodReturnValue,
-                    returnValue, array);
             }
         }
     }

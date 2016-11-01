@@ -1,8 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MockCreatorTest.Structs;
 using ObjectCreator.Extensions;
+using ObjectCreatorTest.Structs;
 
-namespace MockCreatorTest.Test
+namespace ObjectCreatorTest.Test
 {
     [TestClass]
     public class TestStructWihtoutCtor

@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MockCreatorTest.Interfaces;
 using ObjectCreator.Extensions;
 using ObjectCreator.Helper;
+using ObjectCreatorTest.Interfaces;
 using TestExtension;
 
-namespace MockCreatorTest.Test
+namespace ObjectCreatorTest.Test
 {
     [TestClass]
     public class TestIMethodWithPrimitiveTypeInterface

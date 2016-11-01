@@ -1,9 +1,9 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 using Extensions;
 using ObjectCreator.Extensions;
+using ObjectCreator.Helper;
 
 namespace DesignTimeCreator
 {
@@ -11,6 +11,8 @@ namespace DesignTimeCreator
     {
         public static readonly DependencyProperty DesignTimeTypeProperty = DependencyProperty.RegisterAttached(
             "DesignTimeType", typeof(Type), typeof(DesignTimeAttachedProperties), new PropertyMetadata(default(Type), PropertyChangedCallback));
+
+        private static readonly RandomDefaultData RandomDefaultData = new RandomDefaultData();
 
         private static async void PropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
@@ -22,7 +24,7 @@ namespace DesignTimeCreator
             var frameworkElement = dependencyObject.Cast<FrameworkElement>();
             var newType = dependencyPropertyChangedEventArgs.NewValue.Cast<Type>();
 
-            var taskResult = await Task.Run(() => newType.For());
+            var taskResult = await Task.Run(() => newType.For(RandomDefaultData));
             frameworkElement.DataContext = taskResult;
         }
 

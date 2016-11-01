@@ -17,6 +17,14 @@ namespace DesignTimeCreator
 
     public interface IMainWindowViewModel : INotifyPropertyChanged
     {
+        int IntValue { get; }
+
+        double DoubleValue { get; }
+
+        decimal DecimalValue { get; }
+
+        bool BoolValue { get; }
+
         IPerson Person { get; set; }
 
         IEnumerable<IPerson> Persons { get; }
@@ -28,6 +36,14 @@ namespace DesignTimeCreator
 
     public class MainWindowViewModel : BindingBase
     {
+        public int IntValue { get; set; }
+
+        public double DoubleValue { get; set; }
+
+        public decimal DecimalValue { get; set; }
+
+        public bool BoolValue { get; set; }
+
         public IPerson Person { get; set; }
 
         public IEnumerable<IPerson> Persons { get; set; }

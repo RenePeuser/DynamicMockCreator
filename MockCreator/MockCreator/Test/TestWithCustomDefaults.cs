@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ObjectCreator.Extensions;
 using ObjectCreator.Helper;
 
-namespace MockCreatorTest.Test
+namespace ObjectCreatorTest.Test
 {
     [TestClass]
     public class TestWithCustomDefaults

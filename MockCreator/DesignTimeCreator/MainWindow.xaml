@@ -5,9 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DesignTimeCreator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525"
-        local:DesignTimeAttachedProperties.DesignTimeType="{x:Type local:IMainWindowViewModel}">
+        Title="MainWindow" Height="549.2" Width="520.2"
+        local:DesignTimeAttachedProperties.DesignTimeType="{x:Type local:MainWindowViewModel}">
     <StackPanel>
+        <TextBlock Text="{Binding Path=IntValue}"/>
+        <TextBlock Text="{Binding Path=DoubleValue}"/>
+        <TextBlock Text="{Binding Path=DecimalValue}"/>
+        <TextBlock Text="{Binding Path=BoolValue}"/>
         <TextBlock Text="{Binding Path=Person.Name}"/>
         <TextBlock Text="{Binding Path=Person.Age}"/>
         <DataGrid ItemsSource="{Binding Path=Persons}" AutoGenerateColumns="True"/>

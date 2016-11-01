@@ -9,7 +9,7 @@ using ObjectCreator.Extensions;
 using ObjectCreator.Helper;
 using TestExtension;
 
-namespace MockCreatorTest.Test
+namespace ObjectCreatorTest.Test
 {
     [TestClass]
     public class TestDynamicTestExecution

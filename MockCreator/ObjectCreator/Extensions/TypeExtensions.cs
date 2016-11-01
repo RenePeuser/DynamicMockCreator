@@ -30,6 +30,16 @@ namespace ObjectCreator.Extensions
             return result;
         }
 
+        public static object InvokeExpectedMethod(this Type classType, string methodName, Type[] argumentTypes,
+            params object[] arguments)
+        {
+            var argumentCount = arguments.Length;
+            var expectedMethod = classType.GetMethods().First(item => item.Name == methodName && item.GetParameters().Length == argumentCount);
+            var genericMethod = expectedMethod.MakeGenericMethod(argumentTypes);
+            var result = genericMethod.Invoke(null, arguments);
+            return result;
+        }
+
         public static bool IsSystemType(this Type type)
         {
             return type.FullName.StartsWith("System");

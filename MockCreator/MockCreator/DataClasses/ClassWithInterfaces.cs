@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace MockCreatorTest.DataClasses
+namespace ObjectCreatorTest.DataClasses
 {
     public class ClassWithInterfaces
     {

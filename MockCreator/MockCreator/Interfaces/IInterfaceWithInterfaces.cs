@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MockCreatorTest.Interfaces
+namespace ObjectCreatorTest.Interfaces
 {
     public interface IInterfaceWithInterfaces
     {
