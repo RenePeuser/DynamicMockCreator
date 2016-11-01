@@ -10,27 +10,34 @@ This Samples shows the default usage of the object creator. That means the data 
 
 Create from Interface:
 
+
+```csharp
 [TestMethod]
 public void CreateFromInterface()
 {
     Assert.IsNotNull(ObjectCreatorExtensions.Create<INotifyPropertyChanged>());
 }
+```
 
 Create from class
 
+```csharp
 [TestMethod]
 public void CreateContainerClass()
 {
     Assert.IsNotNull(ObjectCreatorExtensions.Create<Container>());
 }
+```
 
 Create from abstract class
 
+```csharp
 [TestMethod]
 public void CreateFromAbstractClass()
 {
     Assert.IsNotNull(ObjectCreatorExtensions.Create<ClassAbstract>());
 }
+```
 
 # Radom data initialization
 
@@ -42,22 +49,30 @@ private static readonly RandomDefaultData RandomDefaultData = new RandomDefaultD
 If we has this creator we can use it as an parameter for the "Create<>" method. With this way
 the data structures will be initialized with randomized data.
 
+
+```csharp
 [TestMethod]
 public void CreateFromInterfaceType()
 {
     Assert.IsNotNull(ObjectCreatorExtensions.Create<INotifyPropertyChanged>(RandomDefaultData));
 }
+```
 
+
+```csharp
 [TestMethod]
 public void CreateFromClassWithPrimitiveArguments()
 {
     Assert.IsNotNull(ObjectCreatorExtensions.Create<ClassWithPrimitiveTypes>(RandomDefaultData));
 }
+```
 
+
+```csharp
 [TestMethod]
 public void CreateFromClassWithInterfacesArguments()
 {
     Assert.IsNotNull(ObjectCreatorExtensions.Create<ClassWithInterfaces>(RandomDefaultData));
 }
-
+```
 
