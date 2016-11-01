@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -6,6 +7,27 @@ namespace ObjectCreator.Extensions
 {
     public static class TypeExtensions
     {
+        private static readonly IEnumerable<Type> ActionDeclarations = new[]
+        {
+            typeof(Action),
+            typeof(Action<>),
+            typeof(Action<,>),
+            typeof(Action<,,>),
+            typeof(Action<,,,>),
+            typeof(Action<,,,,>),
+            typeof(Action<,,,,,>),
+            typeof(Action<,,,,,,>),
+            typeof(Action<,,,,,,,>),
+            typeof(Action<,,,,,,,,>),
+            typeof(Action<,,,,,,,,,>),
+            typeof(Action<,,,,,,,,,,>),
+            typeof(Action<,,,,,,,,,,,>),
+            typeof(Action<,,,,,,,,,,,,>),
+            typeof(Action<,,,,,,,,,,,,,>),
+            typeof(Action<,,,,,,,,,,,,,,>),
+            typeof(Action<,,,,,,,,,,,,,,,>)
+        };
+
         public static ConstructorInfo GetConstructor(this Type type)
         {
             var ctor = type.GetConstructors(BindingFlags.Public | BindingFlags.Static |
@@ -43,16 +65,6 @@ namespace ObjectCreator.Extensions
         public static bool IsSystemType(this Type type)
         {
             return type.FullName.StartsWith("System");
-        }
-
-        public static bool IsNotSystemType(this Type type)
-        {
-            return !type.IsSystemType();
-        }
-
-        public static bool IsNotArray(this Type type)
-        {
-            return !type.IsArray;
-        }
+        }              
     }
 }

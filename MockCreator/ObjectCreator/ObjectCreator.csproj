@@ -50,6 +50,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\ActionTypeExtensions.cs" />
+    <Compile Include="Extensions\FuncTypeExtensions.cs" />
     <Compile Include="Extensions\ObjectCreatorSetupExtensions.cs" />
     <Compile Include="Extensions\ObjectCreatorExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />

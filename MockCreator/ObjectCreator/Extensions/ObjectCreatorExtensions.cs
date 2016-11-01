@@ -40,6 +40,16 @@ namespace ObjectCreator.Extensions
                 return CreateFromArray<T>(type, defaultData);
             }
 
+            if (type.IsAction())
+            {
+                return type.CreateFromAction<T>(defaultData);
+            }
+
+            if (type.IsFunc())
+            {
+                return type.CreateFromFunc<T>(defaultData);
+            }
+
             return CreateDynamicFrom<T>(type, defaultData);
         }
 

@@ -55,10 +55,12 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Actions\ClassWithActions.cs" />
     <Compile Include="DataClasses\ClassAbstract.cs" />
     <Compile Include="DataClasses\ClassWithInterfaces.cs" />
     <Compile Include="DataClasses\ClassWithPrimitiveTypes.cs" />
     <Compile Include="DataClasses\Container.cs" />
+    <Compile Include="Functions\ClassWithActions.cs" />
     <Compile Include="Interfaces\IInterfaceWithInterfaces.cs" />
     <Compile Include="Interfaces\IMethodWithPrimitiveTypesInterface.cs" />
     <Compile Include="Interfaces\InterfaceWithEnumerations.cs" />
@@ -70,6 +72,8 @@
     <Compile Include="Test\TestIPropertyInterfaceMock.cs" />
     <Compile Include="Test\TestDynamicTestExecution.cs" />
     <Compile Include="Test\TestComplexTypes.cs" />
+    <Compile Include="Test\TestObjectCreatorWithAction.cs" />
+    <Compile Include="Test\TestObjectCreatorWithFunc.cs" />
     <Compile Include="Test\TestStructWihtoutCtor.cs" />
     <Compile Include="Test\TestWithCustomDefaults.cs" />
     <Compile Include="Test\TestEnumeration.cs" />
