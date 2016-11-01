@@ -76,12 +76,14 @@ public void CreateFromClassWithInterfacesArguments()
 }
 ```
 
+
 # DesignTimeCreator
 
 Another cool thing what we have with this creator now, is that we can use it to create our DesignTime-DataContext for XAML files. 
 Every developer knows how much time it costs to have the XAML Designer with valid informations. Everytime you have to create mock ups, which will get no service over the time. Every time if the interfaces are changed, you have a lot of refactorings to do. Every of us know that we produce code in our view assemblies which are not necssary for the prodcution code, but you have to implement it to see some visual result at design time.
 
 The solution for such problems is, that you can combine this object creator with the design time data context.
+
 
 To solve this quite easy, i have written a very small attached property which sets the DataContext ONLY at design time with the expected type.
 
@@ -138,3 +140,7 @@ Sample with an interface view model "MainWindowViewModel"
     </StackPanel>
 </Window>
 ```
+
+Result
+
+![alt tag](https://raw.githubusercontent.com/username/projectname/branch/path/to/img.png)
