@@ -4,9 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DesignTimeCreator"
+        xmlns:markupExtensions="clr-namespace:ObjectCreator.MarkupExtensions;assembly=ObjectCreator"
         mc:Ignorable="d"
         Title="MainWindow" Height="549.2" Width="520.2"
-        local:DesignTimeAttachedProperties.DesignTimeType="{x:Type local:IMainWindowViewModel}">
+        markupExtensions:DesignTimeAttachedProperties.DesignTimeType="{x:Type local:IMainWindowViewModel}">
     <StackPanel>
         <TextBlock Text="{Binding Path=IntValue}"/>
         <TextBlock Text="{Binding Path=DoubleValue}"/>

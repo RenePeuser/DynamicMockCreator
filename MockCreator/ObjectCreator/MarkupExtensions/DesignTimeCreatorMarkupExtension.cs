@@ -6,7 +6,7 @@ using Extensions;
 using ObjectCreator.Extensions;
 using ObjectCreator.Helper;
 
-namespace DesignTimeCreator
+namespace ObjectCreator.MarkupExtensions
 {
     public class DesignTimeAttachedProperties
     {
