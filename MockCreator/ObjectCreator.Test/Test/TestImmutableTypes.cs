@@ -10,6 +10,7 @@ using ObjectCreator.Extensions;
 namespace ObjectCreatorTest.Test
 {
     [TestClass]
+    [Ignore]
     public class TestImmutableTypes
     {
         [TestMethod]

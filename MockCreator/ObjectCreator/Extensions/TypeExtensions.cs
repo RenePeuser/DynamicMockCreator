@@ -8,10 +8,12 @@ namespace ObjectCreator.Extensions
 {
     public static class TypeExtensions
     {
+        private static readonly BindingFlags ExpectedBindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance |
+                                                   BindingFlags.Static;
+
         public static ConstructorInfo GetConstructor(this Type type)
         {
-            var ctor = type.GetConstructors(BindingFlags.Public | BindingFlags.Static |
-                                            BindingFlags.NonPublic | BindingFlags.Instance)
+            var ctor = type.GetConstructors(ExpectedBindingFlags)
 
                 .First(item => !item.GetParameters().Any(p => p.ParameterType.IsPointer));
             return ctor;
@@ -26,7 +28,7 @@ namespace ObjectCreator.Extensions
         public static object InvokeGenericMethod(this Type classType, string methodName, Type[] argumentTypes,
             params object[] arguments)
         {
-            var expectedMethod = classType.GetMethods().First(m => m.Name == methodName);
+            var expectedMethod = classType.GetMethods(ExpectedBindingFlags).First(m => m.Name == methodName);
             var genericMethod = expectedMethod.MakeGenericMethod(argumentTypes);
             var result = genericMethod.Invoke(null, arguments);
             return result;
@@ -36,7 +38,7 @@ namespace ObjectCreator.Extensions
             params object[] arguments)
         {
             var argumentCount = arguments.Length;
-            var expectedMethod = classType.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static).First(item => item.Name == methodName && item.GetParameters().Length == argumentCount);
+            var expectedMethod = classType.GetMethods(ExpectedBindingFlags).First(item => item.Name == methodName && item.GetParameters().Length == argumentCount);
             var genericMethod = expectedMethod.MakeGenericMethod(argumentTypes);
             var result = genericMethod.Invoke(null, arguments);
             return result;
