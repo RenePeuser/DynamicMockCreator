@@ -17,10 +17,10 @@ namespace ObjectCreator.MarkupExtensions
 
         private static async void PropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
-            if (!DesignerProperties.GetIsInDesignMode(dependencyObject))
-            {
-                return;
-            }
+            //if (!DesignerProperties.GetIsInDesignMode(dependencyObject))
+            //{
+            //    return;
+            //}
 
             var frameworkElement = dependencyObject.Cast<FrameworkElement>();
             var newType = dependencyPropertyChangedEventArgs.NewValue.Cast<Type>();

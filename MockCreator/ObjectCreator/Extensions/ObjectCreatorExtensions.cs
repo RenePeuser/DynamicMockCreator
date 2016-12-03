@@ -42,7 +42,7 @@ namespace ObjectCreator.Extensions
 
             if (type.IsArray)
             {
-                return CreateFromArray<T>(type, defaultData);
+                return CreateFromArray<T>(type, defaultData, objectCreatorMode);
             }
 
             if (type.IsAction())
@@ -94,13 +94,13 @@ namespace ObjectCreator.Extensions
             return CreateFunc(new[] { type }, defaultData, objectCreatorMode);
         }
 
-        private static T CreateFromArray<T>(Type type, IDefaultData defaultData)
+        private static T CreateFromArray<T>(Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
         {
             var elementType = type.GetElementType();
             var array = Array.CreateInstance(elementType, 5);
             for (var i = 0; i < 5; i++)
             {
-                var arrayItem = elementType.Create(defaultData);
+                var arrayItem = elementType.Create(defaultData, objectCreatorMode);
                 array.SetValue(arrayItem, i);
             }
             return (T)(object)array;
@@ -126,7 +126,7 @@ namespace ObjectCreator.Extensions
         {
             if (type.IsInterfaceImplemented<IEnumerable>())
             {
-                return CreateEnumeration<T>(type, defaultData);
+                return CreateEnumeration<T>(type, defaultData, objectCreatorMode);
             }
 
             var args = new object[] { };
@@ -166,7 +166,7 @@ namespace ObjectCreator.Extensions
             // This is special we dont need a proxy for interfaces of IEnumerable.
             if (typeof(T).IsInterfaceImplemented<IEnumerable>())
             {
-                return CreateEnumeration<T>(argumentType, defaultData);
+                return CreateEnumeration<T>(argumentType, defaultData, objectCreatorMode);
             }
 
             var mock = (T)ForFunc(argumentType);
@@ -194,15 +194,15 @@ namespace ObjectCreator.Extensions
             return mock;
         }
 
-        private static T CreateEnumeration<T>(Type enumerationType, IDefaultData defaultData)
+        private static T CreateEnumeration<T>(Type enumerationType, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
         {
             var genericArguments = enumerationType.GetGenericArguments();
             if (!genericArguments.Any())
             {
-                return (T)CreateEnumeration(typeof(object), defaultData);
+                return (T)CreateEnumeration(typeof(object), defaultData, objectCreatorMode);
             }
 
-            var enumeration = CreateEnumeration(enumerationType, defaultData);
+            var enumeration = CreateEnumeration(enumerationType, defaultData, objectCreatorMode);
             var result = ToListOfTypeFunc(genericArguments.First(), enumeration);
 
             if (enumerationType.IsInterfaceImplemented<ICollection>())
@@ -213,12 +213,12 @@ namespace ObjectCreator.Extensions
             return (T)result;
         }
 
-        private static IEnumerable CreateEnumeration(Type enumerationType, IDefaultData defaultData)
+        private static IEnumerable CreateEnumeration(Type enumerationType, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
         {
             var genericArgument = enumerationType.GetGenericArguments().First();
             for (var i = 0; i < 5; i++)
             {
-                var result = genericArgument.Create(defaultData);
+                var result = genericArgument.Create(defaultData, objectCreatorMode);
                 yield return result;
             }
         }
