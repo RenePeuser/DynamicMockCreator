@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Extensions;
@@ -15,6 +16,7 @@ namespace ObjectCreator.Extensions
         private static readonly Func<Type, IEnumerable, object> ToListOfTypeFunc = (genericTypeArg, enumeration) => typeof(EnumerableExtensions).InvokeGenericMethod(nameof(EnumerableExtensions.ToListOfType), new[] { genericTypeArg }, enumeration);
         private static readonly Func<Type, object[], object> ForPartsOfFunc = (genericType, arguments) => typeof(Substitute).InvokeGenericMethod(nameof(Substitute.ForPartsOf), new[] { genericType }, new object[] { arguments });
         private static readonly Func<Type, object> ForFunc = genericType => typeof(Substitute).InvokeGenericMethod(nameof(Substitute.For), new[] { genericType }, new object[] { new object[] { } });
+        private static readonly Func<Type, Type, IDefaultData, ObjectCreatorMode, object> CreateDictionaryFunc = (keyType, valueType, defaultData, creatorMode) => typeof(ObjectCreatorExtensions).InvokeExpectedMethod(nameof(ObjectCreatorExtensions.CreateFromDictionary), new[] { keyType, valueType }, defaultData, creatorMode);
 
         public static T Create<T>(ObjectCreatorMode objectCreatorMode = ObjectCreatorMode.None)
         {
@@ -92,6 +94,23 @@ namespace ObjectCreator.Extensions
             }
 
             return CreateFunc(new[] { type }, defaultData, objectCreatorMode);
+        }
+
+        private static Dictionary<TKey, TValue> CreateFromDictionary<TKey, TValue>(IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
+        {
+            var dictionary = new Dictionary<TKey, TValue>();
+            for (int i = 0; i < 5; i++)
+            {
+                var key = Create<TKey>(defaultData, objectCreatorMode);
+                if (dictionary.ContainsKey(key))
+                {
+                    break;
+                }
+
+                var value = Create<TValue>(defaultData, objectCreatorMode);
+                dictionary.Add(key, value);
+            }
+            return dictionary;
         }
 
         private static T CreateFromArray<T>(Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
@@ -200,6 +219,11 @@ namespace ObjectCreator.Extensions
             if (!genericArguments.Any())
             {
                 return (T)CreateEnumeration(typeof(object), defaultData, objectCreatorMode);
+            }
+
+            if (typeof(T).IsInterfaceImplemented<IDictionary>())
+            {
+                return (T)CreateDictionaryFunc(genericArguments[0], genericArguments[1], defaultData, objectCreatorMode);
             }
 
             var enumeration = CreateEnumeration(enumerationType, defaultData, objectCreatorMode);

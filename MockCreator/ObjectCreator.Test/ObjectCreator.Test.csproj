@@ -42,6 +42,10 @@
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.3.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="TestExtension">
       <HintPath>..\ExternalLibs\TestExtension.dll</HintPath>
     </Reference>
@@ -63,6 +67,7 @@
     <Compile Include="Interfaces\IInterfaceWithInterfaces.cs" />
     <Compile Include="Interfaces\IMethodWithPrimitiveTypesInterface.cs" />
     <Compile Include="Interfaces\InterfaceWithEnumerations.cs" />
+    <Compile Include="Interfaces\InterfaceWithImmutableEnumerations.cs" />
     <Compile Include="Interfaces\InterfaceWithUndefinedMethods.cs" />
     <Compile Include="Interfaces\IPrimitivePropertyInterface.cs" />
     <Compile Include="Structs\StructWithoutCtor.cs" />
@@ -70,6 +75,7 @@
     <Compile Include="Test\TestClassWithFuncAndAction.cs" />
     <Compile Include="Test\TestIInterfaceWithInterfaces.cs" />
     <Compile Include="Test\TestIMethodWithPrimitiveTypeInterface.cs" />
+    <Compile Include="Test\TestImmutableTypes.cs" />
     <Compile Include="Test\TestIPropertyInterfaceMock.cs" />
     <Compile Include="Test\TestDynamicTestExecution.cs" />
     <Compile Include="Test\TestComplexTypes.cs" />
@@ -91,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

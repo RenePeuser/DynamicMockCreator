@@ -57,5 +57,11 @@ namespace ObjectCreatorTest.Test
         {
             Assert.IsNotNull(ObjectCreatorExtensions.Create<ObservableCollection<string>>());
         }
+
+        [TestMethod]
+        public void CreateDictionary()
+        {
+            Assert.IsNotNull(ObjectCreatorExtensions.Create<Dictionary<string, int>>());
+        }
     }
 }

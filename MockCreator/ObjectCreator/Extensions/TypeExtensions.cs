@@ -36,7 +36,7 @@ namespace ObjectCreator.Extensions
             params object[] arguments)
         {
             var argumentCount = arguments.Length;
-            var expectedMethod = classType.GetMethods().First(item => item.Name == methodName && item.GetParameters().Length == argumentCount);
+            var expectedMethod = classType.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static).First(item => item.Name == methodName && item.GetParameters().Length == argumentCount);
             var genericMethod = expectedMethod.MakeGenericMethod(argumentTypes);
             var result = genericMethod.Invoke(null, arguments);
             return result;
