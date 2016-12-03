@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Extensions;
 using ObjectCreator.Interfaces;
 
@@ -10,11 +11,13 @@ namespace ObjectCreator.Helper
         private readonly Dictionary<Type, object> _defaultData;
 
         public DefaultData(params object[] defaultData)
+            : this(defaultData.Select(item => new TypeToValue(item.GetType(), item)).ToArray())
         {
-            _defaultData = new Dictionary<Type, object>();
+        }
 
-            // ToDo: Dictionary.AddRange Extensions => AddRange(this Dictionary dictionary, Func<TKey> keySelector, Func<TValue> valueSelector)
-            defaultData.ForEach(item => _defaultData.Add(item.GetType(), item));
+        public DefaultData(params TypeToValue[] typeToValue)
+        {
+            _defaultData = typeToValue.ToDictionary(item => item.Type, item => item.Value);
         }
 
         public object GetDefaultValue(Type type)

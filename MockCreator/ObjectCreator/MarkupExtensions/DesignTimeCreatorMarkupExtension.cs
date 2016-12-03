@@ -25,7 +25,7 @@ namespace ObjectCreator.MarkupExtensions
             var frameworkElement = dependencyObject.Cast<FrameworkElement>();
             var newType = dependencyPropertyChangedEventArgs.NewValue.Cast<Type>();
 
-            var taskResult = await Task.Run(() => newType.Create(RandomDefaultData));
+            var taskResult = await Task.Run(() => newType.Create(RandomDefaultData, ObjectCreatorMode.WithProperties));
             frameworkElement.DataContext = taskResult;
         }
 

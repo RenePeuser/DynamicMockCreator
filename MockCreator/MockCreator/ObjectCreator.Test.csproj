@@ -63,6 +63,7 @@
     <Compile Include="Interfaces\IInterfaceWithInterfaces.cs" />
     <Compile Include="Interfaces\IMethodWithPrimitiveTypesInterface.cs" />
     <Compile Include="Interfaces\InterfaceWithEnumerations.cs" />
+    <Compile Include="Interfaces\InterfaceWithUndefinedMethods.cs" />
     <Compile Include="Interfaces\IPrimitivePropertyInterface.cs" />
     <Compile Include="Structs\StructWithoutCtor.cs" />
     <Compile Include="Structs\StructWithCtor.cs" />
@@ -75,6 +76,8 @@
     <Compile Include="Test\TestObjectCreatorWithAction.cs" />
     <Compile Include="Test\TestObjectCreatorWithFunc.cs" />
     <Compile Include="Test\TestStructWihtoutCtor.cs" />
+    <Compile Include="Test\TestTask.cs" />
+    <Compile Include="Test\TestUndefinedTypes.cs" />
     <Compile Include="Test\TestWithCustomDefaults.cs" />
     <Compile Include="Test\TestEnumeration.cs" />
     <Compile Include="Test\TestPrimitveTypes.cs" />
@@ -85,6 +88,9 @@
       <Project>{7833c2c1-4f55-4589-b905-340c373448da}</Project>
       <Name>ObjectCreator</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

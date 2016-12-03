@@ -41,6 +41,14 @@
       <HintPath>..\packages\NSubstitute.1.10.0.0\lib\net45\NSubstitute.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Ploeh.AutoFixture, Version=3.50.2.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoFixture.3.50.2\lib\net40\Ploeh.AutoFixture.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ploeh.AutoFixture.AutoNSubstitute, Version=3.50.2.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoFixture.AutoNSubstitute.3.50.2\lib\net40\Ploeh.AutoFixture.AutoNSubstitute.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -59,16 +67,20 @@
     <Compile Include="Extensions\FuncTypeExtensions.cs" />
     <Compile Include="Extensions\ObjectCreatorSetupExtensions.cs" />
     <Compile Include="Extensions\ObjectCreatorExtensions.cs" />
+    <Compile Include="Extensions\TaskExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Helper\DefaultData.cs" />
     <Compile Include="Helper\DefaultDataItem.cs" />
     <Compile Include="Helper\DefaultValueHelper.cs" />
+    <Compile Include="Helper\ObjectCreatorMode.cs" />
     <Compile Include="Helper\RandomDefaultData.cs" />
+    <Compile Include="Helper\TypeToValue.cs" />
     <Compile Include="Interfaces\IDefaultData.cs" />
     <Compile Include="MarkupExtensions\DesignTimeCreatorMarkupExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

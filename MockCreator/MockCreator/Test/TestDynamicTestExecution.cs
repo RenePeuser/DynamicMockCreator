@@ -15,24 +15,24 @@ namespace ObjectCreatorTest.Test
     public class TestDynamicTestExecution
     {
         private static readonly DefaultData CustomData = new DefaultData(
-            (sbyte) 3,
-            (byte) 3,
-            (short) 3,
-            (ushort) 3,
+            (sbyte)3,
+            (byte)3,
+            (short)3,
+            (ushort)3,
             3,
-            (uint) 3,
-            (long) 3.3,
-            (ulong) 3.3,
+            (uint)3,
+            (long)3.3,
+            (ulong)3.3,
             '?',
-            (float) 3.3,
+            (float)3.3,
             3.4,
             false,
             new decimal(3.5),
             "What",
             new DateTime(),
             new object(),
-            new[] {"T..X"},
-            new Collection<int> {3, 3});
+            new[] { "T..X" },
+            new Collection<int> { 3, 3 });
 
         private Dictionary<Type, object> _dictionary;
 
@@ -56,7 +56,7 @@ namespace ObjectCreatorTest.Test
             foreach (var keyValuePair in dictionary)
             {
                 var result = typeof(ObjectCreatorExtensions).InvokeExpectedMethod(nameof(ObjectCreatorExtensions.Create),
-                    new[] {keyValuePair.Key}, CustomData);
+                    new[] { keyValuePair.Key }, CustomData, ObjectCreatorMode.None);
 
                 if (CustomData.GetDefaultValue(keyValuePair.Key).NotEqualityEquals(result))
                 {

@@ -28,7 +28,7 @@ namespace ObjectCreator.Helper
             { typeof(char), () => NextChar() },
             { typeof(bool), () => NextBool() },
             { typeof(string), NextString },
-            { typeof(DateTime), () => NextDateTime() },
+            { typeof(DateTime), () => NextDateTime() }
         };
 
         public object GetDefaultValue(Type type)

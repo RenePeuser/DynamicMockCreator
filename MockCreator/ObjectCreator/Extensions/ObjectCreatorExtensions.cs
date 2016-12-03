@@ -11,12 +11,17 @@ namespace ObjectCreator.Extensions
 {
     public static class ObjectCreatorExtensions
     {
-        public static T Create<T>()
+        private static readonly Func<Type[], IDefaultData, ObjectCreatorMode, object> CreateFunc = (types, data, creatorMode) => typeof(ObjectCreatorExtensions).InvokeExpectedMethod(nameof(ObjectCreatorExtensions.Create), types, data, creatorMode);
+        private static readonly Func<Type, IEnumerable, object> ToListOfTypeFunc = (genericTypeArg, enumeration) => typeof(EnumerableExtensions).InvokeGenericMethod(nameof(EnumerableExtensions.ToListOfType), new[] { genericTypeArg }, enumeration);
+        private static readonly Func<Type, object[], object> ForPartsOfFunc = (genericType, arguments) => typeof(Substitute).InvokeGenericMethod(nameof(Substitute.ForPartsOf), new[] { genericType }, new object[] { arguments });
+        private static readonly Func<Type, object> ForFunc = genericType => typeof(Substitute).InvokeGenericMethod(nameof(Substitute.For), new[] { genericType }, new object[] { new object[] { } });
+
+        public static T Create<T>(ObjectCreatorMode objectCreatorMode = ObjectCreatorMode.None)
         {
-            return Create<T>(null);
+            return Create<T>(null, objectCreatorMode);
         }
 
-        public static T Create<T>(IDefaultData defaultData)
+        public static T Create<T>(IDefaultData defaultData, ObjectCreatorMode objectCreatorMode = ObjectCreatorMode.None)
         {
             var type = typeof(T);
             var defaultValue = type.GetDefaultValue(defaultData);
@@ -27,12 +32,12 @@ namespace ObjectCreator.Extensions
 
             if (type.IsInterface)
             {
-                return CreateFromInterface<T>(type, defaultData);
+                return CreateFromInterface<T>(type, defaultData, objectCreatorMode);
             }
 
             if (type.IsAbstract)
             {
-                return CreateFromAbstractClass<T>(type, defaultData);
+                return CreateFromAbstractClass<T>(type, defaultData, objectCreatorMode);
             }
 
             if (type.IsArray)
@@ -42,7 +47,7 @@ namespace ObjectCreator.Extensions
 
             if (type.IsAction())
             {
-                return type.CreateFromAction<T>(defaultData);
+                return type.CreateFromAction<T>();
             }
 
             if (type.IsFunc())
@@ -50,27 +55,43 @@ namespace ObjectCreator.Extensions
                 return type.CreateFromFunc<T>(defaultData);
             }
 
-            return CreateDynamicFrom<T>(type, defaultData);
+            if (type.IsTask())
+            {
+                return type.CreateFromTask<T>(defaultData);
+            }
+
+            return CreateDynamicFrom<T>(type, defaultData, objectCreatorMode);
         }
 
-        public static object Create(this Type type)
+        public static object Create(this Type type, ObjectCreatorMode objectCreatorMode = ObjectCreatorMode.None)
         {
             if (type == null)
             {
                 throw new ArgumentNullException(nameof(type));
             }
 
-            return type.Create(null);
+            return type.Create(null, objectCreatorMode);
         }
 
-        public static object Create(this Type type, IDefaultData defaultData)
+        public static object Create(this Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode = ObjectCreatorMode.None)
         {
             if (type == null)
             {
                 throw new ArgumentNullException(nameof(type));
             }
 
-            return typeof(ObjectCreatorExtensions).InvokeExpectedMethod(nameof(ObjectCreatorExtensions.Create), new[] { type }, defaultData);
+            var result = type.GetDefaultValue(defaultData);
+            if (result != null)
+            {
+                return result;
+            }
+
+            if (type.IsUndefined())
+            {
+                return null;
+            }
+
+            return CreateFunc(new[] { type }, defaultData, objectCreatorMode);
         }
 
         private static T CreateFromArray<T>(Type type, IDefaultData defaultData)
@@ -85,14 +106,23 @@ namespace ObjectCreator.Extensions
             return (T)(object)array;
         }
 
-        private static T CreateFromAbstractClass<T>(this Type type, IDefaultData defaultData)
+        private static T CreateFromAbstractClass<T>(this Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
         {
             var args = type.CreateCtorArguments(defaultData);
-            return typeof(Substitute).InvokeGenericMethod<T>(nameof(Substitute.ForPartsOf), new[] { type },
-                new object[] { args });
+            var result = (T)ForPartsOfFunc(type, args);
+
+            switch (objectCreatorMode)
+            {
+                case ObjectCreatorMode.All:
+                case ObjectCreatorMode.WithProperties:
+                    result.InitProperties(defaultData);
+                    break;
+            }
+
+            return result;
         }
 
-        private static T CreateDynamicFrom<T>(this Type type, IDefaultData defaultData)
+        private static T CreateDynamicFrom<T>(this Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
         {
             if (type.IsInterfaceImplemented<IEnumerable>())
             {
@@ -106,7 +136,15 @@ namespace ObjectCreator.Extensions
             }
 
             var result = (T)Activator.CreateInstance(type, args);
-            result.InitProperties(defaultData);
+
+            switch (objectCreatorMode)
+            {
+                case ObjectCreatorMode.All:
+                case ObjectCreatorMode.WithProperties:
+                    result.InitProperties(defaultData);
+                    break;
+            }
+
             return result;
         }
 
@@ -123,7 +161,7 @@ namespace ObjectCreator.Extensions
             return arguments.ToArray();
         }
 
-        private static T CreateFromInterface<T>(this Type argumentType, IDefaultData defaultData)
+        private static T CreateFromInterface<T>(this Type argumentType, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
         {
             // This is special we dont need a proxy for interfaces of IEnumerable.
             if (typeof(T).IsInterfaceImplemented<IEnumerable>())
@@ -131,8 +169,7 @@ namespace ObjectCreator.Extensions
                 return CreateEnumeration<T>(argumentType, defaultData);
             }
 
-            var mock = typeof(Substitute).InvokeGenericMethod<T>(nameof(Substitute.For), new[] { argumentType },
-                new object[] { new object[] { } });
+            var mock = (T)ForFunc(argumentType);
 
             // Check solution for that case and all scenarios.
             if (typeof(T).IsSystemType())
@@ -140,8 +177,20 @@ namespace ObjectCreator.Extensions
                 return mock;
             }
 
-            mock.SetupProperties(defaultData);
-            mock.SetupMethods(defaultData);
+            switch (objectCreatorMode)
+            {
+                case ObjectCreatorMode.All:
+                    mock.SetupProperties(defaultData, objectCreatorMode);
+                    mock.SetupMethods(defaultData, objectCreatorMode);
+                    break;
+                case ObjectCreatorMode.WithProperties:
+                    mock.SetupProperties(defaultData, objectCreatorMode);
+                    break;
+                case ObjectCreatorMode.WithMethods:
+                    mock.SetupMethods(defaultData, objectCreatorMode);
+                    break;
+            }
+
             return mock;
         }
 
@@ -154,8 +203,7 @@ namespace ObjectCreator.Extensions
             }
 
             var enumeration = CreateEnumeration(enumerationType, defaultData);
-            var result = typeof(EnumerableExtensions).InvokeGenericMethod(nameof(EnumerableExtensions.ToListOfType),
-                new[] { genericArguments.First() }, enumeration);
+            var result = ToListOfTypeFunc(genericArguments.First(), enumeration);
 
             if (enumerationType.IsInterfaceImplemented<ICollection>())
             {

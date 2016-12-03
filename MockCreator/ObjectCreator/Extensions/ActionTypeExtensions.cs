@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using ObjectCreator.Interfaces;
 
 namespace ObjectCreator.Extensions
 {
@@ -45,10 +44,10 @@ namespace ObjectCreator.Extensions
             return ActionDeclarations.Contains(genericTypeDefintion);
         }
 
-        public static T CreateFromAction<T>(this Type type, IDefaultData defaultValue)
+        public static T CreateFromAction<T>(this Type type)
         {
             var parameterExpressions = CreateParameterExpressions(type);
-            var returnBlockExpression = CreateReturnBlockExpression(type, defaultValue);
+            var returnBlockExpression = Expression.Block(Expression.Empty());
             var lambda = Expression.Lambda(returnBlockExpression, parameterExpressions);
             var compiledLambda = lambda.Compile();
             return (T)(object)compiledLambda;
@@ -67,12 +66,6 @@ namespace ObjectCreator.Extensions
             {
                 yield return Expression.Parameter(genericArguments[i]);
             }
-        }
-
-        private static BlockExpression CreateReturnBlockExpression(Type funcType, IDefaultData defaultValue)
-        {
-            var expressionBlock = Expression.Block(Expression.Empty());
-            return expressionBlock;
         }
     }
 }
