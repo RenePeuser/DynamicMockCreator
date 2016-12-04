@@ -227,7 +227,7 @@ namespace ObjectCreator.Extensions
             }
 
             var enumeration = CreateEnumeration(enumerationType, defaultData, objectCreatorMode);
-            var result = ToListOfTypeFunc(genericArguments.First(), enumeration);
+            var result = ToListOfTypeFunc(genericArguments[0], enumeration);
 
             if (enumerationType.IsInterfaceImplemented<ICollection>())
             {

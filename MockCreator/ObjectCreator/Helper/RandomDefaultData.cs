@@ -39,7 +39,7 @@ namespace ObjectCreator.Helper
 
         private static double NextDouble()
         {
-            return Math.Round((Random.NextDouble() * 100), 2);
+            return Math.Round(Random.NextDouble() * 100, 2);
         }
 
         private static char NextChar()

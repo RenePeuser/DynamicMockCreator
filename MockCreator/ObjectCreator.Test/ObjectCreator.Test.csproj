@@ -40,12 +40,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ExternalLibs\Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Collections.Immutable.1.3.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.ServiceModel" />
     <Reference Include="TestExtension">
       <HintPath>..\ExternalLibs\TestExtension.dll</HintPath>
     </Reference>
@@ -72,6 +75,10 @@
     <Compile Include="Interfaces\IPrimitivePropertyInterface.cs" />
     <Compile Include="Structs\StructWithoutCtor.cs" />
     <Compile Include="Structs\StructWithCtor.cs" />
+    <Compile Include="Test\ClassCreationTest\SystemCollectionsObjectModelTest.cs" />
+    <Compile Include="Test\ClassCreationTest\SystemCollectionsGenericTest.cs" />
+    <Compile Include="Test\ClassCreationTest\SystemCollectionsConcurrentTest.cs" />
+    <Compile Include="Test\ClassCreationTest\SystemCollectionsSpecialized.cs" />
     <Compile Include="Test\TestClassWithFuncAndAction.cs" />
     <Compile Include="Test\TestIInterfaceWithInterfaces.cs" />
     <Compile Include="Test\TestIMethodWithPrimitiveTypeInterface.cs" />
@@ -85,7 +92,7 @@
     <Compile Include="Test\TestTask.cs" />
     <Compile Include="Test\TestUndefinedTypes.cs" />
     <Compile Include="Test\TestWithCustomDefaults.cs" />
-    <Compile Include="Test\TestEnumeration.cs" />
+    <Compile Include="Test\ClassCreationTest\SystemCollectionsTest.cs" />
     <Compile Include="Test\TestPrimitveTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
