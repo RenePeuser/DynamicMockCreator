@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ObjectCreator.Extensions;
 
-namespace ObjectCreatorTest.Test
+namespace ObjectCreatorTest.Test.ClassCreationTest
 {
     [TestClass]
     public class SystemCollectionsObjectModelClassTest

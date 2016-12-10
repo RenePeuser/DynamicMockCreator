@@ -57,6 +57,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -73,6 +74,7 @@
     <Compile Include="Extensions\ObjectCreatorExtensions.cs" />
     <Compile Include="Extensions\TaskExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Helper\EnumerableCreator.cs" />
     <Compile Include="Helper\DefaultData.cs" />
     <Compile Include="Helper\DefaultDataItem.cs" />
     <Compile Include="Helper\DefaultValueHelper.cs" />

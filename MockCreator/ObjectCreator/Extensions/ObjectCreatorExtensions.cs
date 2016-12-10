@@ -215,26 +215,28 @@ namespace ObjectCreator.Extensions
 
         private static T CreateEnumeration<T>(Type enumerationType, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
         {
-            var genericArguments = enumerationType.GetGenericArguments();
-            if (!genericArguments.Any())
-            {
-                return (T)CreateEnumeration(typeof(object), defaultData, objectCreatorMode);
-            }
+            return EnumerableCreator.Create<T>();
 
-            if (typeof(T).IsInterfaceImplemented<IDictionary>())
-            {
-                return (T)CreateDictionaryFunc(genericArguments[0], genericArguments[1], defaultData, objectCreatorMode);
-            }
+            //var genericArguments = enumerationType.GetGenericArguments();
+            //if (!genericArguments.Any())
+            //{
+            //    return (T)CreateEnumeration(typeof(object), defaultData, objectCreatorMode);
+            //}
 
-            var enumeration = CreateEnumeration(enumerationType, defaultData, objectCreatorMode);
-            var result = ToListOfTypeFunc(genericArguments[0], enumeration);
+            //if (typeof(T).IsInterfaceImplemented<IDictionary>())
+            //{
+            //    return (T)CreateDictionaryFunc(genericArguments[0], genericArguments[1], defaultData, objectCreatorMode);
+            //}
 
-            if (enumerationType.IsInterfaceImplemented<ICollection>())
-            {
-                return (T)Activator.CreateInstance(enumerationType, result);
-            }
+            //var enumeration = CreateEnumeration(enumerationType, defaultData, objectCreatorMode);
+            //var result = ToListOfTypeFunc(genericArguments[0], enumeration);
 
-            return (T)result;
+            //if (enumerationType.IsInterfaceImplemented<ICollection>())
+            //{
+            //    return (T)Activator.CreateInstance(enumerationType, result);
+            //}
+
+            //return (T)result;
         }
 
         private static IEnumerable CreateEnumeration(Type enumerationType, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)

@@ -40,9 +40,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ExternalLibs\Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <Private>False</Private>
-    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Collections.Immutable.1.3.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
@@ -75,10 +73,12 @@
     <Compile Include="Interfaces\IPrimitivePropertyInterface.cs" />
     <Compile Include="Structs\StructWithoutCtor.cs" />
     <Compile Include="Structs\StructWithCtor.cs" />
+    <Compile Include="Test\ClassCreationTest\SystemCollectionsImmutableTest.cs" />
     <Compile Include="Test\ClassCreationTest\SystemCollectionsObjectModelTest.cs" />
     <Compile Include="Test\ClassCreationTest\SystemCollectionsGenericTest.cs" />
     <Compile Include="Test\ClassCreationTest\SystemCollectionsConcurrentTest.cs" />
     <Compile Include="Test\ClassCreationTest\SystemCollectionsSpecialized.cs" />
+    <Compile Include="Test\PeformanceTest.cs" />
     <Compile Include="Test\TestClassWithFuncAndAction.cs" />
     <Compile Include="Test\TestIInterfaceWithInterfaces.cs" />
     <Compile Include="Test\TestIMethodWithPrimitiveTypeInterface.cs" />

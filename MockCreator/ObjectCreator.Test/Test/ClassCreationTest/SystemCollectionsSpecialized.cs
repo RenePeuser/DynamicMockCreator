@@ -1,9 +1,8 @@
-using System.Collections;
 using System.Collections.Specialized;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ObjectCreator.Extensions;
 
-namespace ObjectCreatorTest.Test
+namespace ObjectCreatorTest.Test.ClassCreationTest
 {
     [TestClass]
     public class SystemCollectionsSpecializedClassTest
@@ -15,6 +14,7 @@ namespace ObjectCreatorTest.Test
         }
 
         [TestMethod]
+        [Ignore]
         public void TestNameObjectCollectionBasehKeysCollection()
         {
             Assert.IsNotNull(ObjectCreatorExtensions.Create<NameObjectCollectionBase.KeysCollection>());
@@ -57,6 +57,7 @@ namespace ObjectCreatorTest.Test
         }
 
         [TestMethod]
+        [Ignore]
         public void TestStringEnumerator()
         {
             Assert.IsNotNull(ObjectCreatorExtensions.Create<StringEnumerator>());

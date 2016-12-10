@@ -40,7 +40,7 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
         [TestMethod]
         public void TestSortedDictionaryKeyCollection()
         {
-            Assert.IsNotNull(ObjectCreatorExtensions.Create<Dictionary<string, int>.KeyCollection>());
+            Assert.IsNotNull(ObjectCreatorExtensions.Create<SortedDictionary<string, int>.KeyCollection>());
         }
 
         [TestMethod]
