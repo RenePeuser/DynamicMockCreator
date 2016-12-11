@@ -8,30 +8,7 @@ namespace ObjectCreator.Extensions
 {
     internal static class TaskCreator
     {
-        internal static object CreateFromTask(Type type, IDefaultData defaultValue)
-        {
-            if (type == null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
-
-            if (!type.IsTask())
-            {
-                return null;
-            }
-
-            var genericTypeParam = type.GetGenericArguments().FirstOrDefault();
-            if (genericTypeParam != null)
-            {
-                var returnValue = FuncCreator.Create(genericTypeParam, defaultValue);
-                var result = typeof(TaskCreator).InvokeGenericMethod(nameof(FromResult), new[] { genericTypeParam }, returnValue);
-                return result;
-            }
-
-            return Task.FromResult(0);
-        }
-
-        public static T CreateFromTask<T>(this Type type, IDefaultData defaultValue)
+        public static T Create<T>(Type type, IDefaultData defaultValue)
         {
             if (type == null)
             {
@@ -41,7 +18,7 @@ namespace ObjectCreator.Extensions
             var genericTypeParam = type.GetGenericArguments().FirstOrDefault();
             if (genericTypeParam != null)
             {
-                var returnValue = FuncCreator.Create(genericTypeParam, defaultValue);
+                var returnValue = FuncCreator.Create<T>(genericTypeParam, defaultValue);
                 var result = typeof(TaskCreator).InvokeGenericMethod(nameof(FromResult), new[] { genericTypeParam }, returnValue);
                 return (T)result;
             }

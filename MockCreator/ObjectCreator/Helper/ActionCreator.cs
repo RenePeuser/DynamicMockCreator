@@ -9,25 +9,15 @@ namespace ObjectCreator.Helper
     {
         internal static T Create<T>(Type type)
         {
+            if (!type.IsAction())
+            {
+                return default(T);
+            }
             var parameterExpressions = CreateParameterExpressions(type);
             var returnBlockExpression = Expression.Block(Expression.Empty());
             var lambda = Expression.Lambda(returnBlockExpression, parameterExpressions);
             var compiledLambda = lambda.Compile();
             return (T)(object)compiledLambda;
-        }
-
-        internal static object Create(Type type)
-        {
-            if (!type.IsAction())
-            {
-                return null;
-            }
-
-            var parameterExpressions = CreateParameterExpressions(type);
-            var returnBlockExpression = Expression.Block(Expression.Empty());
-            var lambda = Expression.Lambda(returnBlockExpression, parameterExpressions);
-            var compiledLambda = lambda.Compile();
-            return compiledLambda;
         }
 
         private static IEnumerable<ParameterExpression> CreateParameterExpressions(Type funcType)

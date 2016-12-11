@@ -11,6 +11,11 @@ namespace ObjectCreator.Helper
     {
         internal static T Create<T>(Type type, IDefaultData defaultValue)
         {
+            if (!type.IsFunc())
+            {
+                return default(T);
+            }
+
             var parameterExpressions = CreateParameterExpressions(type);
             var returnBlockExpression = CreateReturnBlockExpression(type, defaultValue);
             var lambda = Expression.Lambda(returnBlockExpression, parameterExpressions);
@@ -18,21 +23,7 @@ namespace ObjectCreator.Helper
             return (T)(object)compiledLambda;
         }
 
-        internal static object Create(Type type, IDefaultData defaultValue)
-        {
-            if (!type.IsFunc())
-            {
-                return null;
-            }
-
-            var parameterExpressions = CreateParameterExpressions(type);
-            var returnBlockExpression = CreateReturnBlockExpression(type, defaultValue);
-            var lambda = Expression.Lambda(returnBlockExpression, parameterExpressions);
-            var compiledLambda = lambda.Compile();
-            return compiledLambda;
-        }
-
-        private static IEnumerable<ParameterExpression> CreateParameterExpressions(Type funcType)
+       private static IEnumerable<ParameterExpression> CreateParameterExpressions(Type funcType)
         {
             var genericArguments = funcType.GetGenericArguments();
             var inputParameterCount = genericArguments.Length - 1;

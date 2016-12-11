@@ -6,11 +6,11 @@ namespace ObjectCreator.Helper
 {
     internal static class ArrayCreator
     {
-        internal static object Create(Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
+        internal static T Create<T>(Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
         {
             if (!type.IsArray)
             {
-                return null;
+                return default(T);
             }
 
             var elementType = type.GetElementType();
@@ -20,7 +20,7 @@ namespace ObjectCreator.Helper
                 var arrayItem = elementType.Create(defaultData, objectCreatorMode);
                 array.SetValue(arrayItem, i);
             }
-            return array;
+            return (T)(object)array;
         }
     }
 }

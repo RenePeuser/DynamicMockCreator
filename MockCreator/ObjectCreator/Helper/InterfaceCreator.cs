@@ -11,59 +11,6 @@ namespace ObjectCreator.Helper
     {
         private static readonly Func<Type, object> ForFunc = genericType => typeof(Substitute).InvokeGenericMethod(nameof(Substitute.For), new[] { genericType }, new object[] { new object[] { } });
 
-        internal static object Create(Type argumentType, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
-        {
-            if (!argumentType.IsInterface)
-            {
-                return null;
-            }
-
-            object returnValue = null;
-            if (argumentType.IsInterfaceImplemented<IEnumerable>())
-            {
-                returnValue = EnumerableCreator.Create(argumentType, defaultData, objectCreatorMode);
-            }
-
-            if (returnValue == null)
-            {
-                returnValue = ForFunc(argumentType);
-            }
-
-            return returnValue;
-        }
-
-        internal static object CreateOld(Type argumentType, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
-        {
-            if (!argumentType.IsInterface)
-            {
-                return null;
-            }
-
-            var mock = ForFunc(argumentType);
-
-            // Check solution for that case and all scenarios.
-            if (argumentType.IsSystemType())
-            {
-                return mock;
-            }
-
-            switch (objectCreatorMode)
-            {
-                case ObjectCreatorMode.All:
-                    mock.SetupProperties(defaultData, objectCreatorMode);
-                    mock.SetupMethods(defaultData, objectCreatorMode);
-                    break;
-                case ObjectCreatorMode.WithProperties:
-                    mock.SetupProperties(defaultData, objectCreatorMode);
-                    break;
-                case ObjectCreatorMode.WithMethods:
-                    mock.SetupMethods(defaultData, objectCreatorMode);
-                    break;
-            }
-
-            return mock;
-        }
-
         internal static T Create<T>(Type argumentType, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
         {
             if (!argumentType.IsInterface)
@@ -71,29 +18,63 @@ namespace ObjectCreator.Helper
                 return default(T);
             }
 
-            var mock = (T)ForFunc(argumentType);
-
-            // Check solution for that case and all scenarios.
-            if (typeof(T).IsSystemType())
+            var returnValue = default(T);
+            if (argumentType.IsInterfaceImplemented<IEnumerable>())
             {
-                return mock;
+                returnValue = EnumerableCreator.Create<T>(argumentType, defaultData, objectCreatorMode);
             }
 
-            switch (objectCreatorMode)
+            if (returnValue == null)
             {
-                case ObjectCreatorMode.All:
-                    mock.SetupProperties(defaultData, objectCreatorMode);
-                    mock.SetupMethods(defaultData, objectCreatorMode);
-                    break;
-                case ObjectCreatorMode.WithProperties:
-                    mock.SetupProperties(defaultData, objectCreatorMode);
-                    break;
-                case ObjectCreatorMode.WithMethods:
-                    mock.SetupMethods(defaultData, objectCreatorMode);
-                    break;
+                returnValue = (T)ForFunc(argumentType);
+                switch (objectCreatorMode)
+                {
+                    case ObjectCreatorMode.All:
+                        returnValue.SetupProperties(defaultData, objectCreatorMode);
+                        returnValue.SetupMethods(defaultData, objectCreatorMode);
+                        break;
+                    case ObjectCreatorMode.WithProperties:
+                        returnValue.SetupProperties(defaultData, objectCreatorMode);
+                        break;
+                    case ObjectCreatorMode.WithMethods:
+                        returnValue.SetupMethods(defaultData, objectCreatorMode);
+                        break;
+                }
             }
 
-            return mock;
+            return returnValue;
         }
+
+        //internal static T Create<T>(Type argumentType, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
+        //{
+        //    if (!argumentType.IsInterface)
+        //    {
+        //        return default(T);
+        //    }
+
+        //    var mock = (T)ForFunc(argumentType);
+
+        //    // Check solution for that case and all scenarios.
+        //    if (typeof(T).IsSystemType())
+        //    {
+        //        return mock;
+        //    }
+
+        //    switch (objectCreatorMode)
+        //    {
+        //        case ObjectCreatorMode.All:
+        //            mock.SetupProperties(defaultData, objectCreatorMode);
+        //            mock.SetupMethods(defaultData, objectCreatorMode);
+        //            break;
+        //        case ObjectCreatorMode.WithProperties:
+        //            mock.SetupProperties(defaultData, objectCreatorMode);
+        //            break;
+        //        case ObjectCreatorMode.WithMethods:
+        //            mock.SetupMethods(defaultData, objectCreatorMode);
+        //            break;
+        //    }
+
+        //    return mock;
+        //}
     }
 }

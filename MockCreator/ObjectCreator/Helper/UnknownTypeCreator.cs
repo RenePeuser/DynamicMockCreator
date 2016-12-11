@@ -9,12 +9,12 @@ namespace ObjectCreator.Helper
 {
     internal static class UnknownTypeCreator
     {
-        internal static object CreateDynamicFrom(Type type, IDefaultData defaultData,
+        internal static T CreateDynamicFrom<T>(Type type, IDefaultData defaultData,
             ObjectCreatorMode objectCreatorMode)
         {
             if (type.IsInterfaceImplemented<IEnumerable>())
             {
-                var returnValue = EnumerableCreator.Create(type, defaultData, objectCreatorMode);
+                var returnValue = EnumerableCreator.Create<T>(type, defaultData, objectCreatorMode);
                 if (returnValue != null)
                 {
                     return returnValue;
@@ -27,7 +27,7 @@ namespace ObjectCreator.Helper
                 args = type.CreateCtorArguments(defaultData, objectCreatorMode);
             }
 
-            var result = Activator.CreateInstance(type, args);
+            var result = (T)Activator.CreateInstance(type, args);
 
             switch (objectCreatorMode)
             {

@@ -34,35 +34,35 @@ namespace ObjectCreator.Extensions
 
             if (type.IsInterface)
             {
-                return (T)InterfaceCreator.Create(type, defaultData, objectCreatorMode);
+                return InterfaceCreator.Create<T>(type, defaultData, objectCreatorMode);
             }
 
             if (type.IsAbstract)
             {
-                return (T)AbstractClassCreator.Create(type, defaultData, objectCreatorMode);
+                return AbstractClassCreator.Create<T>(type, defaultData, objectCreatorMode);
             }
 
             if (type.IsArray)
             {
-                return (T)ArrayCreator.Create(type, defaultData, objectCreatorMode);
+                return ArrayCreator.Create<T>(type, defaultData, objectCreatorMode);
             }
 
             if (type.IsAction())
             {
-                return (T)ActionCreator.Create(type);
+                return ActionCreator.Create<T>(type);
             }
 
             if (type.IsFunc())
             {
-                return (T)FuncCreator.Create(type, defaultData);
+                return FuncCreator.Create<T>(type, defaultData);
             }
 
             if (type.IsTask())
             {
-                return (T)TaskCreator.CreateFromTask(type, defaultData);
+                return TaskCreator.Create<T>(type, defaultData);
             }
 
-            return (T)UnknownTypeCreator.CreateDynamicFrom(type, defaultData, objectCreatorMode);
+            return UnknownTypeCreator.CreateDynamicFrom<T>(type, defaultData, objectCreatorMode);
         }
 
         public static object Create(this Type type, ObjectCreatorMode objectCreatorMode = ObjectCreatorMode.None)
@@ -100,10 +100,10 @@ namespace ObjectCreator.Extensions
         {
             if (type.IsInterfaceImplemented<IEnumerable>())
             {
-                var returnValue = EnumerableCreator.Create(type, defaultData, objectCreatorMode);
+                var returnValue = EnumerableCreator.Create<T>(type, defaultData, objectCreatorMode);
                 if (returnValue != null)
                 {
-                    return (T)returnValue;
+                    return returnValue;
                 }
             }
 

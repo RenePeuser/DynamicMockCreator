@@ -29,7 +29,7 @@ namespace ObjectCreator.Extensions
             foreach (var propertyInfo in properties)
             {
                 var propertyType = propertyInfo.PropertyType;
-                var newValue = FuncCreator.Create(propertyType, defaultData);
+                var newValue = FuncCreator.Create<T>(propertyType, defaultData);
                 propertyInfo.SetValue(source, newValue);
             }
         }
@@ -50,7 +50,7 @@ namespace ObjectCreator.Extensions
 
         public static void SetupMethods<T>(this T mock, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
         {
-            var allMethods = typeof(T).GetAllMethods();
+            var allMethods = typeof(T).GetMethods(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
 
             foreach (var methodInfo in allMethods)
             {

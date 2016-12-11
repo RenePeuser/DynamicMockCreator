@@ -17,16 +17,16 @@ namespace ObjectCreator.Helper
 {
     internal static class EnumerableCreator
     {
-        internal static object Create(Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
+        internal static T Create<T>(Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
         {
             if (!type.IsInterfaceImplemented<IEnumerable>())
             {
-                return null;
+                return default(T);
             }
 
             var result = type.IsGenericType
-            ? EnumerableCreatorGeneric.Create(type)
-            : EnumerableCreatorNonGeneric.Create(type);
+                ? EnumerableCreatorGeneric.Create<T>()
+                : EnumerableCreatorNonGeneric.Create<T>();
 
             if (result == null)
             {
@@ -45,8 +45,8 @@ namespace ObjectCreator.Helper
             }
 
             return type.IsGenericType
-            ? (T)EnumerableCreatorGeneric.Create<T>()
-            : (T)EnumerableCreatorNonGeneric.Create<T>();
+            ? EnumerableCreatorGeneric.Create<T>()
+            : EnumerableCreatorNonGeneric.Create<T>();
         }
     }
 
@@ -59,12 +59,12 @@ namespace ObjectCreator.Helper
                 NonGenericTypeCreator.GetValueOrDefault(type)?.Invoke();
         }
 
-        internal static object Create<T>()
+        internal static T Create<T>()
         {
             var type = typeof(T);
             return type.IsInterface ?
-                NonGenericInterfaceTypeCreator.GetValueOrDefault(type)?.Invoke() :
-                NonGenericTypeCreator.GetValueOrDefault(type)?.Invoke();
+                (T)NonGenericInterfaceTypeCreator.GetValueOrDefault(type)?.Invoke() :
+                (T)NonGenericTypeCreator.GetValueOrDefault(type)?.Invoke();
         }
 
         private static readonly Dictionary<Type, Func<object>> NonGenericTypeCreator = new Dictionary<Type, Func<object>>
@@ -115,14 +115,14 @@ namespace ObjectCreator.Helper
                 GenericCollectionTypes.GetValueOrDefault(genericType)?.Invoke(type);
         }
 
-        internal static object Create<T>()
+        internal static T Create<T>()
         {
             var expectedType = typeof(T);
             var genericType = expectedType.GetGenericTypeDefinition();
 
             return expectedType.IsInterface ?
-                GenericInterfaceCollectionTypes.GetValueOrDefault(genericType)?.Invoke(expectedType) :
-                GenericCollectionTypes.GetValueOrDefault(genericType)?.Invoke(expectedType);
+                (T)GenericInterfaceCollectionTypes.GetValueOrDefault(genericType)?.Invoke(expectedType) :
+                (T)GenericCollectionTypes.GetValueOrDefault(genericType)?.Invoke(expectedType);
         }
 
         private static readonly Dictionary<Type, Func<Type, object>> GenericCollectionTypes = new Dictionary<Type, Func<Type, object>>()
