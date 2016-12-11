@@ -18,7 +18,7 @@ namespace ObjectCreator.Helper
             return (T)(object)compiledLambda;
         }
 
-        internal static object Create(this Type type, IDefaultData defaultValue)
+        internal static object Create(Type type, IDefaultData defaultValue)
         {
             if (!type.IsFunc())
             {

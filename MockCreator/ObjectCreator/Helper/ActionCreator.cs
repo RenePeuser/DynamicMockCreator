@@ -7,7 +7,7 @@ namespace ObjectCreator.Helper
 {
     internal static class ActionCreator
     {
-        internal static T Create<T>(this Type type)
+        internal static T Create<T>(Type type)
         {
             var parameterExpressions = CreateParameterExpressions(type);
             var returnBlockExpression = Expression.Block(Expression.Empty());
