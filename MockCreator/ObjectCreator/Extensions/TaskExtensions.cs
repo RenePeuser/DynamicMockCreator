@@ -1,12 +1,36 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ObjectCreator.Helper;
 using ObjectCreator.Interfaces;
 
 namespace ObjectCreator.Extensions
 {
-    public static class TcTaskTypeExtensions
+    internal static class TaskCreator
     {
+        internal static object CreateFromTask(Type type, IDefaultData defaultValue)
+        {
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
+            if (!type.IsTask())
+            {
+                return null;
+            }
+
+            var genericTypeParam = type.GetGenericArguments().FirstOrDefault();
+            if (genericTypeParam != null)
+            {
+                var returnValue = FuncCreator.Create(genericTypeParam, defaultValue);
+                var result = typeof(TaskCreator).InvokeGenericMethod(nameof(FromResult), new[] { genericTypeParam }, returnValue);
+                return result;
+            }
+
+            return Task.FromResult(0);
+        }
+
         public static T CreateFromTask<T>(this Type type, IDefaultData defaultValue)
         {
             if (type == null)
@@ -17,8 +41,8 @@ namespace ObjectCreator.Extensions
             var genericTypeParam = type.GetGenericArguments().FirstOrDefault();
             if (genericTypeParam != null)
             {
-                var returnValue = genericTypeParam.Create(defaultValue);
-                var result = typeof(TcTaskTypeExtensions).InvokeGenericMethod(nameof(FromResult), new[] { genericTypeParam }, returnValue);
+                var returnValue = FuncCreator.Create(genericTypeParam, defaultValue);
+                var result = typeof(TaskCreator).InvokeGenericMethod(nameof(FromResult), new[] { genericTypeParam }, returnValue);
                 return (T)result;
             }
 

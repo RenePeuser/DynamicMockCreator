@@ -67,6 +67,20 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
         {
             Assert.IsNotNull(ObjectCreatorExtensions.Create<DictionaryEntry>());
         }
+
+        [TestMethod]
+        public void TestMyEnumerable()
+        {
+            Assert.IsNotNull(ObjectCreatorExtensions.Create<MyEnumerable>());
+        }
+
+        private class MyEnumerable : IEnumerable
+        {
+            public IEnumerator GetEnumerator()
+            {
+                return new List<object>().GetEnumerator();
+            }
+        }
     }
 
     [TestClass]
@@ -140,6 +154,17 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
         public void TestIStructuralEquatable()
         {
             Assert.IsNotNull(ObjectCreatorExtensions.Create<IStructuralEquatable>());
+        }
+
+        [TestMethod]
+        public void TestOwnIEnumerable()
+        {
+            Assert.IsNotNull(ObjectCreatorExtensions.Create<IMyEnumerable>());
+        }
+
+        // Test class to test own implementation of IEnumerable.
+        public interface IMyEnumerable : IEnumerable
+        {
         }
     }
 

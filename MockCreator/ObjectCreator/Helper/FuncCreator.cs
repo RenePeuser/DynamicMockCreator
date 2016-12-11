@@ -2,51 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using ObjectCreator.Extensions;
 using ObjectCreator.Interfaces;
 
-namespace ObjectCreator.Extensions
+namespace ObjectCreator.Helper
 {
-    public static class FuncTypeExtensions
+    internal static class FuncCreator
     {
-        private static readonly IEnumerable<Type> FuncDeclarations = new[]
-        {
-            typeof(Func<>),
-            typeof(Func<,>),
-            typeof(Func<,,>),
-            typeof(Func<,,,>),
-            typeof(Func<,,,,>),
-            typeof(Func<,,,,,>),
-            typeof(Func<,,,,,,>),
-            typeof(Func<,,,,,,,>),
-            typeof(Func<,,,,,,,,>),
-            typeof(Func<,,,,,,,,,>),
-            typeof(Func<,,,,,,,,,,>),
-            typeof(Func<,,,,,,,,,,,>),
-            typeof(Func<,,,,,,,,,,,,>),
-            typeof(Func<,,,,,,,,,,,,,>),
-            typeof(Func<,,,,,,,,,,,,,,>),
-            typeof(Func<,,,,,,,,,,,,,,,>),
-            typeof(Func<,,,,,,,,,,,,,,,,>)
-        };
-
-        public static bool IsFunc(this Type type)
-        {
-            if (!type.GetGenericArguments().Any())
-            {
-                return false;
-            }
-
-            var genericTypeDefintion = type.GetGenericTypeDefinition();
-            return FuncDeclarations.Contains(genericTypeDefintion);
-        }
-
-        public static T CreateFromFunc<T>(this Type type, IDefaultData defaultValue)
+        internal static T Create<T>(Type type, IDefaultData defaultValue)
         {
             var parameterExpressions = CreateParameterExpressions(type);
             var returnBlockExpression = CreateReturnBlockExpression(type, defaultValue);
             var lambda = Expression.Lambda(returnBlockExpression, parameterExpressions);
             var compiledLambda = lambda.Compile();
             return (T)(object)compiledLambda;
+        }
+
+        internal static object Create(this Type type, IDefaultData defaultValue)
+        {
+            if (!type.IsFunc())
+            {
+                return null;
+            }
+
+            var parameterExpressions = CreateParameterExpressions(type);
+            var returnBlockExpression = CreateReturnBlockExpression(type, defaultValue);
+            var lambda = Expression.Lambda(returnBlockExpression, parameterExpressions);
+            var compiledLambda = lambda.Compile();
+            return compiledLambda;
         }
 
         private static IEnumerable<ParameterExpression> CreateParameterExpressions(Type funcType)

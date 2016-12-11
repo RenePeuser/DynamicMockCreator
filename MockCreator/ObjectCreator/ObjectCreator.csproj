@@ -68,19 +68,25 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\ActionTypeExtensions.cs" />
-    <Compile Include="Extensions\FuncTypeExtensions.cs" />
+    <Compile Include="Extensions\ActionExtensions.cs" />
+    <Compile Include="Extensions\FuncExtensions.cs" />
     <Compile Include="Extensions\ObjectCreatorSetupExtensions.cs" />
     <Compile Include="Extensions\ObjectCreatorExtensions.cs" />
     <Compile Include="Extensions\TaskExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Helper\AbstractClassCreator.cs" />
+    <Compile Include="Helper\ActionCreator.cs" />
+    <Compile Include="Helper\ArrayCreator.cs" />
     <Compile Include="Helper\EnumerableCreator.cs" />
     <Compile Include="Helper\DefaultData.cs" />
     <Compile Include="Helper\DefaultDataItem.cs" />
     <Compile Include="Helper\DefaultValueHelper.cs" />
+    <Compile Include="Helper\FuncCreator.cs" />
+    <Compile Include="Helper\InterfaceCreator.cs" />
     <Compile Include="Helper\ObjectCreatorMode.cs" />
     <Compile Include="Helper\RandomDefaultData.cs" />
     <Compile Include="Helper\TypeToValue.cs" />
+    <Compile Include="Helper\UnknownTypeCreator.cs" />
     <Compile Include="Interfaces\IDefaultData.cs" />
     <Compile Include="MarkupExtensions\DesignTimeCreatorMarkupExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

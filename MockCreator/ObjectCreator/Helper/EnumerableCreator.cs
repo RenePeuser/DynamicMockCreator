@@ -5,26 +5,60 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
+using System.ServiceModel;
 using Extensions;
+using NSubstitute;
 using ObjectCreator.Extensions;
+using ObjectCreator.Interfaces;
 
 namespace ObjectCreator.Helper
 {
-    public static class EnumerableCreator
+    internal static class EnumerableCreator
     {
-        public static T Create<T>()
+        internal static object Create(Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
+        {
+            if (!type.IsInterfaceImplemented<IEnumerable>())
+            {
+                return null;
+            }
+
+            var result = type.IsGenericType
+            ? EnumerableCreatorGeneric.Create(type)
+            : EnumerableCreatorNonGeneric.Create(type);
+
+            if (result == null)
+            {
+                Debug.WriteLine($"Expected IEnumerble type: '{type.Name}' is unknown to create.");
+            }
+
+            return result;
+        }
+
+        internal static T Create<T>()
         {
             var type = typeof(T);
+            if (!type.IsInterfaceImplemented<IEnumerable>())
+            {
+                return default(T);
+            }
+
             return type.IsGenericType
-                ? (T)EnumerableCreatorGeneric.Create<T>()
-                : (T)EnumerableCreatorNonGeneric.Create<T>();
+            ? (T)EnumerableCreatorGeneric.Create<T>()
+            : (T)EnumerableCreatorNonGeneric.Create<T>();
         }
     }
 
     internal static class EnumerableCreatorNonGeneric
     {
+        internal static object Create(Type type)
+        {
+            return type.IsInterface ?
+                NonGenericInterfaceTypeCreator.GetValueOrDefault(type)?.Invoke() :
+                NonGenericTypeCreator.GetValueOrDefault(type)?.Invoke();
+        }
+
         internal static object Create<T>()
         {
             var type = typeof(T);
@@ -37,9 +71,9 @@ namespace ObjectCreator.Helper
         {
             {typeof(ArrayList), () => new ArrayList()},
             {typeof(BitArray), () => new BitArray(0)},
-            {typeof(CollectionBase), () => new Collection<object>()},
-            {typeof(DictionaryBase), () => new Dictionary<object, object>()},
-            {typeof(ReadOnlyCollectionBase), () => new ReadOnlyCollection<object>(new List<object>())},
+            {typeof(CollectionBase), () => Substitute.ForPartsOf<CollectionBase>()},
+            {typeof(DictionaryBase), () => Substitute.ForPartsOf<DictionaryBase>()},
+            {typeof(ReadOnlyCollectionBase), () => Substitute.ForPartsOf<ReadOnlyCollectionBase>()},
             {typeof(Hashtable), () => new Hashtable()},
             {typeof(Queue), () => new Queue()},
             {typeof(SortedList), () => new SortedList()},
@@ -54,6 +88,8 @@ namespace ObjectCreator.Helper
             {typeof(StringEnumerator), () => new StringCollection().GetEnumerator()},
             {typeof(BitVector32), () => new BitVector32(0)},
             {typeof(BitVector32.Section), () => BitVector32.CreateSection(0)},
+            {typeof(UriSchemeKeyedCollection), () => new UriSchemeKeyedCollection() },
+            {typeof(NameObjectCollectionBase), () => Substitute.ForPartsOf<NameObjectCollectionBase>() },
         };
 
         private static readonly Dictionary<Type, Func<object>> NonGenericInterfaceTypeCreator = new Dictionary<Type, Func<object>>()
@@ -66,8 +102,19 @@ namespace ObjectCreator.Helper
         };
     }
 
-    internal class EnumerableCreatorGeneric
+    internal static class EnumerableCreatorGeneric
     {
+        private static readonly Func<Type, object[], object> ForPartsOfFunc = (genericType, arguments) => typeof(Substitute).InvokeGenericMethod(nameof(Substitute.ForPartsOf), new[] { genericType }, new object[] { arguments });
+
+        internal static object Create(Type type)
+        {
+            var genericType = type.GetGenericTypeDefinition();
+
+            return type.IsInterface ?
+                GenericInterfaceCollectionTypes.GetValueOrDefault(genericType)?.Invoke(type) :
+                GenericCollectionTypes.GetValueOrDefault(genericType)?.Invoke(type);
+        }
+
         internal static object Create<T>()
         {
             var expectedType = typeof(T);
@@ -98,7 +145,7 @@ namespace ObjectCreator.Helper
                 { typeof(SortedSet<>.Enumerator), Activator.CreateInstance },
                 { typeof(Queue<>), Activator.CreateInstance },
                 { typeof(Queue<>.Enumerator),Activator.CreateInstance },
-                { typeof(KeyedCollection<,>),Activator.CreateInstance },
+                { typeof(KeyedCollection<,>),  type => ForPartsOfFunc(type, new object[] {}) },
                 { typeof(Dictionary<,>), Activator.CreateInstance },
                 { typeof(SortedDictionary<,>), Activator.CreateInstance },
                 { typeof(SortedDictionary<,>.Enumerator), Activator.CreateInstance },
@@ -110,8 +157,6 @@ namespace ObjectCreator.Helper
                 { typeof(ConcurrentQueue<>), Activator.CreateInstance },
                 { typeof(ConcurrentStack<>), Activator.CreateInstance },
                 { typeof(Partitioner<>), Activator.CreateInstance },
-                { typeof(SynchronizedKeyedCollection<,>), Activator.CreateInstance },
-
 
                 { typeof(LinkedListNode<>), type => Activator.CreateInstance(type, type.GetGenericArguments().First().Create()) },
                 { typeof(Dictionary<,>.ValueCollection), type =>
@@ -213,14 +258,7 @@ namespace ObjectCreator.Helper
                 { typeof(IImmutableList<>), type => typeof(ImmutableList<>).MakeGenericType(type.GetGenericArguments()).Create()},
                 { typeof(IImmutableQueue<>), type => typeof(ImmutableQueue<>).MakeGenericType(type.GetGenericArguments()).Create()},
                 { typeof(IImmutableSet<>), type => typeof(ImmutableHashSet<>).MakeGenericType(type.GetGenericArguments()).Create()},
-
-                //{ typeof(IImmutableStack<>), type =>
-                //{
-                //    var genericArguments = type.GetGenericArguments();
-                //    var immutableStack = typeof(ImmutableStack<>).MakeGenericType(genericArguments).Create();
-                //    var result = immutableStack.GetType().GetMethod(nameof(ImmutableStack.Pop)).Invoke(null, new[]{immutableStack, null});
-                //    return result;
-                //}},
+                { typeof(IImmutableStack<>), type => typeof(ImmutableStack<>).MakeGenericType(type.GetGenericArguments()).Create()},
             };
     }
 }

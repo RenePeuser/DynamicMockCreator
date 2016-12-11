@@ -78,31 +78,31 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
         }
 
         [TestMethod]
-        public void TestImmutableList()
+        public void TestImmutableListEnumerator()
         {
             Assert.IsNotNull(ObjectCreatorExtensions.Create<ImmutableList<string>.Enumerator>());
         }
 
         [TestMethod]
-        public void TestImmutableSortedDictionary()
+        public void TestImmutableSortedDictionaryEnumerator()
         {
             Assert.IsNotNull(ObjectCreatorExtensions.Create<ImmutableSortedDictionary<string, int>.Enumerator>());
         }
 
         [TestMethod]
-        public void TestImmutableSortedSet()
+        public void TestImmutableSortedSetEnumerator()
         {
             Assert.IsNotNull(ObjectCreatorExtensions.Create<ImmutableSortedSet<string>.Enumerator>());
         }
 
         [TestMethod]
-        public void TestImmutableQueue()
+        public void TestImmutableQueueEnumerator()
         {
             Assert.IsNotNull(ObjectCreatorExtensions.Create<ImmutableQueue<string>.Enumerator>());
         }
 
         [TestMethod]
-        public void TestImmutableStack()
+        public void TestImmutableStackEnumerator()
         {
             Assert.IsNotNull(ObjectCreatorExtensions.Create<ImmutableStack<string>.Enumerator>());
         }
@@ -136,7 +136,6 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
         }
 
         [TestMethod]
-        [Ignore]
         public void TestImmutableStack()
         {
             Assert.IsNotNull(ObjectCreatorExtensions.Create<IImmutableStack<string>>());

@@ -29,7 +29,7 @@ namespace ObjectCreator.Extensions
             foreach (var propertyInfo in properties)
             {
                 var propertyType = propertyInfo.PropertyType;
-                var newValue = propertyType.Create(defaultData);
+                var newValue = FuncCreator.Create(propertyType, defaultData);
                 propertyInfo.SetValue(source, newValue);
             }
         }

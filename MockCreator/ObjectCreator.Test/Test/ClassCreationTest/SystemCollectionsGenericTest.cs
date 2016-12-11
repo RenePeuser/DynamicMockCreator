@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ServiceModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ObjectCreator.Extensions;
 
@@ -104,9 +105,9 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
         }
 
         [TestMethod]
-        public void TestSynchronizedKeyedCollection()
-        {
-            Assert.IsNotNull(ObjectCreatorExtensions.Create<SynchronizedKeyedCollection<string, int>>());
+        public void TestUriSchemeKeyedCollection()
+        {            
+            Assert.IsNotNull(ObjectCreatorExtensions.Create<UriSchemeKeyedCollection>());
         }
 
         [TestMethod]
@@ -192,13 +193,13 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
         }
 
         [TestMethod]
-        public void TestSortedSet()
+        public void TestSortedSetEnumerator()
         {
             Assert.IsNotNull(ObjectCreatorExtensions.Create<SortedSet<string>.Enumerator>());
         }
 
         [TestMethod]
-        public void TestStack()
+        public void TestStackEnumerator()
         {
             Assert.IsNotNull(ObjectCreatorExtensions.Create<Stack<string>.Enumerator>());
         }

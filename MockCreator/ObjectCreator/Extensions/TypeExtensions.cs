@@ -67,12 +67,7 @@ namespace ObjectCreator.Extensions
                 return true;
             }
 
-            if (type == typeof(Task<>))
-            {
-                return true;
-            }
-
-            return false;
+            return type == typeof(Task<>);
         }
 
         public static Array ToArray(this Type type, int length)
