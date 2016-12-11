@@ -82,6 +82,7 @@
     <Compile Include="Test\ClassCreationTest\SystemCollectionsGenericTest.cs" />
     <Compile Include="Test\ClassCreationTest\SystemCollectionsConcurrentTest.cs" />
     <Compile Include="Test\ClassCreationTest\SystemCollectionsSpecialized.cs" />
+    <Compile Include="Test\ClassCreationTest\SystemTest.cs" />
     <Compile Include="Test\PeformanceTest.cs" />
     <Compile Include="Test\TestClassWithFuncAndAction.cs" />
     <Compile Include="Test\TestIInterfaceWithInterfaces.cs" />

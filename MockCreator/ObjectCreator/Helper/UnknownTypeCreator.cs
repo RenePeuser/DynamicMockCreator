@@ -9,7 +9,8 @@ namespace ObjectCreator.Helper
 {
     internal static class UnknownTypeCreator
     {
-        internal static object CreateDynamicFrom(Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
+        internal static object CreateDynamicFrom(Type type, IDefaultData defaultData,
+            ObjectCreatorMode objectCreatorMode)
         {
             if (type.IsInterfaceImplemented<IEnumerable>())
             {
