@@ -3,9 +3,10 @@ using System.Collections;
 using System.Linq;
 using Extensions;
 using ObjectCreator.Extensions;
+using ObjectCreator.Helper;
 using ObjectCreator.Interfaces;
 
-namespace ObjectCreator.Helper
+namespace ObjectCreator.Creators
 {
     internal static class UnknownTypeCreator
     {

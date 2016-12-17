@@ -3,30 +3,31 @@ using System.Collections;
 using Extensions;
 using NSubstitute;
 using ObjectCreator.Extensions;
+using ObjectCreator.Helper;
 using ObjectCreator.Interfaces;
 
-namespace ObjectCreator.Helper
+namespace ObjectCreator.Creators
 {
     public static class InterfaceCreator
     {
         private static readonly Func<Type, object> ForFunc = genericType => typeof(Substitute).InvokeGenericMethod(nameof(Substitute.For), new[] { genericType }, new object[] { new object[] { } });
 
-        internal static T Create<T>(Type argumentType, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
+        internal static T Create<T>(Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
         {
-            if (!argumentType.IsInterface)
+            if (!type.IsInterface)
             {
                 return default(T);
             }
 
             var returnValue = default(T);
-            if (argumentType.IsInterfaceImplemented<IEnumerable>())
+            if (type.IsInterfaceImplemented<IEnumerable>())
             {
-                returnValue = EnumerableCreator.Create<T>(argumentType, defaultData, objectCreatorMode);
+                returnValue = EnumerableCreator.Create<T>(type, defaultData, objectCreatorMode);
             }
 
             if (returnValue == null)
             {
-                returnValue = (T)ForFunc(argumentType);
+                returnValue = (T)ForFunc(type);
                 switch (objectCreatorMode)
                 {
                     case ObjectCreatorMode.All:
@@ -45,14 +46,14 @@ namespace ObjectCreator.Helper
             return returnValue;
         }
 
-        //internal static T Create<T>(Type argumentType, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
+        //internal static T Create<T>(Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
         //{
-        //    if (!argumentType.IsInterface)
+        //    if (!type.IsInterface)
         //    {
         //        return default(T);
         //    }
 
-        //    var mock = (T)ForFunc(argumentType);
+        //    var mock = (T)ForFunc(type);
 
         //    // Check solution for that case and all scenarios.
         //    if (typeof(T).IsSystemType())

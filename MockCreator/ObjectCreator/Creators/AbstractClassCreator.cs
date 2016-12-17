@@ -1,9 +1,10 @@
 ﻿using System;
 using NSubstitute;
 using ObjectCreator.Extensions;
+using ObjectCreator.Helper;
 using ObjectCreator.Interfaces;
 
-namespace ObjectCreator.Helper
+namespace ObjectCreator.Creators
 {
     internal static class AbstractClassCreator
     {

@@ -20,7 +20,8 @@ namespace ObjectCreator.Helper
             true,
             new decimal(1.5),
             "MyString",
-            new DateTime(2016, 10, 15));
+            new DateTime(2016, 10, 15),
+            new Uri("http://www.google.com/"));
 
 
 

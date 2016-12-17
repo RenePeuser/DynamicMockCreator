@@ -72,8 +72,6 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
         [TestMethod]
         public void TestBitVector32()
         {
-            var ctor = typeof(BitVector32).GetConstructors();
-            var test = Activator.CreateInstance(typeof(BitVector32), new object[] {1});
             Assert.IsNotNull(ObjectCreatorExtensions.Create<BitVector32>());
         }
 

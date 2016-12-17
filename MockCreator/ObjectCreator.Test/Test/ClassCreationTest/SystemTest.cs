@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -18,7 +20,6 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
             "EventHandler",
             "Handle",
             "Microsoft.Win32.SystemEvents",
-            "System.Uri",
             "System.Net.AuthenticationSchemeSelector",
             "System.Net.HttpContinueDelegate",
             "System.Net.BindIPEndPoint",
@@ -74,6 +75,41 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
             Debug.WriteLine($"All types which were successfully created: {typesWhichCouldBeCreated.Count}");
             Debug.WriteLine(CreateErrorString(typesWhichCouldBeCreated));
             Assert.IsFalse(typesWhichCannotCreated.Any(), CreateErrorString(typesWhichCannotCreated));
+        }
+
+        [TestMethod]
+        public void TestUri()
+        {
+            Assert.IsNotNull(ObjectCreatorExtensions.Create<Uri>());
+        }
+
+        [TestMethod]
+        public void Test()
+        {
+            var assembly =
+                Assembly.LoadFile(
+                    @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.dll");
+
+            var types = assembly.GetTypes();
+
+            var result = types.Any(t => t == typeof(IEnumerable));
+
+            var allEnumerations =
+                types
+                    .Where(item => item.IsInterface);
+
+            var grouped = allEnumerations.GroupBy(item => item.Namespace);
+            var stringBuilder = new StringBuilder();
+            foreach (var grouping in grouped)
+            {
+                stringBuilder.AppendLine($"Namespace: {grouping.Key}");
+                foreach (var type in grouping)
+                {
+                    stringBuilder.AppendLine(type.Name);
+                }
+            }
+
+            Debug.Write(stringBuilder.ToString());
         }
 
         private static string CreateErrorString(List<string> errors)

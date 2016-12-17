@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using ObjectCreator.Extensions;
 using ObjectCreator.Interfaces;
 
-namespace ObjectCreator.Helper
+namespace ObjectCreator.Creators
 {
     internal static class FuncCreator
     {
@@ -23,7 +23,7 @@ namespace ObjectCreator.Helper
             return (T)(object)compiledLambda;
         }
 
-       private static IEnumerable<ParameterExpression> CreateParameterExpressions(Type funcType)
+        private static IEnumerable<ParameterExpression> CreateParameterExpressions(Type funcType)
         {
             var genericArguments = funcType.GetGenericArguments();
             var inputParameterCount = genericArguments.Length - 1;

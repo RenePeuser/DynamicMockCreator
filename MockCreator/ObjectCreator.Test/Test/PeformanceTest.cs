@@ -9,6 +9,7 @@ namespace ObjectCreatorTest.Test
     [TestClass]
     public class PeformanceTest
     {
+        // This test is only to capture test initialize time here !!
         [TestMethod]
         public void Init()
         {

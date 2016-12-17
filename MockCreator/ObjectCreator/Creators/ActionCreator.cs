@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ObjectCreator.Extensions;
 
-namespace ObjectCreator.Helper
+namespace ObjectCreator.Creators
 {
     internal static class ActionCreator
     {
