@@ -13,9 +13,7 @@ namespace ObjectCreator.Extensions
 
         public static ConstructorInfo GetConstructor(this Type type)
         {
-            var ctor = type.GetConstructors(ExpectedBindingFlags)
-
-                .First(item => !item.GetParameters().Any(p => p.ParameterType.IsPointer));
+            var ctor = type.GetConstructors(ExpectedBindingFlags).FirstOrDefault();
             return ctor;
         }
 
@@ -68,6 +66,11 @@ namespace ObjectCreator.Extensions
             }
 
             return type == typeof(Task<>);
+        }
+
+        public static bool IsStatic(this Type type)
+        {
+            return type.IsClass && type.IsAbstract && type.IsSealed;
         }
 
         public static Array ToArray(this Type type, int length)

@@ -26,6 +26,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,6 +36,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Extensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -66,7 +70,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="DataClasses\ClassAbstract.cs" />
-    <Compile Include="DataClasses\ClassWithActionAndFunc.cs" />
+    <Compile Include="DataClasses\ImmutableActionAndFunc.cs" />
     <Compile Include="DataClasses\ClassWithInterfaces.cs" />
     <Compile Include="DataClasses\ClassWithPrimitiveTypes.cs" />
     <Compile Include="DataClasses\Container.cs" />
@@ -93,6 +97,7 @@
     <Compile Include="Test\TestComplexTypes.cs" />
     <Compile Include="Test\TestObjectCreatorWithAction.cs" />
     <Compile Include="Test\TestObjectCreatorWithFunc.cs" />
+    <Compile Include="Test\TestStatic.cs" />
     <Compile Include="Test\TestStructWihtoutCtor.cs" />
     <Compile Include="Test\TestTask.cs" />
     <Compile Include="Test\TestUndefinedTypes.cs" />

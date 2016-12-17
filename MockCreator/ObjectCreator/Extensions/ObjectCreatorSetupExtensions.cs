@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using NSubstitute;
@@ -21,7 +22,7 @@ namespace ObjectCreator.Extensions
                 throw new ArgumentNullException(nameof(source));
             }
 
-            if (source.GetType().IsSystemType())
+            if (typeof(T).IsSystemType())
             {
                 return;
             }
@@ -29,8 +30,18 @@ namespace ObjectCreator.Extensions
             var properties = source.GetType().GetProperties().Where(prop => prop.CanWrite);
             foreach (var propertyInfo in properties)
             {
+                if (propertyInfo.GetIndexParameters().Any())
+                {
+                    continue;
+                }
+
                 var propertyType = propertyInfo.PropertyType;
-                var newValue = FuncCreator.Create<T>(propertyType, defaultData);
+                var propertyValue = propertyInfo.GetValue(source);
+                if (propertyValue != null)
+                {
+                    continue;
+                }
+                var newValue = propertyType.Create(defaultData);
                 propertyInfo.SetValue(source, newValue);
             }
         }
@@ -43,7 +54,8 @@ namespace ObjectCreator.Extensions
             {
                 var propertyType = propertyInfo.PropertyType;
                 var returnValue = propertyType.Create(defaultData, objectCreatorMode);
-                var propertyValue = propertyInfo.GetValue(mock);
+                var indexParameter = propertyInfo.GetIndexParameters().Select(p => p.ParameterType.Create()).ToArray();
+                var propertyValue = propertyInfo.GetValue(mock, indexParameter);
                 var array = Array.CreateInstance(propertyType, 0);
                 ReturnsFunc(propertyType, propertyValue, returnValue, array);
             }
@@ -56,6 +68,16 @@ namespace ObjectCreator.Extensions
             foreach (var methodInfo in allMethods)
             {
                 var methodReturnType = methodInfo.ReturnType;
+                if (methodReturnType == typeof(void))
+                {
+                    continue;
+                }
+
+                if (methodReturnType.IsUndefined())
+                {
+                    continue;
+                }
+
                 object returnValue;
                 if (methodReturnType.IsInterface)
                 {

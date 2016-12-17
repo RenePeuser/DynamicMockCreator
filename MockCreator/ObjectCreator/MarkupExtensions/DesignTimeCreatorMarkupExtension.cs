@@ -10,11 +10,11 @@ namespace ObjectCreator.MarkupExtensions
     public class DesignTimeAttachedProperties
     {
         public static readonly DependencyProperty DesignTimeTypeProperty = DependencyProperty.RegisterAttached(
-            "DesignTimeType", typeof(Type), typeof(DesignTimeAttachedProperties), new PropertyMetadata(default(Type), PropertyChangedCallback));
+            "DesignTimeType", typeof(Type), typeof(DesignTimeAttachedProperties), new PropertyMetadata(default(Type), PropertyChangedCallbackAsync));
 
         private static readonly RandomDefaultData RandomDefaultData = new RandomDefaultData();
 
-        private static async void PropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        private static async void PropertyChangedCallbackAsync(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
             //if (!DesignerProperties.GetIsInDesignMode(dependencyObject))
             //{

@@ -15,16 +15,22 @@ namespace ObjectCreator.Extensions
     {
         private static readonly Func<Type[], IDefaultData, ObjectCreatorMode, object> CreateFunc = (types, data, creatorMode) => typeof(ObjectCreatorExtensions).InvokeExpectedMethod(nameof(ObjectCreatorExtensions.Create), types, data, creatorMode);
 
-        public static T Create<T>(ObjectCreatorMode objectCreatorMode = ObjectCreatorMode.None)
+        public static T Create<T>()
         {
-            // For performance comparison !! ;-) Autofixture is much slower than this creator.
-            //var fixture = new Fixture().Customize(new AutoConfiguredNSubstituteCustomization());
-            //var result = fixture.Create<T>();
-            //return result;
+            return Create<T>(null, ObjectCreatorMode.None);
+        }
+
+        public static T Create<T>(IDefaultData defaultData)
+        {
+            return Create<T>(defaultData, ObjectCreatorMode.None);
+        }
+
+        public static T Create<T>(ObjectCreatorMode objectCreatorMode)
+        {
             return Create<T>(null, objectCreatorMode);
         }
 
-        public static T Create<T>(IDefaultData defaultData, ObjectCreatorMode objectCreatorMode = ObjectCreatorMode.None)
+        public static T Create<T>(IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
         {
             var type = typeof(T);
             var defaultValue = type.GetDefaultValue(defaultData);
@@ -66,13 +72,13 @@ namespace ObjectCreator.Extensions
             return UnknownTypeCreator.CreateDynamicFrom<T>(type, defaultData, objectCreatorMode);
         }
 
-        public static object Create(this Type type, ObjectCreatorMode objectCreatorMode = ObjectCreatorMode.None)
+        public static object Create(this Type type)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
+            return Create(type, ObjectCreatorMode.None);
+        }
 
+        public static object Create(this Type type, ObjectCreatorMode objectCreatorMode)
+        {
             return type.Create(null, objectCreatorMode);
         }
 
@@ -81,6 +87,11 @@ namespace ObjectCreator.Extensions
             if (type == null)
             {
                 throw new ArgumentNullException(nameof(type));
+            }
+
+            if (type.IsStatic())
+            {
+                throw new Exception("Static class could not be constucted");
             }
 
             var result = type.GetDefaultValue(defaultData);
@@ -138,16 +149,6 @@ namespace ObjectCreator.Extensions
             var parameterInfos = methodBase.GetParameters();
             var arguments = parameterInfos.Select(item => item.ParameterType.Create(defaultData, objectCreatorMode));
             return arguments.ToArray();
-        }
-
-        private static IEnumerable CreateEnumeration(Type enumerationType, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
-        {
-            var genericArgument = enumerationType.GetGenericArguments().First();
-            for (var i = 0; i < 5; i++)
-            {
-                var result = genericArgument.Create(defaultData, objectCreatorMode);
-                yield return result;
-            }
         }
     }
 }

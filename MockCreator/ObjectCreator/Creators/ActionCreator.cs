@@ -9,15 +9,20 @@ namespace ObjectCreator.Creators
     {
         internal static T Create<T>(Type type)
         {
+            return (T)Create(type);
+        }
+
+        internal static object Create(Type type)
+        {
             if (!type.IsAction())
             {
-                return default(T);
+                return null;
             }
             var parameterExpressions = CreateParameterExpressions(type);
             var returnBlockExpression = Expression.Block(Expression.Empty());
             var lambda = Expression.Lambda(returnBlockExpression, parameterExpressions);
             var compiledLambda = lambda.Compile();
-            return (T)(object)compiledLambda;
+            return compiledLambda;
         }
 
         private static IEnumerable<ParameterExpression> CreateParameterExpressions(Type funcType)

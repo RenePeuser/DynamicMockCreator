@@ -11,16 +11,21 @@ namespace ObjectCreator.Creators
     {
         internal static T Create<T>(Type type, IDefaultData defaultValue)
         {
+            return (T)Create(type, defaultValue);
+        }
+
+        internal static object Create(Type type, IDefaultData defaultValue)
+        {
             if (!type.IsFunc())
             {
-                return default(T);
+                return null;
             }
 
             var parameterExpressions = CreateParameterExpressions(type);
             var returnBlockExpression = CreateReturnBlockExpression(type, defaultValue);
             var lambda = Expression.Lambda(returnBlockExpression, parameterExpressions);
             var compiledLambda = lambda.Compile();
-            return (T)(object)compiledLambda;
+            return compiledLambda;
         }
 
         private static IEnumerable<ParameterExpression> CreateParameterExpressions(Type funcType)

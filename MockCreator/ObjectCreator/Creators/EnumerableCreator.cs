@@ -20,11 +20,32 @@ namespace ObjectCreator.Creators
     {
         internal static T Create<T>(Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
         {
-            if (!type.IsInterfaceImplemented<IEnumerable>())
+            if (type.IsInterfaceImplemented<IEnumerable>())
             {
-                return default(T);
+                return CreateEnumerable<T>(type, defaultData, objectCreatorMode);
             }
 
+            if (type.IsInterfaceImplemented<IEnumerator>())
+            {
+                return EnumeratorCreatorGeneric.Create<T>();
+            }
+
+            return default(T);
+        }
+
+        private static T CreateEnumerator<T>(Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
+        {
+            var result = EnumeratorCreatorGeneric.Create<T>();
+            if (result == null)
+            {
+                Debug.WriteLine($"Expected Enumerator type: '{type.Name}' is unknown to create.");
+            }
+
+            return result;
+        }
+
+        private static T CreateEnumerable<T>(Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
+        {
             var result = type.IsGenericType
                 ? EnumerableCreatorGeneric.Create<T>()
                 : EnumerableCreatorNonGeneric.Create<T>();
@@ -37,38 +58,17 @@ namespace ObjectCreator.Creators
             return result;
         }
 
-        internal static T Create<T>()
+        private static class EnumerableCreatorNonGeneric
         {
-            var type = typeof(T);
-            if (!type.IsInterfaceImplemented<IEnumerable>())
+            internal static T Create<T>()
             {
-                return default(T);
+                var type = typeof(T);
+                return type.IsInterface ?
+                    (T)NonGenericInterfaceTypeCreator.GetValueOrDefault(type)?.Invoke() :
+                    (T)NonGenericTypeCreator.GetValueOrDefault(type)?.Invoke();
             }
 
-            return type.IsGenericType
-            ? EnumerableCreatorGeneric.Create<T>()
-            : EnumerableCreatorNonGeneric.Create<T>();
-        }
-    }
-
-    internal static class EnumerableCreatorNonGeneric
-    {
-        internal static object Create(Type type)
-        {
-            return type.IsInterface ?
-                NonGenericInterfaceTypeCreator.GetValueOrDefault(type)?.Invoke() :
-                NonGenericTypeCreator.GetValueOrDefault(type)?.Invoke();
-        }
-
-        internal static T Create<T>()
-        {
-            var type = typeof(T);
-            return type.IsInterface ?
-                (T)NonGenericInterfaceTypeCreator.GetValueOrDefault(type)?.Invoke() :
-                (T)NonGenericTypeCreator.GetValueOrDefault(type)?.Invoke();
-        }
-
-        private static readonly Dictionary<Type, Func<object>> NonGenericTypeCreator = new Dictionary<Type, Func<object>>
+            private static readonly Dictionary<Type, Func<object>> NonGenericTypeCreator = new Dictionary<Type, Func<object>>
         {
             {typeof(ArrayList), () => new ArrayList()},
             {typeof(BitArray), () => new BitArray(0)},
@@ -83,7 +83,6 @@ namespace ObjectCreator.Creators
             {typeof(OrderedDictionary), () => new OrderedDictionary()},
             {typeof(StringCollection), () => new StringCollection()},
             {typeof(StringDictionary), () => new StringDictionary()},
-            {typeof(StringEnumerator), () => new StringCollection().GetEnumerator()},
             {typeof(BitVector32), () => new BitVector32(0)},
             {typeof(BitVector32.Section), () => BitVector32.CreateSection(0)},
             {typeof(UriSchemeKeyedCollection), () => new UriSchemeKeyedCollection() },
@@ -93,7 +92,7 @@ namespace ObjectCreator.Creators
             {typeof(ReadOnlyCollectionBase), () => Substitute.ForPartsOf<ReadOnlyCollectionBase>()},
         };
 
-        private static readonly Dictionary<Type, Func<object>> NonGenericInterfaceTypeCreator = new Dictionary<Type, Func<object>>()
+            private static readonly Dictionary<Type, Func<object>> NonGenericInterfaceTypeCreator = new Dictionary<Type, Func<object>>
         {
             {typeof(IEnumerable), () => new Collection<object>()},
             {typeof(ICollection), () => new Collection<object>()},
@@ -101,32 +100,23 @@ namespace ObjectCreator.Creators
             {typeof(IDictionary), () => new Dictionary<object, object>()},
             {typeof(IOrderedDictionary), () => new OrderedDictionary()},
         };
-    }
-
-    internal static class EnumerableCreatorGeneric
-    {
-        private static readonly Func<Type, object[], object> ForPartsOfFunc = (genericType, arguments) => typeof(Substitute).InvokeGenericMethod(nameof(Substitute.ForPartsOf), new[] { genericType }, new object[] { arguments });
-
-        internal static object Create(Type type)
-        {
-            var genericType = type.GetGenericTypeDefinition();
-
-            return type.IsInterface ?
-                GenericInterfaceCollectionTypes.GetValueOrDefault(genericType)?.Invoke(type) :
-                GenericCollectionTypes.GetValueOrDefault(genericType)?.Invoke(type);
         }
 
-        internal static T Create<T>()
+        private static class EnumerableCreatorGeneric
         {
-            var expectedType = typeof(T);
-            var genericType = expectedType.GetGenericTypeDefinition();
+            private static readonly Func<Type, object[], object> ForPartsOfFunc = (genericType, arguments) => typeof(Substitute).InvokeGenericMethod(nameof(Substitute.ForPartsOf), new[] { genericType }, new object[] { arguments });
 
-            return expectedType.IsInterface ?
-                (T)GenericInterfaceCollectionTypes.GetValueOrDefault(genericType)?.Invoke(expectedType) :
-                (T)GenericCollectionTypes.GetValueOrDefault(genericType)?.Invoke(expectedType);
-        }
+            internal static T Create<T>()
+            {
+                var expectedType = typeof(T);
+                var genericType = expectedType.GetGenericTypeDefinition();
 
-        private static readonly Dictionary<Type, Func<Type, object>> GenericCollectionTypes = new Dictionary<Type, Func<Type, object>>()
+                return expectedType.IsInterface ?
+                    (T)GenericInterfaceCollectionTypes.GetValueOrDefault(genericType)?.Invoke(expectedType) :
+                    (T)GenericCollectionTypes.GetValueOrDefault(genericType)?.Invoke(expectedType);
+            }
+
+            private static readonly Dictionary<Type, Func<Type, object>> GenericCollectionTypes = new Dictionary<Type, Func<Type, object>>()
             {
                 { typeof(List<>), Activator.CreateInstance },
                 { typeof(Collection<>), Activator.CreateInstance },
@@ -184,33 +174,86 @@ namespace ObjectCreator.Creators
                 { typeof(ImmutableStack<>), type => typeof(ImmutableStack).InvokeGenericMethod(nameof(ImmutableStack.Create), type.GetGenericArguments())},
 
 
-                { typeof(List<>.Enumerator), Activator.CreateInstance },
-                { typeof(SortedSet<>.Enumerator), Activator.CreateInstance },
-                { typeof(LinkedList<>.Enumerator), Activator.CreateInstance },
-                { typeof(Stack<>.Enumerator), Activator.CreateInstance },
-                { typeof(HashSet<>.Enumerator), Activator.CreateInstance },
-                { typeof(Queue<>.Enumerator),Activator.CreateInstance },
-                { typeof(SortedDictionary<,>.KeyCollection.Enumerator), Activator.CreateInstance },
-                { typeof(SortedDictionary<,>.ValueCollection.Enumerator), Activator.CreateInstance },
-                { typeof(SortedDictionary<,>.Enumerator), Activator.CreateInstance },
+                { typeof(List<>.Enumerator), type =>
+                {
+                    var queue = typeof(List<>).MakeGenericType(type.GenericTypeArguments).Create();
+                    var getEnumerator = queue.GetType().GetMethod(nameof(List<int>.GetEnumerator)).Invoke(queue, new object[] {});
+                    return getEnumerator;
+                } },
+
+                { typeof(SortedSet<>.Enumerator), type =>
+                {
+                    var queue = typeof(SortedSet<>).MakeGenericType(type.GenericTypeArguments).Create();
+                    var getEnumerator = queue.GetType().GetMethod(nameof(SortedSet<int>.GetEnumerator)).Invoke(queue, new object[] {});
+                    return getEnumerator;
+                } },
+
+                { typeof(LinkedList<>.Enumerator), type =>
+                {
+                    var queue = typeof(LinkedList<>).MakeGenericType(type.GenericTypeArguments).Create();
+                    var getEnumerator = queue.GetType().GetMethod(nameof(LinkedList<int>.GetEnumerator)).Invoke(queue, new object[] {});
+                    return getEnumerator;
+                } },
+
+                { typeof(Stack<>.Enumerator), type =>
+                {
+                    var queue = typeof(Queue<>).MakeGenericType(type.GenericTypeArguments).Create();
+                    var getEnumerator = queue.GetType().GetMethod(nameof(Stack<int>.GetEnumerator)).Invoke(queue, new object[] {});
+                    return getEnumerator;
+                } },
+
+                { typeof(HashSet<>.Enumerator), type =>
+                {
+                    var queue = typeof(Queue<>).MakeGenericType(type.GenericTypeArguments).Create();
+                    var getEnumerator = queue.GetType().GetMethod(nameof(HashSet<int>.GetEnumerator)).Invoke(queue, new object[] {});
+                    return getEnumerator;
+                } },
+
+                { typeof(Queue<>.Enumerator), type =>
+                {
+                    var queue = typeof(Queue<>).MakeGenericType(type.GenericTypeArguments).Create();
+                    var getEnumerator = queue.GetType().GetMethod(nameof(Queue<int>.GetEnumerator)).Invoke(queue, new object[] {});
+                    return getEnumerator;
+                } },
+
+                { typeof(SortedDictionary<, >.KeyCollection.Enumerator), type =>
+                {
+                    var keyCollection = typeof(SortedDictionary<,>.KeyCollection).MakeGenericType(type.GenericTypeArguments).Create();
+                    var getEnumerator = keyCollection.GetType().GetMethod(nameof(KeyedCollection<int,int>.GetEnumerator)).Invoke(keyCollection, new object[] {});
+                    return getEnumerator;
+                } },
+
+                { typeof(SortedDictionary<, >.ValueCollection.Enumerator), type =>
+                {
+                    var valueCollection = typeof(SortedDictionary<,>.ValueCollection).MakeGenericType(type.GenericTypeArguments).Create();
+                    var getEnumerator = valueCollection.GetType().GetMethod(nameof(KeyedCollection<int,int>.GetEnumerator)).Invoke(valueCollection, new object[] {});
+                    return getEnumerator;
+                } },
+
+
+                { typeof(SortedDictionary<,>.Enumerator), type =>
+                {
+                    var dictionary = typeof(SortedDictionary<,>).MakeGenericType(type.GenericTypeArguments).Create();
+                    var getEnumerator = dictionary.GetType().GetMethod(nameof(SortedDictionary<int,int>.GetEnumerator)).Invoke(dictionary, new object[] {});
+                    return getEnumerator;
+                }},
+
                 { typeof(Dictionary<,>.Enumerator), type =>
                 {
-                    var dictionary = Activator.CreateInstance(type);
-                    var getEnumerator = dictionary.GetType().GetMethod("GetEnumerator").Invoke(dictionary, new object[] {});
+                    var dictionary = typeof(Dictionary<,>).MakeGenericType(type.GenericTypeArguments).Create();
+                    var getEnumerator = dictionary.GetType().GetMethod(nameof(Dictionary<int,int>.GetEnumerator)).Invoke(dictionary, new object[] {});
                     return getEnumerator;
                 }},
                 { typeof(Dictionary<, >.KeyCollection.Enumerator), type =>
                 {
-                    var result = Activator.CreateInstance(type, typeof(Dictionary<,>).MakeGenericType(type.GenericTypeArguments).Create());
-                    var keyCollection = result.GetType().GetProperty(nameof(Dictionary<int, int>.Keys)).GetValue(result);
-                    var getEnumerator = keyCollection.GetType().GetMethod("GetEnumerator").Invoke(keyCollection, new object[] {});
+                    var keyCollection = typeof(Dictionary<string, int>.KeyCollection).Create();
+                    var getEnumerator = keyCollection.GetType().GetMethod(nameof(KeyedCollection<int,int>.GetEnumerator)).Invoke(keyCollection, new object[] {});
                     return getEnumerator;
                 } },
                 { typeof(Dictionary<,>.ValueCollection.Enumerator), type =>
                 {
-                    var result = Activator.CreateInstance(type, typeof(Dictionary<,>).MakeGenericType(type.GenericTypeArguments).Create());
-                    var keyCollection = result.GetType().GetProperty(nameof(Dictionary<int, int>.Values)).GetValue(result);
-                    var getEnumerator = keyCollection.GetType().GetMethod("GetEnumerator").Invoke(keyCollection, new object[] {});
+                    var keyCollection = typeof(Dictionary<string, int>.ValueCollection).Create();
+                    var getEnumerator = keyCollection.GetType().GetMethod(nameof(Dictionary<int,int>.ValueCollection.GetEnumerator)).Invoke(keyCollection, new object[] {});
                     return getEnumerator;
                 } },
 
@@ -245,7 +288,7 @@ namespace ObjectCreator.Creators
                 }},
             };
 
-        private static readonly Dictionary<Type, Func<Type, object>> GenericInterfaceCollectionTypes = new Dictionary<Type, Func<Type, object>>()
+            private static readonly Dictionary<Type, Func<Type, object>> GenericInterfaceCollectionTypes = new Dictionary<Type, Func<Type, object>>()
             {
                 { typeof(IEnumerable<>), type => Activator.CreateInstance(typeof(Collection<>).MakeGenericType(type.GetGenericArguments()))},
                 { typeof(ICollection<>), type => Activator.CreateInstance(typeof(Collection<>).MakeGenericType(type.GetGenericArguments()))},
@@ -264,5 +307,120 @@ namespace ObjectCreator.Creators
                 { typeof(IEnumerator<>), type => Activator.CreateInstance(typeof(List<>.Enumerator).MakeGenericType(type.GetGenericArguments()))},
                 { typeof(IEqualityComparer<>), type => Activator.CreateInstance(typeof(EqualityComparer<>).MakeGenericType(type.GetGenericArguments())).GetType().GetMethod(nameof(EqualityComparer<int>.Default))},
             };
+        }
+
+        private static class EnumerationCreator
+        {
+            internal static IEnumerable CreateEnumeration(Type enumerationType, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
+            {
+                var enumerationItemType = enumerationType.GetGenericArguments()[0];
+                for (var i = 0; i < 3; i++)
+                {
+                    var result = enumerationItemType.Create(defaultData, objectCreatorMode);
+                    yield return result;
+                }
+            }
+        }
+
+        private static class EnumeratorCreatorGeneric
+        {
+            internal static T Create<T>()
+            {
+                var expectedType = typeof(T);
+                var genericType = expectedType.GetGenericTypeDefinition();
+                var result = (T)EnumeratorCreators.GetValueOrDefault(genericType)?.Invoke(expectedType);
+                if (result == null)
+                {
+                    Debug.WriteLine($"Expected Enumerator type: '{expectedType.Name}' is unknown to create.");
+                }
+
+                return result;
+            }
+
+            private static readonly Dictionary<Type, Func<Type, object>> EnumeratorCreators = new Dictionary<Type, Func<Type, object>>()
+            {
+                { typeof(List<>.Enumerator), type =>
+                {
+                    var queue = typeof(List<>).MakeGenericType(type.GenericTypeArguments).Create();
+                    var getEnumerator = queue.GetType().GetMethod(nameof(List<int>.GetEnumerator)).Invoke(queue, new object[] {});
+                    return getEnumerator;
+                } },
+
+                { typeof(SortedSet<>.Enumerator), type =>
+                {
+                    var queue = typeof(SortedSet<>).MakeGenericType(type.GenericTypeArguments).Create();
+                    var getEnumerator = queue.GetType().GetMethod(nameof(SortedSet<int>.GetEnumerator)).Invoke(queue, new object[] {});
+                    return getEnumerator;
+                } },
+
+                { typeof(LinkedList<>.Enumerator), type =>
+                {
+                    var queue = typeof(LinkedList<>).MakeGenericType(type.GenericTypeArguments).Create();
+                    var getEnumerator = queue.GetType().GetMethod(nameof(LinkedList<int>.GetEnumerator)).Invoke(queue, new object[] {});
+                    return getEnumerator;
+                } },
+
+                { typeof(Stack<>.Enumerator), type =>
+                {
+                    var queue = typeof(Queue<>).MakeGenericType(type.GenericTypeArguments).Create();
+                    var getEnumerator = queue.GetType().GetMethod(nameof(Stack<int>.GetEnumerator)).Invoke(queue, new object[] {});
+                    return getEnumerator;
+                } },
+
+                { typeof(HashSet<>.Enumerator), type =>
+                {
+                    var queue = typeof(Queue<>).MakeGenericType(type.GenericTypeArguments).Create();
+                    var getEnumerator = queue.GetType().GetMethod(nameof(HashSet<int>.GetEnumerator)).Invoke(queue, new object[] {});
+                    return getEnumerator;
+                } },
+
+                { typeof(Queue<>.Enumerator), type =>
+                {
+                    var queue = typeof(Queue<>).MakeGenericType(type.GenericTypeArguments).Create();
+                    var getEnumerator = queue.GetType().GetMethod(nameof(Queue<int>.GetEnumerator)).Invoke(queue, new object[] {});
+                    return getEnumerator;
+                } },
+
+                { typeof(SortedDictionary<, >.KeyCollection.Enumerator), type =>
+                {
+                    var keyCollection = typeof(SortedDictionary<,>.KeyCollection).MakeGenericType(type.GenericTypeArguments).Create();
+                    var getEnumerator = keyCollection.GetType().GetMethod(nameof(KeyedCollection<int,int>.GetEnumerator)).Invoke(keyCollection, new object[] {});
+                    return getEnumerator;
+                } },
+
+                { typeof(SortedDictionary<, >.ValueCollection.Enumerator), type =>
+                {
+                    var valueCollection = typeof(SortedDictionary<,>.ValueCollection).MakeGenericType(type.GenericTypeArguments).Create();
+                    var getEnumerator = valueCollection.GetType().GetMethod(nameof(KeyedCollection<int,int>.GetEnumerator)).Invoke(valueCollection, new object[] {});
+                    return getEnumerator;
+                } },
+
+                { typeof(SortedDictionary<,>.Enumerator), type =>
+                {
+                    var dictionary = typeof(SortedDictionary<,>).MakeGenericType(type.GenericTypeArguments).Create();
+                    var getEnumerator = dictionary.GetType().GetMethod(nameof(SortedDictionary<int,int>.GetEnumerator)).Invoke(dictionary, new object[] {});
+                    return getEnumerator;
+                }},
+
+                { typeof(Dictionary<,>.Enumerator), type =>
+                {
+                    var dictionary = typeof(Dictionary<,>).MakeGenericType(type.GenericTypeArguments).Create();
+                    var getEnumerator = dictionary.GetType().GetMethod(nameof(Dictionary<int,int>.GetEnumerator)).Invoke(dictionary, new object[] {});
+                    return getEnumerator;
+                }},
+                { typeof(Dictionary<, >.KeyCollection.Enumerator), type =>
+                {
+                    var keyCollection = typeof(Dictionary<string, int>.KeyCollection).Create();
+                    var getEnumerator = keyCollection.GetType().GetMethod(nameof(KeyedCollection<int,int>.GetEnumerator)).Invoke(keyCollection, new object[] {});
+                    return getEnumerator;
+                } },
+                { typeof(Dictionary<,>.ValueCollection.Enumerator), type =>
+                {
+                    var keyCollection = typeof(Dictionary<string, int>.ValueCollection).Create();
+                    var getEnumerator = keyCollection.GetType().GetMethod(nameof(Dictionary<int,int>.ValueCollection.GetEnumerator)).Invoke(keyCollection, new object[] {});
+                    return getEnumerator;
+                } },
+            };
+        }
     }
 }

@@ -19,11 +19,7 @@ namespace ObjectCreator.Creators
                 return default(T);
             }
 
-            var returnValue = default(T);
-            if (type.IsInterfaceImplemented<IEnumerable>())
-            {
-                returnValue = EnumerableCreator.Create<T>(type, defaultData, objectCreatorMode);
-            }
+            var returnValue = EnumerableCreator.Create<T>(type, defaultData, objectCreatorMode);
 
             if (returnValue == null)
             {
