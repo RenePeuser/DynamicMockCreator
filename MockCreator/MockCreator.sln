@@ -1,13 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26014.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesignTimeCreator", "DesignTimeCreator\DesignTimeCreator.csproj", "{0E0B35AB-F334-46D9-904E-3ABFCB637636}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectCreator", "ObjectCreator\ObjectCreator.csproj", "{7833C2C1-4F55-4589-B905-340C373448DA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectCreator.Test", "ObjectCreator.Test\ObjectCreator.Test.csproj", "{DA580529-DE60-4607-A6E4-37E0A4EA369D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions", "..\..\Extensions\Extensions\Extensions\Extensions.csproj", "{2501B7B9-A28D-4614-B357-134080D9D70D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions.Test", "..\..\Extensions\Extensions\Extensions.Test\Extensions.Test.csproj", "{BE291E67-048D-4889-AD58-4F6E14D40683}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestExtension", "..\..\Extensions\Extensions\TestExtension\TestExtension.csproj", "{CB7669A4-E13A-4488-9F8F-15502051D044}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +33,18 @@ Global
 		{DA580529-DE60-4607-A6E4-37E0A4EA369D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA580529-DE60-4607-A6E4-37E0A4EA369D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA580529-DE60-4607-A6E4-37E0A4EA369D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2501B7B9-A28D-4614-B357-134080D9D70D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2501B7B9-A28D-4614-B357-134080D9D70D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2501B7B9-A28D-4614-B357-134080D9D70D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2501B7B9-A28D-4614-B357-134080D9D70D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE291E67-048D-4889-AD58-4F6E14D40683}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE291E67-048D-4889-AD58-4F6E14D40683}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE291E67-048D-4889-AD58-4F6E14D40683}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE291E67-048D-4889-AD58-4F6E14D40683}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB7669A4-E13A-4488-9F8F-15502051D044}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB7669A4-E13A-4488-9F8F-15502051D044}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB7669A4-E13A-4488-9F8F-15502051D044}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB7669A4-E13A-4488-9F8F-15502051D044}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
