@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ObjectCreator.Extensions;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Timers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NSubstitute;
-using ObjectCreator.Extensions;
 
 namespace ObjectCreatorTest.Test.ClassCreationTest
 {
@@ -19,6 +13,7 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
     public class SystemTest
     {
         [TestMethod]
+        [Ignore]
         public void TestAllTypesFrom_System_Dll()
         {
             var assembly = Assembly.LoadFile(@"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.dll");

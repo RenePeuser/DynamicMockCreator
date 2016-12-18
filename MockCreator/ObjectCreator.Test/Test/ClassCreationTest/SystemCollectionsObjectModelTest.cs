@@ -50,7 +50,7 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
         }
 
         [TestMethod]
-        public void TestReadOnlyDictionaryValueCollction()
+        public void TestReadOnlyDictionaryValueCollection()
         {
             Assert.IsNotNull(ObjectCreatorExtensions.Create<ReadOnlyDictionary<string, int>.ValueCollection>());
         }

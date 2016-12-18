@@ -91,7 +91,7 @@ namespace ObjectCreator.Extensions
 
             if (type.IsStatic())
             {
-                throw new Exception("Static class could not be constucted");
+                throw new Exception("Static class could not be constructed");
             }
 
             var result = type.GetDefaultValue(defaultData);

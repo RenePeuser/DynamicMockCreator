@@ -6,7 +6,7 @@ using ObjectCreatorTest.Structs;
 namespace ObjectCreatorTest.Test
 {
     [TestClass]
-    public class TestStructWihtoutCtor
+    public class TestStructWithoutCtor
     {
         [TestMethod]
         public void TestStruct()
@@ -15,7 +15,7 @@ namespace ObjectCreatorTest.Test
         }
 
         [TestMethod]
-        public void TestStructWithoutCtor()
+        public void TestStructWithoutConstructor()
         {
             Assert.IsNotNull(ObjectCreatorExtensions.Create<StructWithoutCtor>());
         }

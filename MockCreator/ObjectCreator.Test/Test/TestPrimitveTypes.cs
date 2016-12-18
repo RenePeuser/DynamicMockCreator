@@ -5,7 +5,7 @@ using ObjectCreator.Extensions;
 namespace ObjectCreatorTest.Test
 {
     [TestClass]
-    public class TestPrimitveTypes
+    public class TestPrimitiveTypes
     {
         [TestMethod]
         public void TestBool()

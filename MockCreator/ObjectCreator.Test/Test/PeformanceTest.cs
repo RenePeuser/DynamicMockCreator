@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace ObjectCreatorTest.Test
 {
     [TestClass]
-    public class PeformanceTest
+    public class PerformanceTest
     {
         // This test is only to capture test initialize time here !!
         [TestMethod]
@@ -30,7 +30,7 @@ namespace ObjectCreatorTest.Test
         {
             for (int i = 0; i < 10000; i++)
             {
-                Assert.IsNotNull(typeof(PeformanceTest).GetMethod("CreateList",
+                Assert.IsNotNull(typeof(PerformanceTest).GetMethod("CreateList",
                         BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)
                     .Invoke(this, new object[] { }));
             }
@@ -63,25 +63,25 @@ namespace ObjectCreatorTest.Test
         [TestMethod]
         public void InvokeMethodByReflection()
         {
-            var value = "abcbcc";
+            var value = "hello";
             var methodInfo = typeof(string).GetMethod(nameof(string.IndexOf), new[] { typeof(char) });
 
             for (int i = 0; i < 100000; i++)
             {
-                Assert.AreEqual(2, methodInfo.Invoke(value, new object[] { 'c' }));
+                Assert.AreEqual(4, methodInfo.Invoke(value, new object[] { 'o' }));
             }
         }
 
         [TestMethod]
         public void InvokeMethodByDelegate()
         {
-            var value = "abcbcc";
+            var value = "hello";
             var methodInfo = typeof(string).GetMethod(nameof(string.IndexOf), new[] { typeof(char) });
             var indexOfDelegate = (Func<char, int>)Delegate.CreateDelegate(typeof(Func<char, int>), value, methodInfo);
 
             for (int i = 0; i < 100000; i++)
             {
-                Assert.AreEqual(2, indexOfDelegate('c'));
+                Assert.AreEqual(4, indexOfDelegate('o'));
             }
         }
 

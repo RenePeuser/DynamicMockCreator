@@ -17,7 +17,6 @@ namespace ObjectCreator.Creators
                 return null;
             }
 
-            // ToDo: check if necessary !!
             var args = type.CreateCtorArguments(defaultData, objectCreatorMode);
             var result = ForPartsOfFunc(type, args);
 

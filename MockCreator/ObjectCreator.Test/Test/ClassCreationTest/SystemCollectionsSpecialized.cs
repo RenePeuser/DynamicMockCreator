@@ -17,7 +17,7 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
 
         [TestMethod]
         [Ignore]
-        public void TestNameObjectCollectionBasehKeysCollection()
+        public void TestNameObjectCollectionBaseKeysCollection()
         {
             Assert.IsNotNull(ObjectCreatorExtensions.Create<NameObjectCollectionBase.KeysCollection>());
         }

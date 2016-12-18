@@ -4,11 +4,11 @@ using System.Collections.ObjectModel;
 
 namespace ObjectCreatorTest.Interfaces
 {
-    public interface InterfaceWithEnumerations
+    public interface MyInterfaceWithEnumerations
     {
         IEnumerable<object> Objects { get; }
 
-        IEnumerable<ICloneable> Cloneables { get; }
+        IEnumerable<ICloneable> Cloneable { get; }
 
         object[] ObjectArrays { get; }
 
@@ -16,6 +16,6 @@ namespace ObjectCreatorTest.Interfaces
 
         ObservableCollection<object> ObservableCollectionObjects { get; }
 
-        ObservableCollection<ICloneable> ObservableCollectionCloneables { get; }
+        ObservableCollection<ICloneable> ObservableCollectionCloneable { get; }
     }
 }

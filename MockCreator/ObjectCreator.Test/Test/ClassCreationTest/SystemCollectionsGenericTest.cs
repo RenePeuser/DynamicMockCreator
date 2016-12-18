@@ -28,7 +28,7 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
         }
 
         [TestMethod]
-        public void TestHashset()
+        public void TestHashSet()
         {
             Assert.IsNotNull(ObjectCreatorExtensions.Create<HashSet<string>>());
         }
