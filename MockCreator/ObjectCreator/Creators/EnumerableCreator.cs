@@ -105,6 +105,24 @@ namespace ObjectCreator.Creators
                 { typeof(Collection<>), Activator.CreateInstance },
                 { typeof(ObservableCollection<>), Activator.CreateInstance },
                 { typeof(Dictionary<,>), Activator.CreateInstance },
+                { typeof(ConcurrentBag<>), Activator.CreateInstance },
+                { typeof(ConcurrentDictionary<,>), Activator.CreateInstance },
+                { typeof(BlockingCollection<>), Activator.CreateInstance },
+                { typeof(Queue<>), Activator.CreateInstance },
+                { typeof(KeyedByTypeCollection<>), Activator.CreateInstance },
+                { typeof(HashSet<>), Activator.CreateInstance},
+                { typeof(Stack<>), Activator.CreateInstance },
+                { typeof(SortedList<,>), Activator.CreateInstance },
+                { typeof(LinkedList<>), Activator.CreateInstance },
+                { typeof(SynchronizedCollection<>), Activator.CreateInstance },
+                { typeof(SynchronizedReadOnlyCollection<>), Activator.CreateInstance},
+                { typeof(SortedSet<>), Activator.CreateInstance },
+                { typeof(SortedDictionary<,>), Activator.CreateInstance },
+                { typeof(ConcurrentQueue<>), Activator.CreateInstance },
+                { typeof(ConcurrentStack<>), Activator.CreateInstance },
+                { typeof(Partitioner<>), Activator.CreateInstance },
+
+
                 { typeof(ReadOnlyCollection<>), type =>
                     {
                         var genericArguments = type.GetGenericArguments();
@@ -126,24 +144,9 @@ namespace ObjectCreator.Creators
                     var returnValue = Activator.CreateInstance(typeof(ReadOnlyDictionary<,>).MakeGenericType(genericArguments), parameter);
                     return returnValue;
                 }},
-                { typeof(ConcurrentBag<>), Activator.CreateInstance },
-                { typeof(ConcurrentDictionary<,>), Activator.CreateInstance },
-                { typeof(BlockingCollection<>), Activator.CreateInstance },
+
                 { typeof(ImmutableList<>), type => typeof(ImmutableList).InvokeGenericMethod(nameof(ImmutableList.Create), type.GetGenericArguments())},
-                { typeof(Queue<>), Activator.CreateInstance },
                 { typeof(KeyValuePair<,>), type => Activator.CreateInstance(type, type.GetGenericArguments().Select(arg => arg.Create()).ToArray()) },
-                { typeof(HashSet<>), Activator.CreateInstance},
-                { typeof(Stack<>), Activator.CreateInstance },
-                { typeof(KeyedByTypeCollection<>), Activator.CreateInstance },
-                { typeof(SortedList<,>), Activator.CreateInstance },
-                { typeof(LinkedList<>), Activator.CreateInstance },
-                { typeof(SynchronizedCollection<>), Activator.CreateInstance },
-                { typeof(SynchronizedReadOnlyCollection<>), Activator.CreateInstance},
-                { typeof(SortedSet<>), Activator.CreateInstance },
-                { typeof(SortedDictionary<,>), Activator.CreateInstance },
-                { typeof(ConcurrentQueue<>), Activator.CreateInstance },
-                { typeof(ConcurrentStack<>), Activator.CreateInstance },
-                { typeof(Partitioner<>), Activator.CreateInstance },
                 { typeof(KeyedCollection<,>),  type => ForPartsOfFunc(type, new object[] {}) },
                 { typeof(LinkedListNode<>), type => Activator.CreateInstance(type, type.GetGenericArguments().First().Create()) },
                 { typeof(ImmutableArray<>), type => typeof(ImmutableArray).InvokeGenericMethod(nameof(ImmutableArray.Create), type.GetGenericArguments())},
@@ -154,8 +157,21 @@ namespace ObjectCreator.Creators
                 { typeof(ImmutableQueue<>), type => typeof(ImmutableQueue).InvokeGenericMethod(nameof(ImmutableQueue.Create), type.GetGenericArguments())},
                 { typeof(ImmutableStack<>), type => typeof(ImmutableStack).InvokeGenericMethod(nameof(ImmutableStack.Create), type.GetGenericArguments())},
 
-                { typeof(SortedDictionary<,>.KeyCollection), type => Activator.CreateInstance(type, typeof(SortedDictionary<,>).MakeGenericType(type.GenericTypeArguments).Create())},
-                { typeof(SortedDictionary<,>.ValueCollection), type => Activator.CreateInstance(type, typeof(SortedDictionary<,>).MakeGenericType(type.GenericTypeArguments).Create())},
+
+                { typeof(SortedDictionary<,>.KeyCollection), type =>
+                    {
+                        var sortedDictionary = typeof(SortedDictionary<,>).MakeGenericType(type.GenericTypeArguments).Create();
+                        var keyCollection = sortedDictionary.GetType().GetProperty(nameof(SortedDictionary<int, int>.Keys)).GetValue(sortedDictionary);
+                        return keyCollection;
+                    }},
+
+                { typeof(SortedDictionary<,>.ValueCollection), type =>
+                    {
+                        var sortedDictionary = typeof(SortedDictionary<,>).MakeGenericType(type.GenericTypeArguments).Create();
+                        var keyCollection = sortedDictionary.GetType().GetProperty(nameof(SortedDictionary<int, int>.Values)).GetValue(sortedDictionary);
+                        return keyCollection;
+                    }},
+
                 { typeof(Dictionary<,>.ValueCollection), type =>
                 {
                     var dictionary = typeof(Dictionary<,>).MakeGenericType(type.GenericTypeArguments).Create();

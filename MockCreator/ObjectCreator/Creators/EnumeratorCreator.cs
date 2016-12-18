@@ -47,37 +47,42 @@ namespace ObjectCreator.Creators
 
     internal static class EnumeratorCreatorGeneric
     {
-        internal static T Create<T>(Type expectedType)
-        {
-            if (expectedType.IsInterface)
-            {
-                var genericType = expectedType.GetGenericTypeDefinition();
-                var result = EnumeratorCreators.GetValueOrDefault(genericType)?.Invoke(expectedType);
-                if (result == null)
-                {
-                    Debug.WriteLine($"Expected IEnumerator type: '{expectedType.Name}' is unknown to create.");
-                }
-                return (T)result;
-            }
-            else
-            {
-                var declaringType = expectedType.DeclaringType;
-                var genericTypes = expectedType.GetGenericArguments();
-                var genericDeclaringType = declaringType.MakeGenericType(genericTypes);
-                var createdType = genericDeclaringType.Create();
-                var enumerator = createdType.GetType().GetMethod("GetEnumerator").Invoke(createdType, new object[] { });
-                return (T)enumerator;
-            }
-        }
-
         private static readonly Dictionary<Type, Func<Type, object>> EnumeratorCreators = new Dictionary<Type, Func<Type, object>>()
             {
                 { typeof(IEnumerator<>), type =>
                 {
                     var queue = typeof(IEnumerable<>).MakeGenericType(type.GenericTypeArguments).Create();
-                    var getEnumerator = queue.GetType().GetMethod(nameof(IEnumerable<int>.GetEnumerator)).Invoke(queue, new object[] {});
+                    var getEnumerator = queue.GetType().GetMethod(nameof(IEnumerable<object>.GetEnumerator)).Invoke(queue, new object[] {});
                     return getEnumerator;
                 } },
             };
+
+        internal static T Create<T>(Type expectedType)
+        {
+            return expectedType.IsInterface ?
+                CreateFromInterface<T>(expectedType) :
+                CreateDynamic<T>(expectedType);
+        }
+
+        private static T CreateDynamic<T>(Type expectedType)
+        {
+            var declaringType = expectedType.DeclaringType;
+            var genericTypes = expectedType.GetGenericArguments();
+            var genericDeclaringType = declaringType.MakeGenericType(genericTypes);
+            var createdType = genericDeclaringType.Create();
+            var enumerator = createdType.GetType().GetMethod("GetEnumerator").Invoke(createdType, new object[] { });
+            return (T)enumerator;
+        }
+
+        private static T CreateFromInterface<T>(Type expectedType)
+        {
+            var genericType = expectedType.GetGenericTypeDefinition();
+            var result = EnumeratorCreators.GetValueOrDefault(genericType)?.Invoke(expectedType);
+            if (result == null)
+            {
+                Debug.WriteLine($"Expected IEnumerator type: '{expectedType.Name}' is unknown to create.");
+            }
+            return (T)result;
+        }        
     }
 }
