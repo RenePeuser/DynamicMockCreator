@@ -19,59 +19,44 @@ namespace ObjectCreator.Creators
                 return default(T);
             }
 
-            var returnValue = EnumerableCreator.Create<T>(type, defaultData, objectCreatorMode);
-
-            if (returnValue == null)
+            if (type.IsInterfaceImplemented<IEnumerable>())
             {
-                returnValue = (T)ForFunc(type);
-                switch (objectCreatorMode)
+                var result = EnumerableCreator.Create<T>(type, defaultData, objectCreatorMode);
+                if (result != null)
                 {
-                    case ObjectCreatorMode.All:
-                        returnValue.SetupProperties(defaultData, objectCreatorMode);
-                        returnValue.SetupMethods(defaultData, objectCreatorMode);
-                        break;
-                    case ObjectCreatorMode.WithProperties:
-                        returnValue.SetupProperties(defaultData, objectCreatorMode);
-                        break;
-                    case ObjectCreatorMode.WithMethods:
-                        returnValue.SetupMethods(defaultData, objectCreatorMode);
-                        break;
+                    return result;
                 }
             }
 
-            return returnValue;
+            if (type.IsInterfaceImplemented<IEnumerator>())
+            {
+                var result = EnumeratorCreator.Create<T>(type, defaultData, objectCreatorMode);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+
+            return CreateProxy<T>(type, defaultData, objectCreatorMode);
         }
 
-        //internal static T Create<T>(Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
-        //{
-        //    if (!type.IsInterface)
-        //    {
-        //        return default(T);
-        //    }
-
-        //    var mock = (T)ForFunc(type);
-
-        //    // Check solution for that case and all scenarios.
-        //    if (typeof(T).IsSystemType())
-        //    {
-        //        return mock;
-        //    }
-
-        //    switch (objectCreatorMode)
-        //    {
-        //        case ObjectCreatorMode.All:
-        //            mock.SetupProperties(defaultData, objectCreatorMode);
-        //            mock.SetupMethods(defaultData, objectCreatorMode);
-        //            break;
-        //        case ObjectCreatorMode.WithProperties:
-        //            mock.SetupProperties(defaultData, objectCreatorMode);
-        //            break;
-        //        case ObjectCreatorMode.WithMethods:
-        //            mock.SetupMethods(defaultData, objectCreatorMode);
-        //            break;
-        //    }
-
-        //    return mock;
-        //}
+        private static T CreateProxy<T>(Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
+        {
+            var proxy = (T)ForFunc(type);
+            switch (objectCreatorMode)
+            {
+                case ObjectCreatorMode.All:
+                    proxy.SetupProperties(defaultData, objectCreatorMode);
+                    proxy.SetupMethods(defaultData, objectCreatorMode);
+                    break;
+                case ObjectCreatorMode.WithProperties:
+                    proxy.SetupProperties(defaultData, objectCreatorMode);
+                    break;
+                case ObjectCreatorMode.WithMethods:
+                    proxy.SetupMethods(defaultData, objectCreatorMode);
+                    break;
+            }
+            return proxy;
+        }
     }
 }

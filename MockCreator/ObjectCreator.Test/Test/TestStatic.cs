@@ -7,6 +7,7 @@ namespace ObjectCreatorTest.Test
     public class TestStatic
     {
         [TestMethod]
+        [Ignore]
         public void TestStaticClass()
         {
             Assert.IsNull(typeof(TypeExtensions).Create());

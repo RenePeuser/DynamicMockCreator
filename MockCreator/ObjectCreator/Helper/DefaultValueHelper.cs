@@ -6,22 +6,24 @@ namespace ObjectCreator.Helper
     public static class DefaultValueHelper
     {
         private static readonly DefaultData DefaultData = new DefaultData(
-            (sbyte)1,
-            (byte)1,
-            (short)1,
-            (ushort)1,
-            1,
-            (uint)1,
-            (long)1.1,
-            (ulong)1.2,
-            'c',
-            (float)1.3,
-            1.4,
-            true,
-            new decimal(1.5),
-            "MyString",
-            new DateTime(2016, 10, 15),
-            new Uri("http://www.google.com/"));
+            new TypeToValue(typeof(int), 1),
+            new TypeToValue(typeof(double), 1.4),
+
+            new TypeToValue(typeof(byte), (byte)1),
+            new TypeToValue(typeof(sbyte), (sbyte)1),
+            new TypeToValue(typeof(short), (short)1),
+            new TypeToValue(typeof(ushort), (ushort)1),
+            new TypeToValue(typeof(uint), (uint)1),
+            new TypeToValue(typeof(long), (long)1.1),
+            new TypeToValue(typeof(ulong), (ulong)1.2),
+            new TypeToValue(typeof(char), (char)'c'),
+            new TypeToValue(typeof(float), (float)1.3),
+
+            new TypeToValue(typeof(bool), true),
+            new TypeToValue(typeof(decimal), new decimal(1.5)),
+            new TypeToValue(typeof(string), "MyString"),
+            new TypeToValue(typeof(DateTime), new DateTime(2016, 10, 15)),
+            new TypeToValue(typeof(Uri), new Uri("http://www.google.com/")));
 
 
 
