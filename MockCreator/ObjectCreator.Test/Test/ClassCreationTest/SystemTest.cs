@@ -83,7 +83,7 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
         }
 
         [TestMethod]
-        public void TestUri()
+        public void TestFailingSystemTypes()
         {
             Assert.IsNotNull(ObjectCreatorExtensions.Create<System.Net.AuthenticationManager>());
             Assert.IsNotNull(ObjectCreatorExtensions.Create<System.Net.FileWebRequest>());
