@@ -13,24 +13,24 @@ namespace ObjectCreatorTest.Test
     public class TestIInterfaceWithInterfaces
     {
         private static readonly DefaultData CustomData = new DefaultData(
-            (sbyte) 2,
-            (byte) 2,
-            (short) 2,
-            (ushort) 2,
+            (sbyte)2,
+            (byte)2,
+            (short)2,
+            (ushort)2,
             2,
-            (uint) 2,
-            (long) 2.2,
-            (ulong) 2.2,
+            (uint)2,
+            (long)2.2,
+            (ulong)2.2,
             '?',
-            (float) 2.3,
+            (float)2.3,
             2.4,
             false,
             new decimal(2.5),
             "Next",
             new DateTime(),
             new object(),
-            new[] {"B..C"},
-            new Collection<int> {2, 2});
+            new[] { "B..C" },
+            new Collection<int> { 2, 2 });
 
         private static Dictionary<Type, object> _dictionary;
         private static IInterfaceWithInterfaces _mock;
@@ -40,7 +40,8 @@ namespace ObjectCreatorTest.Test
         {
             var privateObject = CustomData.ToPrivateObject();
             _dictionary = privateObject.GetField<Dictionary<Type, object>>("_defaultData");
-            _mock = ObjectCreatorExtensions.Create<IInterfaceWithInterfaces>(CustomData, ObjectCreatorMode.WithProperties);
+            var objectCreationStrategy = new ObjectCreationStrategy(true, false, false, 0);
+            _mock = ObjectCreatorExtensions.Create<IInterfaceWithInterfaces>(CustomData, objectCreationStrategy);
         }
 
         [TestMethod]

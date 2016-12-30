@@ -12,7 +12,7 @@ namespace ObjectCreator.Creators
     {
         private static readonly Func<Type, object> ForFunc = genericType => typeof(Substitute).InvokeGenericMethod(nameof(Substitute.For), new[] { genericType }, new object[] { new object[] { } });
 
-        internal static T Create<T>(Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
+        internal static T Create<T>(Type type, IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
         {
             if (!type.IsInterface)
             {
@@ -21,7 +21,7 @@ namespace ObjectCreator.Creators
 
             if (type.IsInterfaceImplemented<IEnumerable>())
             {
-                var result = EnumerableCreator.Create<T>(type, defaultData, objectCreatorMode);
+                var result = EnumerableCreator.Create<T>(type, defaultData, objectCreationStrategy);
                 if (result != null)
                 {
                     return result;
@@ -30,32 +30,30 @@ namespace ObjectCreator.Creators
 
             if (type.IsInterfaceImplemented<IEnumerator>())
             {
-                var result = EnumeratorCreator.Create<T>(type, defaultData, objectCreatorMode);
+                var result = EnumeratorCreator.Create<T>(type, defaultData, objectCreationStrategy);
                 if (result != null)
                 {
                     return result;
                 }
             }
 
-            return CreateProxy<T>(type, defaultData, objectCreatorMode);
+            return CreateProxy<T>(type, defaultData, objectCreationStrategy);
         }
 
-        private static T CreateProxy<T>(Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
+        private static T CreateProxy<T>(Type type, IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
         {
             var proxy = (T)ForFunc(type);
-            switch (objectCreatorMode)
+
+            if (objectCreationStrategy.SetupProperties)
             {
-                case ObjectCreatorMode.All:
-                    proxy.SetupProperties(defaultData, objectCreatorMode);
-                    proxy.SetupMethods(defaultData, objectCreatorMode);
-                    break;
-                case ObjectCreatorMode.WithProperties:
-                    proxy.SetupProperties(defaultData, objectCreatorMode);
-                    break;
-                case ObjectCreatorMode.WithMethods:
-                    proxy.SetupMethods(defaultData, objectCreatorMode);
-                    break;
+                proxy.SetupProperties(defaultData, objectCreationStrategy);
             }
+
+            if (objectCreationStrategy.SetupMethods)
+            {
+                proxy.SetupMethods(defaultData, objectCreationStrategy);
+            }
+
             return proxy;
         }
     }

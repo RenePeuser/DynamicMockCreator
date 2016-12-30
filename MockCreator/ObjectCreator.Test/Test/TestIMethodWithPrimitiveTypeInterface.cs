@@ -16,24 +16,24 @@ namespace ObjectCreatorTest.Test
     public class TestIMethodWithPrimitiveTypeInterface
     {
         private static readonly DefaultData CustomData = new DefaultData(
-            (sbyte) 2,
-            (byte) 2,
-            (short) 2,
-            (ushort) 2,
+            (sbyte)2,
+            (byte)2,
+            (short)2,
+            (ushort)2,
             2,
-            (uint) 2,
-            (long) 2.2,
-            (ulong) 2.2,
+            (uint)2,
+            (long)2.2,
+            (ulong)2.2,
             '?',
-            (float) 2.3,
+            (float)2.3,
             2.4,
             false,
             new decimal(2.5),
             "Next",
             new DateTime(),
             new object(),
-            new[] {"B..C"},
-            new Collection<int> {2, 2});
+            new[] { "B..C" },
+            new Collection<int> { 2, 2 });
 
         private Dictionary<Type, object> _dictionary;
 
@@ -47,7 +47,8 @@ namespace ObjectCreatorTest.Test
         [TestMethod]
         public void TestFor()
         {
-            var mock = ObjectCreatorExtensions.Create<IMethodWithPrimitiveTypesInterface>(CustomData, ObjectCreatorMode.WithMethods);
+            var objectCreationStrategy = new ObjectCreationStrategy(false, true, false, 0);
+            var mock = ObjectCreatorExtensions.Create<IMethodWithPrimitiveTypesInterface>(CustomData, objectCreationStrategy);
             var errors = Analyze(mock, _dictionary);
 
             Assert.IsFalse(errors.Any(), ToErrorString(errors));
@@ -60,7 +61,7 @@ namespace ObjectCreatorTest.Test
             foreach (var methodInfo in methods)
             {
                 var expectedValue = dictionary[methodInfo.ReturnType];
-                var currentValue = mock.GetType().GetMethod(methodInfo.Name).Invoke(mock, new object[] {});
+                var currentValue = mock.GetType().GetMethod(methodInfo.Name).Invoke(mock, new object[] { });
 
                 if (expectedValue.NotEqualityEquals(currentValue))
                 {

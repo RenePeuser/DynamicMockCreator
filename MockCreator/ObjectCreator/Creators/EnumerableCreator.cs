@@ -18,17 +18,17 @@ namespace ObjectCreator.Creators
 {
     internal static class EnumerableCreator
     {
-        internal static T Create<T>(Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
+        internal static T Create<T>(Type type, IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
         {
             if (type.IsInterfaceImplemented<IEnumerable>())
             {
-                return CreateEnumerable<T>(type, defaultData, objectCreatorMode);
+                return CreateEnumerable<T>(type, defaultData, objectCreationStrategy);
             }
 
             return default(T);
         }
 
-        private static T CreateEnumerable<T>(Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
+        private static T CreateEnumerable<T>(Type type, IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
         {
             var result = type.IsGenericType
                 ? EnumerableCreatorGeneric.Create<T>()
@@ -108,6 +108,16 @@ namespace ObjectCreator.Creators
                 { typeof(ConcurrentBag<>), Activator.CreateInstance },
                 { typeof(ConcurrentDictionary<,>), Activator.CreateInstance },
                 { typeof(BlockingCollection<>), Activator.CreateInstance },
+
+                { typeof(ReadOnlyCollection<>), type =>
+                    {
+                        var genericArguments = type.GetGenericArguments();
+                        var parameter = typeof(List<>).MakeGenericType(genericArguments).Create();
+                        var returnValue = Activator.CreateInstance(typeof(ReadOnlyCollection<>).MakeGenericType(genericArguments), parameter);
+                        return returnValue;
+                    }},
+
+                { typeof(KeyValuePair<,>), type => Activator.CreateInstance(type, type.GetGenericArguments().Select(arg => arg.Create()).ToArray()) },
                 { typeof(Queue<>), Activator.CreateInstance },
                 { typeof(KeyedByTypeCollection<>), Activator.CreateInstance },
                 { typeof(HashSet<>), Activator.CreateInstance},
@@ -123,13 +133,7 @@ namespace ObjectCreator.Creators
                 { typeof(Partitioner<>), Activator.CreateInstance },
 
 
-                { typeof(ReadOnlyCollection<>), type =>
-                    {
-                        var genericArguments = type.GetGenericArguments();
-                        var parameter = typeof(List<>).MakeGenericType(genericArguments).Create();
-                        var returnValue = Activator.CreateInstance(typeof(ReadOnlyCollection<>).MakeGenericType(genericArguments), parameter);
-                        return returnValue;
-                    }},
+
                 { typeof(ReadOnlyObservableCollection<>), type =>
                     {
                         var genericArguments = type.GetGenericArguments();
@@ -146,7 +150,7 @@ namespace ObjectCreator.Creators
                 }},
 
                 { typeof(ImmutableList<>), type => typeof(ImmutableList).InvokeGenericMethod(nameof(ImmutableList.Create), type.GetGenericArguments())},
-                { typeof(KeyValuePair<,>), type => Activator.CreateInstance(type, type.GetGenericArguments().Select(arg => arg.Create()).ToArray()) },
+
                 { typeof(KeyedCollection<,>),  type => ForPartsOfFunc(type, new object[] {}) },
                 { typeof(LinkedListNode<>), type => Activator.CreateInstance(type, type.GetGenericArguments().First().Create()) },
                 { typeof(ImmutableArray<>), type => typeof(ImmutableArray).InvokeGenericMethod(nameof(ImmutableArray.Create), type.GetGenericArguments())},
@@ -221,12 +225,12 @@ namespace ObjectCreator.Creators
 
     internal static class EnumerationCreator
     {
-        internal static IEnumerable CreateEnumeration(Type enumerationType, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
+        internal static IEnumerable CreateEnumeration(Type enumerationType, IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
         {
             var enumerationItemType = enumerationType.GetGenericArguments()[0];
             for (var i = 0; i < 3; i++)
             {
-                var result = enumerationItemType.Create(defaultData, objectCreatorMode);
+                var result = enumerationItemType.Create(defaultData, objectCreationStrategy);
                 yield return result;
             }
         }

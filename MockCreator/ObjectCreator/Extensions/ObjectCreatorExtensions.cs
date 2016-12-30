@@ -1,36 +1,36 @@
-using System;
-using System.Collections;
-using System.Linq;
-using System.Reflection;
 using Extensions;
 using ObjectCreator.Creators;
 using ObjectCreator.Helper;
 using ObjectCreator.Interfaces;
-using Ploeh.AutoFixture;
-using Ploeh.AutoFixture.AutoNSubstitute;
+using System;
+using System.Collections;
+using System.Linq;
+using System.Reflection;
+
 
 namespace ObjectCreator.Extensions
 {
     public static class ObjectCreatorExtensions
     {
-        private static readonly Func<Type[], IDefaultData, ObjectCreatorMode, object> CreateFunc = (types, data, creatorMode) => typeof(ObjectCreatorExtensions).InvokeExpectedMethod(nameof(ObjectCreatorExtensions.Create), types, data, creatorMode);
+        private static readonly ObjectCreationStrategy DefaultCreationStrategy = new ObjectCreationStrategy();
+        private static readonly Func<Type[], IDefaultData, ObjectCreationStrategy, object> CreateFunc = (types, data, creatorMode) => typeof(ObjectCreatorExtensions).InvokeExpectedMethod(nameof(ObjectCreatorExtensions.Create), types, data, creatorMode);
 
         public static T Create<T>()
         {
-            return Create<T>(null, ObjectCreatorMode.None);
+            return Create<T>(null, DefaultCreationStrategy);
         }
 
         public static T Create<T>(IDefaultData defaultData)
         {
-            return Create<T>(defaultData, ObjectCreatorMode.None);
+            return Create<T>(defaultData, DefaultCreationStrategy);
         }
 
-        public static T Create<T>(ObjectCreatorMode objectCreatorMode)
+        public static T Create<T>(ObjectCreationStrategy objectCreationStrategy)
         {
-            return Create<T>(null, objectCreatorMode);
+            return Create<T>(null, objectCreationStrategy);
         }
 
-        public static T Create<T>(IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
+        public static T Create<T>(IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
         {
             var type = typeof(T);
             var defaultValue = type.GetDefaultValue(defaultData);
@@ -41,17 +41,17 @@ namespace ObjectCreator.Extensions
 
             if (type.IsInterface)
             {
-                return InterfaceCreator.Create<T>(type, defaultData, objectCreatorMode);
+                return InterfaceCreator.Create<T>(type, defaultData, objectCreationStrategy);
             }
 
             if (type.IsAbstract)
             {
-                return AbstractClassCreator.Create<T>(type, defaultData, objectCreatorMode);
+                return AbstractClassCreator.Create<T>(type, defaultData, objectCreationStrategy);
             }
 
             if (type.IsArray)
             {
-                return ArrayCreator.Create<T>(type, defaultData, objectCreatorMode);
+                return ArrayCreator.Create<T>(type, defaultData, objectCreationStrategy);
             }
 
             if (type.IsAction())
@@ -61,28 +61,33 @@ namespace ObjectCreator.Extensions
 
             if (type.IsFunc())
             {
-                return FuncCreator.Create<T>(type, defaultData);
+                return FuncCreator.Create<T>(type, defaultData, objectCreationStrategy);
             }
 
             if (type.IsTask())
             {
-                return TaskCreator.Create<T>(type, defaultData);
+                return TaskCreator.Create<T>(type, defaultData, objectCreationStrategy);
             }
 
-            return UnknownTypeCreator.CreateDynamicFrom<T>(type, defaultData, objectCreatorMode);
+            return UnknownTypeCreator.CreateDynamicFrom<T>(type, defaultData, objectCreationStrategy);
         }
 
         public static object Create(this Type type)
         {
-            return Create(type, ObjectCreatorMode.None);
+            return Create(type, DefaultCreationStrategy);
         }
 
-        public static object Create(this Type type, ObjectCreatorMode objectCreatorMode)
+        public static object Create(this Type type, IDefaultData defaultData)
         {
-            return type.Create(null, objectCreatorMode);
+            return type.Create(defaultData, DefaultCreationStrategy);
         }
 
-        public static object Create(this Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode = ObjectCreatorMode.None)
+        public static object Create(this Type type, ObjectCreationStrategy objectCreationStrategy)
+        {
+            return type.Create(null, objectCreationStrategy);
+        }
+
+        public static object Create(this Type type, IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
         {
             if (type == null)
             {
@@ -105,14 +110,14 @@ namespace ObjectCreator.Extensions
                 return null;
             }
 
-            return CreateFunc(new[] { type }, defaultData, objectCreatorMode);
+            return CreateFunc(new[] { type }, defaultData, objectCreationStrategy);
         }
 
-        internal static T CreateDynamicFrom<T>(this Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
+        internal static T CreateDynamicFrom<T>(this Type type, IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
         {
             if (type.IsInterfaceImplemented<IEnumerable>())
             {
-                var returnValue = EnumerableCreator.Create<T>(type, defaultData, objectCreatorMode);
+                var returnValue = EnumerableCreator.Create<T>(type, defaultData, objectCreationStrategy);
                 if (returnValue != null)
                 {
                     return returnValue;
@@ -122,32 +127,34 @@ namespace ObjectCreator.Extensions
             var args = new object[] { };
             if (type.GetConstructors().Any())
             {
-                args = type.CreateCtorArguments(defaultData, objectCreatorMode);
+                args = type.CreateCtorArguments(defaultData, objectCreationStrategy);
             }
 
             var result = (T)Activator.CreateInstance(type, args);
-
-            switch (objectCreatorMode)
-            {
-                case ObjectCreatorMode.All:
-                case ObjectCreatorMode.WithProperties:
-                    result.InitProperties(defaultData);
-                    break;
-            }
-
+            result.Setup(defaultData, objectCreationStrategy);
             return result;
         }
 
-        internal static object[] CreateCtorArguments(this Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
+        private static T Setup<T>(this T source, IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
         {
-            var ctor = type.GetConstructor();
-            return ctor.CreateArguments(defaultData, objectCreatorMode);
+            if (objectCreationStrategy.SetupProperties)
+            {
+                source.InitProperties(defaultData, objectCreationStrategy);
+            }
+
+            return source;
         }
 
-        private static object[] CreateArguments(this MethodBase methodBase, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
+        internal static object[] CreateCtorArguments(this Type type, IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
+        {
+            var ctor = type.GetConstructor();
+            return ctor.CreateArguments(defaultData, objectCreationStrategy);
+        }
+
+        private static object[] CreateArguments(this MethodBase methodBase, IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
         {
             var parameterInfos = methodBase.GetParameters();
-            var arguments = parameterInfos.Select(item => item.ParameterType.Create(defaultData, objectCreatorMode));
+            var arguments = parameterInfos.Select(item => item.ParameterType.Create(defaultData, objectCreationStrategy));
             return arguments.ToArray();
         }
     }

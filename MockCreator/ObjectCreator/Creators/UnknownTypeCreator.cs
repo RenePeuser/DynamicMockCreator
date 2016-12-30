@@ -16,11 +16,11 @@ namespace ObjectCreator.Creators
                                               BindingFlags.Static;
 
         internal static T CreateDynamicFrom<T>(Type type, IDefaultData defaultData,
-            ObjectCreatorMode objectCreatorMode)
+            ObjectCreationStrategy objectCreationStrategy)
         {
             if (type.IsInterfaceImplemented<IEnumerable>())
             {
-                var enumerable = EnumerableCreator.Create<T>(type, defaultData, objectCreatorMode);
+                var enumerable = EnumerableCreator.Create<T>(type, defaultData, objectCreationStrategy);
                 if (enumerable != null)
                 {
                     return enumerable;
@@ -29,41 +29,39 @@ namespace ObjectCreator.Creators
 
             if (type.IsInterfaceImplemented<IEnumerator>())
             {
-                var enumerator = EnumeratorCreator.Create<T>(type, defaultData, objectCreatorMode);
+                var enumerator = EnumeratorCreator.Create<T>(type, defaultData, objectCreationStrategy);
                 if (enumerator != null)
                 {
                     return enumerator;
                 }
             }
 
-            var expectedObject = CreateDynamic<T>(type, defaultData, objectCreatorMode);
+            var expectedObject = CreateDynamic<T>(type, defaultData, objectCreationStrategy);
             if (expectedObject == null)
             {
                 return expectedObject;
             }
 
-            return InitObject(defaultData, objectCreatorMode, expectedObject);
+            return InitObject(defaultData, objectCreationStrategy, expectedObject);
         }
 
-        private static T InitObject<T>(IDefaultData defaultData, ObjectCreatorMode objectCreatorMode, T expectedObject)
+        private static T InitObject<T>(IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy, T expectedObject)
         {
-            switch (objectCreatorMode)
+            if(objectCreationStrategy.SetupProperties)
             {
-                case ObjectCreatorMode.All:
-                case ObjectCreatorMode.WithProperties:
-                    expectedObject.InitProperties(defaultData);
-                    break;
+                expectedObject.InitProperties(defaultData, objectCreationStrategy);
             }
+
             return expectedObject;
         }
 
         private static T CreateDynamic<T>(Type type, IDefaultData defaultData,
-            ObjectCreatorMode objectCreatorMode)
+            ObjectCreationStrategy objectCreationStrategy)
         {
             var args = new object[] { };
             if (type.GetConstructors(ExpectedBindingFlags).Any())
             {
-                args = type.CreateCtorArguments(defaultData, objectCreatorMode);
+                args = type.CreateCtorArguments(defaultData, objectCreationStrategy);
             }
 
             T result = default(T);
@@ -78,6 +76,5 @@ namespace ObjectCreator.Creators
 
             return result;
         }
-
     }
 }

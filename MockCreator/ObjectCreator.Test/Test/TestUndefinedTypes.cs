@@ -21,7 +21,8 @@ namespace ObjectCreatorTest.Test
         [TestMethod]
         public void TestUndefinedGenericTypeWithDefaultValue()
         {
-            Assert.IsNotNull(typeof(IEnumerable<>).Create(new DefaultData(new TypeToValue(typeof(IEnumerable<>), new List<object>()))));
+            var defaultData = new DefaultData(new TypeToValue(typeof(IEnumerable<>), new List<object>()));
+            Assert.IsNotNull(typeof(IEnumerable<>).Create(defaultData));
         }
 
         [TestMethod]

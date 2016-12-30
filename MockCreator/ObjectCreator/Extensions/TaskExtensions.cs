@@ -9,7 +9,7 @@ namespace ObjectCreator.Extensions
 {
     internal static class TaskCreator
     {
-        public static T Create<T>(Type type, IDefaultData defaultValue)
+        public static T Create<T>(Type type, IDefaultData defaultValue, ObjectCreationStrategy objectCreationStrategy)
         {
             if (type == null)
             {
@@ -19,7 +19,7 @@ namespace ObjectCreator.Extensions
             var genericTypeParam = type.GetGenericArguments().FirstOrDefault();
             if (genericTypeParam != null)
             {
-                var returnValue = FuncCreator.Create<T>(genericTypeParam, defaultValue);
+                var returnValue = FuncCreator.Create<T>(genericTypeParam, defaultValue, objectCreationStrategy);
                 var result = typeof(TaskCreator).InvokeGenericMethod(nameof(FromResult), new[] { genericTypeParam }, returnValue);
                 return (T)result;
             }

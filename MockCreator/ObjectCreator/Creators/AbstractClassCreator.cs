@@ -10,41 +10,22 @@ namespace ObjectCreator.Creators
     {
         private static readonly Func<Type, object[], object> ForPartsOfFunc = (genericType, arguments) => typeof(Substitute).InvokeGenericMethod(nameof(Substitute.ForPartsOf), new[] { genericType }, new object[] { arguments });
 
-        internal static object Create(Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
+        internal static T Create<T>(Type type, IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
         {
-            if (!type.IsAbstract)
-            {
-                return null;
-            }
-
-            var args = type.CreateCtorArguments(defaultData, objectCreatorMode);
-            var result = ForPartsOfFunc(type, args);
-
-            switch (objectCreatorMode)
-            {
-                case ObjectCreatorMode.All:
-                case ObjectCreatorMode.WithProperties:
-                    result.InitProperties(defaultData);
-                    break;
-            }
-
+            var args = type.CreateCtorArguments(defaultData, objectCreationStrategy);
+            var result = (T)ForPartsOfFunc(type, args);
+            result.Init(defaultData, objectCreationStrategy);
             return result;
         }
 
-        internal static T Create<T>(Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
+        private static T Init<T>(this T source, IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
         {
-            var args = type.CreateCtorArguments(defaultData, objectCreatorMode);
-            var result = (T)ForPartsOfFunc(type, args);
-
-            switch (objectCreatorMode)
+            if (objectCreationStrategy.SetupProperties)
             {
-                case ObjectCreatorMode.All:
-                case ObjectCreatorMode.WithProperties:
-                    result.InitProperties(defaultData);
-                    break;
+                source.InitProperties(defaultData, objectCreationStrategy);
             }
 
-            return result;
+            return source;
         }
     }
 }

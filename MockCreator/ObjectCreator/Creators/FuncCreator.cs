@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using ObjectCreator.Extensions;
+using ObjectCreator.Helper;
 using ObjectCreator.Interfaces;
 
 namespace ObjectCreator.Creators
 {
     internal static class FuncCreator
     {
-        internal static T Create<T>(Type type, IDefaultData defaultValue)
+        internal static T Create<T>(Type type, IDefaultData defaultValue, ObjectCreationStrategy objectCreationStrategy)
         {
-            return (T)Create(type, defaultValue);
+            return (T)Create(type, defaultValue, objectCreationStrategy);
         }
 
-        internal static object Create(Type type, IDefaultData defaultValue)
+        internal static object Create(Type type, IDefaultData defaultValue, ObjectCreationStrategy objectCreationStrategy)
         {
             if (!type.IsFunc())
             {
@@ -22,7 +23,7 @@ namespace ObjectCreator.Creators
             }
 
             var parameterExpressions = CreateParameterExpressions(type);
-            var returnBlockExpression = CreateReturnBlockExpression(type, defaultValue);
+            var returnBlockExpression = CreateReturnBlockExpression(type, defaultValue, objectCreationStrategy);
             var lambda = Expression.Lambda(returnBlockExpression, parameterExpressions);
             var compiledLambda = lambda.Compile();
             return compiledLambda;
@@ -43,10 +44,10 @@ namespace ObjectCreator.Creators
             }
         }
 
-        private static BlockExpression CreateReturnBlockExpression(Type funcType, IDefaultData defaultValue)
+        private static BlockExpression CreateReturnBlockExpression(Type funcType, IDefaultData defaultValue, ObjectCreationStrategy objectCreationStrategy)
         {
             var outputArgument = funcType.GetGenericArguments().Last();
-            var returnValue = Expression.Constant(outputArgument.Create(defaultValue));
+            var returnValue = Expression.Constant(outputArgument.Create(defaultValue, objectCreationStrategy));
             var labelTarget = Expression.Label(outputArgument);
             var expressionBlock = Expression.Block(Expression.Label(labelTarget, returnValue));
             return expressionBlock;

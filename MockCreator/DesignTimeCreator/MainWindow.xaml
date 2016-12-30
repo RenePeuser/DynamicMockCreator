@@ -13,10 +13,10 @@
         <TextBlock Text="{Binding Path=DoubleValue}"/>
         <TextBlock Text="{Binding Path=DecimalValue}"/>
         <TextBlock Text="{Binding Path=BoolValue}"/>
-        <TextBlock Text="{Binding Path=Person.Name}"/>
-        <TextBlock Text="{Binding Path=Person.Age}"/>
-        <DataGrid ItemsSource="{Binding Path=Persons}" AutoGenerateColumns="True"/>
-        <DataGrid ItemsSource="{Binding Path=PersonArray}" AutoGenerateColumns="True"/>
-        <DataGrid ItemsSource="{Binding Path=PersonOC}" AutoGenerateColumns="True"/>
+        <!--<TextBlock Text="{Binding Path=Person.Name}"/>
+        <TextBlock Text="{Binding Path=Person.Age}"/>-->
+        <!--<DataGrid ItemsSource="{Binding Path=Persons}" AutoGenerateColumns="True"/>-->
+        <!--<DataGrid ItemsSource="{Binding Path=PersonArray}" AutoGenerateColumns="True"/>-->
+        <!--<DataGrid ItemsSource="{Binding Path=PersonOC}" AutoGenerateColumns="True"/>-->
     </StackPanel>
 </Window>

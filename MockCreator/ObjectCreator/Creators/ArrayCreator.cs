@@ -7,7 +7,7 @@ namespace ObjectCreator.Creators
 {
     internal static class ArrayCreator
     {
-        internal static T Create<T>(Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
+        internal static T Create<T>(Type type, IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
         {
             if (!type.IsArray)
             {
@@ -16,9 +16,9 @@ namespace ObjectCreator.Creators
 
             var elementType = type.GetElementType();
             var array = Array.CreateInstance(elementType, 5);
-            for (var i = 0; i < 5; i++)
+            for (var i = 0; i < 3; i++)
             {
-                var arrayItem = elementType.Create(defaultData, objectCreatorMode);
+                var arrayItem = elementType.Create(defaultData, objectCreationStrategy);
                 array.SetValue(arrayItem, i);
             }
             return (T)(object)array;

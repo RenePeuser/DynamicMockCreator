@@ -53,10 +53,11 @@ namespace ObjectCreatorTest.Test
 
         private static IEnumerable<string> Analyze(Dictionary<Type, object> dictionary)
         {
+            var objectCreationStrategy = new ObjectCreationStrategy();
             foreach (var keyValuePair in dictionary)
             {
                 var result = typeof(ObjectCreatorExtensions).InvokeExpectedMethod(nameof(ObjectCreatorExtensions.Create),
-                    new[] { keyValuePair.Key }, CustomData, ObjectCreatorMode.None);
+                    new[] { keyValuePair.Key }, CustomData, objectCreationStrategy);
 
                 if (CustomData.GetDefaultValue(keyValuePair.Key).NotEqualityEquals(result))
                 {

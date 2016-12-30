@@ -12,7 +12,7 @@ namespace ObjectCreator.Creators
 {
     internal static class EnumeratorCreator
     {
-        internal static T Create<T>(Type type, IDefaultData defaultData, ObjectCreatorMode objectCreatorMode)
+        internal static T Create<T>(Type type, IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
         {
             if (!type.IsInterfaceImplemented<IEnumerator>())
             {
