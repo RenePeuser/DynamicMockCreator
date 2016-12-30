@@ -32,7 +32,7 @@ namespace ObjectCreator.Creators
         {
             var result = type.IsGenericType
                 ? EnumerableCreatorGeneric.Create<T>()
-                : EnumerableCreatorNonGeneric.Create<T>();
+                : EnumerableCreatorNonGeneric.Create<T>(defaultData, objectCreationStrategy);
 
             if (result == null)
             {
@@ -45,43 +45,42 @@ namespace ObjectCreator.Creators
 
     internal static class EnumerableCreatorNonGeneric
     {
-        internal static T Create<T>()
+        internal static T Create<T>(IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
         {
             var type = typeof(T);
             return type.IsInterface ?
-                (T)NonGenericInterfaceTypeCreator.GetValueOrDefault(type)?.Invoke() :
-                (T)NonGenericTypeCreator.GetValueOrDefault(type)?.Invoke();
+                (T)NonGenericInterfaceTypeCreator.GetValueOrDefault(type)?.Invoke(defaultData, objectCreationStrategy) :
+                (T)NonGenericTypeCreator.GetValueOrDefault(type)?.Invoke(defaultData, objectCreationStrategy);
         }
 
-        private static readonly Dictionary<Type, Func<object>> NonGenericTypeCreator = new Dictionary<Type, Func<object>>
+        private static readonly Dictionary<Type, Func<IDefaultData, ObjectCreationStrategy, object>> NonGenericTypeCreator = new Dictionary<Type, Func<IDefaultData, ObjectCreationStrategy, object>>
         {
-            {typeof(ArrayList), () => new ArrayList()},
-            {typeof(BitArray), () => new BitArray(0)},
-            {typeof(Hashtable), () => new Hashtable()},
-            {typeof(Queue), () => new Queue()},
-            {typeof(SortedList), () => new SortedList()},
-            {typeof(Stack), () => new Stack()},
-            {typeof(DictionaryEntry), () => new DictionaryEntry()},
-            {typeof(HybridDictionary), () => new HybridDictionary()},
-            {typeof(ListDictionary), () => new ListDictionary()},
-            {typeof(NameValueCollection), () => new NameValueCollection()},
-            {typeof(OrderedDictionary), () => new OrderedDictionary()},
-            {typeof(StringCollection), () => new StringCollection()},
-            {typeof(StringDictionary), () => new StringDictionary()},
-            {typeof(UriSchemeKeyedCollection), () => new UriSchemeKeyedCollection() },
-            {typeof(NameObjectCollectionBase), () => Substitute.ForPartsOf<NameObjectCollectionBase>() },
-            {typeof(CollectionBase), () => Substitute.ForPartsOf<CollectionBase>()},
-            {typeof(DictionaryBase), () => Substitute.ForPartsOf<DictionaryBase>()},
-            {typeof(ReadOnlyCollectionBase), () => Substitute.ForPartsOf<ReadOnlyCollectionBase>()},
+            {typeof(ArrayList), (defaultData, objectCreationStrategy) => new ArrayList(EnumerationCreator.CreateEnumerationWithObjects<object>(defaultData, objectCreationStrategy).ToList())},
+            {typeof(BitArray), (defaultData, objectCreationStrategy) => new BitArray(0)},
+            {typeof(Hashtable), (defaultData, objectCreationStrategy) => new Hashtable(EnumerationCreator.CreateDictionaryEntries<object,object>(defaultData, objectCreationStrategy).ToDictionary())},
+            {typeof(Queue), (defaultData, objectCreationStrategy) => new Queue(EnumerationCreator.CreateEnumerationWithObjects<object>(defaultData, objectCreationStrategy).ToList())},
+            {typeof(SortedList), (defaultData, objectCreationStrategy) => new SortedList(EnumerationCreator.CreateDictionaryEntries<object,object>(defaultData, objectCreationStrategy).ToDictionary())},
+            {typeof(Stack), (defaultData, objectCreationStrategy) => new Stack(EnumerationCreator.CreateEnumerationWithObjects<object>(defaultData, objectCreationStrategy).ToList())},
+            {typeof(HybridDictionary), (defaultData, objectCreationStrategy) => EnumerationCreator.CreateDictionaryEntries<object,object>(defaultData, objectCreationStrategy).ToHybridDictionary()},
+            {typeof(ListDictionary), (defaultData, objectCreationStrategy) => EnumerationCreator.CreateDictionaryEntries<object,object>(defaultData, objectCreationStrategy).ToDictionary()},
+            {typeof(NameValueCollection), (defaultData, objectCreationStrategy) => EnumerationCreator.CreateDictionaryEntries<object,object>(defaultData, objectCreationStrategy).ToDictionary().ToNameValueCollection()},
+            {typeof(OrderedDictionary), (defaultData, objectCreationStrategy) => EnumerationCreator.CreateDictionaryEntries<object,object>(defaultData, objectCreationStrategy).ToOrderedDictionary()},
+            {typeof(StringCollection), (defaultData, objectCreationStrategy) => EnumerationCreator.CreateEnumerationWithObjects<object>(defaultData, objectCreationStrategy).ToStringCollection()},
+            {typeof(StringDictionary), (defaultData, objectCreationStrategy) => EnumerationCreator.CreateDictionaryEntries<object,object>(defaultData, objectCreationStrategy).ToStringDictionary()},
+            {typeof(UriSchemeKeyedCollection), (defaultData, objectCreationStrategy) => new UriSchemeKeyedCollection(EnumerationCreator.CreateEnumerationWithObjects<Uri>(defaultData, objectCreationStrategy).ToArray()) },
+            {typeof(NameObjectCollectionBase), (defaultData, objectCreationStrategy) => Substitute.ForPartsOf<NameObjectCollectionBase>() },
+            {typeof(CollectionBase), (defaultData, objectCreationStrategy) => Substitute.ForPartsOf<CollectionBase>()},
+            {typeof(DictionaryBase), (defaultData, objectCreationStrategy) => Substitute.ForPartsOf<DictionaryBase>()},
+            {typeof(ReadOnlyCollectionBase), (defaultData, objectCreationStrategy) => Substitute.ForPartsOf<ReadOnlyCollectionBase>()},
         };
 
-        private static readonly Dictionary<Type, Func<object>> NonGenericInterfaceTypeCreator = new Dictionary<Type, Func<object>>
+        private static readonly Dictionary<Type, Func<IDefaultData, ObjectCreationStrategy, object>> NonGenericInterfaceTypeCreator = new Dictionary<Type, Func<IDefaultData, ObjectCreationStrategy, object>>
         {
-            {typeof(IEnumerable), () => new Collection<object>()},
-            {typeof(ICollection), () => new Collection<object>()},
-            {typeof(IList), () => new List<object>()},
-            {typeof(IDictionary), () => new Dictionary<object, object>()},
-            {typeof(IOrderedDictionary), () => new OrderedDictionary()},
+            {typeof(IEnumerable), (defaultData, objectCreationStrategy) => new List<object>(EnumerationCreator.CreateEnumerationWithObjects<object>(defaultData, objectCreationStrategy))},
+            {typeof(ICollection), (defaultData, objectCreationStrategy) => new List<object>(EnumerationCreator.CreateEnumerationWithObjects<object>(defaultData, objectCreationStrategy))},
+            {typeof(IList), (defaultData, objectCreationStrategy) => new List<object>(EnumerationCreator.CreateEnumerationWithObjects<object>(defaultData, objectCreationStrategy))},
+            {typeof(IDictionary), (defaultData, objectCreationStrategy) => new Dictionary<object, object>(EnumerationCreator.CreateDictionaryEntries<object,object>(defaultData, objectCreationStrategy).ToDictionary())},
+            {typeof(IOrderedDictionary), (defaultData, objectCreationStrategy) => EnumerationCreator.CreateDictionaryEntries<object,object>(defaultData, objectCreationStrategy).ToOrderedDictionary()},
         };
     }
 
@@ -108,7 +107,6 @@ namespace ObjectCreator.Creators
                 { typeof(ConcurrentBag<>), Activator.CreateInstance },
                 { typeof(ConcurrentDictionary<,>), Activator.CreateInstance },
                 { typeof(BlockingCollection<>), Activator.CreateInstance },
-
                 { typeof(ReadOnlyCollection<>), type =>
                     {
                         var genericArguments = type.GetGenericArguments();
@@ -116,7 +114,6 @@ namespace ObjectCreator.Creators
                         var returnValue = Activator.CreateInstance(typeof(ReadOnlyCollection<>).MakeGenericType(genericArguments), parameter);
                         return returnValue;
                     }},
-
                 { typeof(KeyValuePair<,>), type => Activator.CreateInstance(type, type.GetGenericArguments().Select(arg => arg.Create()).ToArray()) },
                 { typeof(Queue<>), Activator.CreateInstance },
                 { typeof(KeyedByTypeCollection<>), Activator.CreateInstance },
@@ -131,9 +128,6 @@ namespace ObjectCreator.Creators
                 { typeof(ConcurrentQueue<>), Activator.CreateInstance },
                 { typeof(ConcurrentStack<>), Activator.CreateInstance },
                 { typeof(Partitioner<>), Activator.CreateInstance },
-
-
-
                 { typeof(ReadOnlyObservableCollection<>), type =>
                     {
                         var genericArguments = type.GetGenericArguments();
@@ -148,9 +142,7 @@ namespace ObjectCreator.Creators
                     var returnValue = Activator.CreateInstance(typeof(ReadOnlyDictionary<,>).MakeGenericType(genericArguments), parameter);
                     return returnValue;
                 }},
-
                 { typeof(ImmutableList<>), type => typeof(ImmutableList).InvokeGenericMethod(nameof(ImmutableList.Create), type.GetGenericArguments())},
-
                 { typeof(KeyedCollection<,>),  type => ForPartsOfFunc(type, new object[] {}) },
                 { typeof(LinkedListNode<>), type => Activator.CreateInstance(type, type.GetGenericArguments().First().Create()) },
                 { typeof(ImmutableArray<>), type => typeof(ImmutableArray).InvokeGenericMethod(nameof(ImmutableArray.Create), type.GetGenericArguments())},
@@ -160,22 +152,18 @@ namespace ObjectCreator.Creators
                 { typeof(ImmutableSortedSet<>), type => typeof(ImmutableSortedSet).InvokeGenericMethod(nameof(ImmutableSortedSet.Create), type.GetGenericArguments())},
                 { typeof(ImmutableQueue<>), type => typeof(ImmutableQueue).InvokeGenericMethod(nameof(ImmutableQueue.Create), type.GetGenericArguments())},
                 { typeof(ImmutableStack<>), type => typeof(ImmutableStack).InvokeGenericMethod(nameof(ImmutableStack.Create), type.GetGenericArguments())},
-
-
                 { typeof(SortedDictionary<,>.KeyCollection), type =>
                     {
                         var sortedDictionary = typeof(SortedDictionary<,>).MakeGenericType(type.GenericTypeArguments).Create();
                         var keyCollection = sortedDictionary.GetType().GetProperty(nameof(SortedDictionary<int, int>.Keys)).GetValue(sortedDictionary);
                         return keyCollection;
                     }},
-
                 { typeof(SortedDictionary<,>.ValueCollection), type =>
                     {
                         var sortedDictionary = typeof(SortedDictionary<,>).MakeGenericType(type.GenericTypeArguments).Create();
                         var keyCollection = sortedDictionary.GetType().GetProperty(nameof(SortedDictionary<int, int>.Values)).GetValue(sortedDictionary);
                         return keyCollection;
                     }},
-
                 { typeof(Dictionary<,>.ValueCollection), type =>
                 {
                     var dictionary = typeof(Dictionary<,>).MakeGenericType(type.GenericTypeArguments).Create();
@@ -228,10 +216,33 @@ namespace ObjectCreator.Creators
         internal static IEnumerable CreateEnumeration(Type enumerationType, IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
         {
             var enumerationItemType = enumerationType.GetGenericArguments()[0];
-            for (var i = 0; i < 3; i++)
+            var enumerationCount = objectCreationStrategy.EnumerationCount;
+
+            for (var i = 0; i < enumerationCount; i++)
             {
                 var result = enumerationItemType.Create(defaultData, objectCreationStrategy);
                 yield return result;
+            }
+        }
+
+        internal static IEnumerable<T> CreateEnumerationWithObjects<T>(IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
+        {
+            var itemsCount = objectCreationStrategy.EnumerationCount;
+            for (int i = 0; i < itemsCount; i++)
+            {
+                yield return ObjectCreatorExtensions.Create<T>(defaultData, objectCreationStrategy);
+            }
+        }
+
+        internal static IEnumerable<KeyValuePair<TKey, TValue>> CreateDictionaryEntries<TKey, TValue>(
+            IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
+        {
+            var itemsCount = objectCreationStrategy.EnumerationCount;
+            for (int i = 0; i < itemsCount; i++)
+            {
+                var key = ObjectCreatorExtensions.Create<TKey>(defaultData, objectCreationStrategy);
+                var value = ObjectCreatorExtensions.Create<TValue>(defaultData, objectCreationStrategy);
+                yield return new KeyValuePair<TKey, TValue>(key, value);
             }
         }
     }

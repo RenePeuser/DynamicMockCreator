@@ -17,32 +17,54 @@ namespace ObjectCreatorTest.Test
         }
 
         [TestMethod]
-        public void TestActivator()
+        public void CreateListByActivator()
         {
             for (int i = 0; i < 10000; i++)
             {
                 Assert.IsNotNull(Activator.CreateInstance(typeof(List<string>)));
             }
         }
+        [TestMethod]
+        public void CreateListWithItemsByActivatorWithCtorParameter()
+        {
+            var items = new List<string>() { "a", "b", "c" };
+            for (int i = 0; i < 10000; i++)
+            {
+                Assert.IsNotNull(Activator.CreateInstance(typeof(List<string>), items));
+            }
+        }
 
         [TestMethod]
-        public void TestActivator111()
+        public void CreateListWithItemsByAdding()
         {
             for (int i = 0; i < 10000; i++)
             {
-                Assert.IsNotNull(typeof(PerformanceTest).GetMethod("CreateList",
+                var list = (List<string>)Activator.CreateInstance(typeof(List<string>));
+                list.Add("a");
+                list.Add("b");
+                list.Add("c");
+                Assert.IsNotNull(Activator.CreateInstance(typeof(List<string>)));
+            }
+        }
+
+        [TestMethod]
+        public void CreateListByMethodWithReflection()
+        {
+            for (int i = 0; i < 10000; i++)
+            {
+                Assert.IsNotNull(typeof(PerformanceTest).GetMethod(nameof(PerformanceTest.CreateListMethod),
                         BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)
                     .Invoke(this, new object[] { }));
             }
         }
 
-        private static List<string> CreateList()
+        private static List<string> CreateListMethod()
         {
             return new List<string>();
         }
 
         [TestMethod]
-        public void TestNew()
+        public void CreateListWithNewOperator()
         {
             for (int i = 0; i < 10000; i++)
             {
@@ -51,7 +73,7 @@ namespace ObjectCreatorTest.Test
         }
 
         [TestMethod]
-        public void MakeGenericType()
+        public void CreateListWithMakeGenericType()
         {
             for (int i = 0; i < 10000; i++)
             {
@@ -118,7 +140,7 @@ namespace ObjectCreatorTest.Test
         }
 
         [TestMethod]
-        public void ActivatorCreation()
+        public void CreateListWithCtorParamByMakeGenericType()
         {
             var collection = new Collection<string>();
             for (int i = 0; i < 10000; i++)
