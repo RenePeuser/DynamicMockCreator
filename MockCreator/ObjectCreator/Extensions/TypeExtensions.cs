@@ -79,6 +79,11 @@ namespace ObjectCreator.Extensions
             return type.IsInterfaceImplemented<IEnumerable>() || type == typeof(IEnumerable);
         }
 
+        public static bool IsIDictionary(this Type type)
+        {
+            return type.IsInterfaceImplemented<IDictionary>() || type == typeof(IDictionary);
+        }
+
         public static bool IsIEnumerator(this Type type)
         {
             return type.IsInterfaceImplemented<IEnumerator>() || type == typeof(IEnumerator);

@@ -68,6 +68,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Creators\DictionaryCreatorGeneric.cs" />
+    <Compile Include="Creators\DictionaryCreatorNonGeneric.cs" />
+    <Compile Include="Creators\EnumerableCreatorGeneric.cs" />
+    <Compile Include="Creators\EnumerableCreatorNonGeneric.cs" />
+    <Compile Include="Creators\EnumerationCreator.cs" />
     <Compile Include="Creators\EnumeratorCreator.cs" />
     <Compile Include="Extensions\ActionExtensions.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />

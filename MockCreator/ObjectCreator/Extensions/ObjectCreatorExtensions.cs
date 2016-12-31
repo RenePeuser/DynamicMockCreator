@@ -133,16 +133,6 @@ namespace ObjectCreator.Extensions
             return result;
         }
 
-        private static T Setup<T>(this T source, IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
-        {
-            if (objectCreationStrategy.SetupProperties)
-            {
-                source.InitProperties(defaultData, objectCreationStrategy);
-            }
-
-            return source;
-        }
-
         internal static object[] CreateCtorArguments(this Type type, IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
         {
             var ctor = type.GetConstructor();
@@ -154,6 +144,16 @@ namespace ObjectCreator.Extensions
             var parameterInfos = methodBase.GetParameters();
             var arguments = parameterInfos.Select(item => item.ParameterType.Create(defaultData, objectCreationStrategy));
             return arguments.ToArray();
+        }
+
+        private static T Setup<T>(this T source, IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
+        {
+            if (objectCreationStrategy.SetupProperties)
+            {
+                source.InitProperties(defaultData, objectCreationStrategy);
+            }
+
+            return source;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
@@ -79,6 +80,19 @@ namespace ObjectCreatorTest.Test
             {
                 var type = typeof(List<>).MakeGenericType(typeof(string));
                 Assert.IsNotNull(Activator.CreateInstance(type));
+            }
+        }
+
+        [TestMethod]
+        public void CreateListWithMakeGenericTypeWithAddingItems()
+        {
+            for (int i = 0; i < 10000; i++)
+            {
+                var type = typeof(List<>).MakeGenericType(typeof(string));
+                var list = (IList)Activator.CreateInstance(type);
+                list.Add("a");
+                list.Add("b");
+                list.Add("c");
             }
         }
 
