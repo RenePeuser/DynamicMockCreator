@@ -45,7 +45,7 @@ namespace ObjectCreator.Extensions
 
         public static bool IsSystemType(this Type type)
         {
-            return type.FullName.StartsWith("System");
+            return type.FullName.StartsWith(nameof(System));
         }
 
         public static bool IsUndefined(this Type type)
@@ -139,7 +139,6 @@ namespace ObjectCreator.Extensions
         public static IEnumerable<MethodInfo> GetAllMethods(this Type type)
         {
             var methods = type.GetMethods().Where(m => (m.ReturnType != typeof(void)) && !m.IsSpecialName);
-            // var inheritInterfaces = type.GetInterfaces().Where(i => !i.FullName.StartsWith("System"));
             var inheritInterfaces = type.GetInterfaces();
             var inhertiMethods = inheritInterfaces.SelectMany(item => item.GetMethods().Where(m => (m.ReturnType != typeof(void)) && !m.IsSpecialName));
             var allMethods = methods.Concat(inhertiMethods);

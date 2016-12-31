@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Globalization;
 using System.Linq;
 
 namespace ObjectCreator.Extensions
@@ -53,17 +51,6 @@ namespace ObjectCreator.Extensions
             var nameValueCollection = new NameValueCollection();
             keyValuePairs.ForEach(item => nameValueCollection.Add(item.Key.ToString(), item.Value.ToString()));
             return nameValueCollection;
-        }
-
-        public static string ToString<T>(this KeyValuePair<string, Func<T, object>> compiledExpression, T argument)
-        {
-            if (argument == null)
-            {
-                throw new ArgumentNullException("argument");
-            }
-
-            var result = string.Format(CultureInfo.InvariantCulture, "{0}[{1}] ", compiledExpression.Key, compiledExpression.Value.Invoke(argument));
-            return result;
         }
     }
 }

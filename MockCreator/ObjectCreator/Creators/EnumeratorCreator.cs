@@ -68,7 +68,7 @@ namespace ObjectCreator.Creators
             var genericTypes = expectedType.GetGenericArguments();
             var genericDeclaringType = declaringType.MakeGenericType(genericTypes);
             var createdType = genericDeclaringType.Create();
-            var enumerator = createdType.GetType().GetMethod("GetEnumerator").Invoke(createdType, new object[] { });
+            var enumerator = createdType.GetType().GetMethod(nameof(IEnumerable.GetEnumerator)).Invoke(createdType, new object[] { });
             return (T)enumerator;
         }
 
@@ -81,6 +81,6 @@ namespace ObjectCreator.Creators
                 Debug.WriteLine($"Expected IEnumerator type: '{expectedType.Name}' is unknown to create.");
             }
             return (T)result;
-        }        
+        }
     }
 }
