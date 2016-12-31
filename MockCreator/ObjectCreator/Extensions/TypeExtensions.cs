@@ -59,6 +59,21 @@ namespace ObjectCreator.Extensions
             return genericArguments.Any(arg => arg.IsUndefined());
         }
 
+        public static bool IsDefaultValue(this Type type, object value)
+        {
+            if (type.IsValueType && value.Equal(0))
+            {
+                return true;
+            }
+
+            if (!type.IsValueType && value == null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public static bool IsTask(this Type type)
         {
             if (type == typeof(Task))

@@ -17,11 +17,11 @@ namespace ObjectCreator.Helper
         {
             { typeof(sbyte), () => (sbyte)NextDouble() },
             { typeof(byte), () => (byte)NextDouble() },
-            { typeof(short), () => (short)NextDouble() },
-            { typeof(ushort), () => (ushort)NextDouble() },
-            { typeof(int), () => (int)NextDouble() },
-            { typeof(uint), () => (uint)NextDouble() },
-            { typeof(long), () => (long)NextDouble() },
+            { typeof(short), () => (short)NextInt() },
+            { typeof(ushort), () => (ushort)NextInt() },
+            { typeof(int), () => NextInt() },
+            { typeof(uint), () => (uint)NextInt() },
+            { typeof(long), () => (long)NextInt() },
             { typeof(float), () => (float)NextDouble() },
             { typeof(decimal), () => (decimal)NextDouble() },
             { typeof(double), () => NextDouble() },
@@ -35,6 +35,11 @@ namespace ObjectCreator.Helper
         {
             var result = RandomDataDictionary.GetValueOrDefault(type);
             return result?.Invoke();
+        }
+
+        private static int NextInt()
+        {
+            return Random.Next(0, 100);
         }
 
         private static double NextDouble()

@@ -10,5 +10,7 @@ namespace ObjectCreatorTest.Interfaces
         IList<string> IList { get; }
 
         IPrimitivePropertyInterface PrimitivePropertyInterface { get; }
+
+        IEnumerable<IPrimitivePropertyInterface> Interfaces { get; }
     }
 }

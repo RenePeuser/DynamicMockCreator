@@ -9,7 +9,7 @@ namespace ObjectCreator.Extensions
 {
     internal static class ObjectCreatorSetupExtensions
     {
-        private static readonly Action<Type, object, object, Array> ReturnsFunc = (methodReturnType, methodReturnValue, returnValue, array) => typeof(SubstituteExtensions).InvokeGenericMethod(nameof(SubstituteExtensions.Returns), new[] { methodReturnType }, methodReturnValue, returnValue, array);
+        private static readonly Action<Type, object, object, Array> ReturnsFunc = (methodReturnType, source, returnValue, array) => typeof(SubstituteExtensions).InvokeGenericMethod(nameof(SubstituteExtensions.Returns), new[] { methodReturnType }, source, returnValue, array);
         private static readonly Func<Type, object> ArgAnyFunc = parameterType => typeof(Arg).InvokeGenericMethod(nameof(Arg.Any), new[] { parameterType });
         private static readonly Func<Type, object> ForFunc = genericType => typeof(Substitute).InvokeGenericMethod(nameof(Substitute.For), new[] { genericType }, new object[] { new object[] { } });
 
@@ -29,12 +29,17 @@ namespace ObjectCreator.Extensions
             foreach (var propertyInfo in properties)
             {
                 if (propertyInfo.GetIndexParameters().Any())
+                {
                     continue;
+                }
 
                 var propertyType = propertyInfo.PropertyType;
                 var propertyValue = propertyInfo.GetValue(source);
-                if (propertyValue != null)
+                if (!propertyType.IsDefaultValue(propertyValue))
+                {
                     continue;
+                }
+
                 var newValue = propertyType.Create(defaultData, objectCreationStrategy);
                 propertyInfo.SetValue(source, newValue);
             }
@@ -61,16 +66,20 @@ namespace ObjectCreator.Extensions
 
         internal static T SetupMethods<T>(this T mock, IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
         {
-            var allMethods = typeof(T).GetMethods(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
+            var allMethods = typeof(T).GetAllMethods();
 
             foreach (var methodInfo in allMethods)
             {
                 var methodReturnType = methodInfo.ReturnType;
                 if (methodReturnType == typeof(void))
+                {
                     continue;
+                }
 
                 if (methodReturnType.IsUndefined())
+                {
                     continue;
+                }
 
                 object returnValue;
                 if (methodReturnType.IsInterface)

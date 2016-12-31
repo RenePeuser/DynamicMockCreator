@@ -10,6 +10,7 @@ using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ObjectCreator.Extensions;
 using ObjectCreator.Helper;
+using ObjectCreatorTest.Interfaces;
 
 namespace ObjectCreatorTest.Test.ClassCreationTest
 {
@@ -347,7 +348,6 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
            typeof(IImmutableStack<int>),
         };
 
-
         [TestMethod]
         public void TestEnumerationWithAnyItems()
         {
@@ -363,19 +363,6 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
                 var result = type.Create(UniqueDefaultData, ObjectCreationStrategy).Cast<IEnumerable>().OfType<object>();
 
                 if (result.Count() != ObjectCreationStrategy.EnumerationCount)
-                {
-                    yield return $"Expected type:{type} has not expected items count {ObjectCreationStrategy.EnumerationCount}";
-                }
-            }
-        }
-
-        private static IEnumerable<string> AnalyzeDictionary(List<Type> typesToCreate)
-        {
-            foreach (var type in typesToCreate)
-            {
-                var result = type.Create(UniqueDefaultData, ObjectCreationStrategy).Cast<IDictionary>();
-
-                if (result.Keys.Count != ObjectCreationStrategy.EnumerationCount)
                 {
                     yield return $"Expected type:{type} has not expected items count {ObjectCreationStrategy.EnumerationCount}";
                 }
