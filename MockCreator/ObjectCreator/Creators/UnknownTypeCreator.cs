@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -18,7 +17,7 @@ namespace ObjectCreator.Creators
         internal static T CreateDynamicFrom<T>(Type type, IDefaultData defaultData,
             ObjectCreationStrategy objectCreationStrategy)
         {
-            if (type.IsInterfaceImplemented<IEnumerable>())
+            if (type.IsIEnumerable())
             {
                 var enumerable = EnumerableCreator.Create<T>(type, defaultData, objectCreationStrategy);
                 if (enumerable != null)
@@ -27,7 +26,7 @@ namespace ObjectCreator.Creators
                 }
             }
 
-            if (type.IsInterfaceImplemented<IEnumerator>())
+            if (type.IsIEnumerator())
             {
                 var enumerator = EnumeratorCreator.Create<T>(type, defaultData, objectCreationStrategy);
                 if (enumerator != null)
@@ -39,7 +38,7 @@ namespace ObjectCreator.Creators
             var expectedObject = CreateDynamic<T>(type, defaultData, objectCreationStrategy);
             if (expectedObject == null)
             {
-                return expectedObject;
+                return default(T);
             }
 
             return InitObject(defaultData, objectCreationStrategy, expectedObject);
@@ -47,7 +46,7 @@ namespace ObjectCreator.Creators
 
         private static T InitObject<T>(IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy, T expectedObject)
         {
-            if(objectCreationStrategy.SetupProperties)
+            if (objectCreationStrategy.SetupProperties)
             {
                 expectedObject.InitProperties(defaultData, objectCreationStrategy);
             }

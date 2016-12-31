@@ -115,7 +115,7 @@ namespace ObjectCreator.Extensions
 
         internal static T CreateDynamicFrom<T>(this Type type, IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
         {
-            if (type.IsInterfaceImplemented<IEnumerable>())
+            if (type.IsIEnumerable())
             {
                 var returnValue = EnumerableCreator.Create<T>(type, defaultData, objectCreationStrategy);
                 if (returnValue != null)

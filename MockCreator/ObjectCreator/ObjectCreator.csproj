@@ -85,6 +85,7 @@
     <Compile Include="Creators\FuncCreator.cs" />
     <Compile Include="Creators\InterfaceCreator.cs" />
     <Compile Include="Helper\ObjectCreatorMode.cs" />
+    <Compile Include="Helper\UniqueDefaultData.cs" />
     <Compile Include="Helper\RandomDefaultData.cs" />
     <Compile Include="Helper\TypeToValue.cs" />
     <Compile Include="Creators\UnknownTypeCreator.cs" />

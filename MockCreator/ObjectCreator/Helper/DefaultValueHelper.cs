@@ -22,9 +22,8 @@ namespace ObjectCreator.Helper
             new TypeToValue(typeof(string), "MyString"),
             new TypeToValue(typeof(object), new object()),
             new TypeToValue(typeof(DateTime), new DateTime(2016, 10, 15)),
+            new TypeToValue(typeof(Guid), Guid.NewGuid()),
             new TypeToValue(typeof(Uri), new Uri("http://www.google.com/")));
-
-
 
         public static object GetDefaultValue(this Type type, IDefaultData customDefaultData)
         {

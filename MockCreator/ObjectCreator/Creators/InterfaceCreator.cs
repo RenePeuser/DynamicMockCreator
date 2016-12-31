@@ -19,7 +19,7 @@ namespace ObjectCreator.Creators
                 return default(T);
             }
 
-            if (type.IsInterfaceImplemented<IEnumerable>())
+            if (type.IsIEnumerable())
             {
                 var result = EnumerableCreator.Create<T>(type, defaultData, objectCreationStrategy);
                 if (result != null)
@@ -28,7 +28,7 @@ namespace ObjectCreator.Creators
                 }
             }
 
-            if (type.IsInterfaceImplemented<IEnumerator>())
+            if (type.IsIEnumerator())
             {
                 var result = EnumeratorCreator.Create<T>(type, defaultData, objectCreationStrategy);
                 if (result != null)

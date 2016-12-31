@@ -1,7 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
+using System.ServiceModel;
+using System.Text;
+using Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ObjectCreator.Extensions;
+using ObjectCreator.Helper;
 
 namespace ObjectCreatorTest.Test.ClassCreationTest
 {
@@ -19,6 +26,7 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
         {
             Assert.IsNotNull(ObjectCreatorExtensions.Create<BitArray>());
         }
+
 
         [TestMethod]
         public void TestCollectionBase()
@@ -168,4 +176,60 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
         }
     }
 
+    [TestClass]
+    public class SystemCollectionCreateAnyItems
+    {
+        private static readonly ObjectCreationStrategy ObjectCreationStrategy = new ObjectCreationStrategy(false, false, false, 4);
+        private static readonly UniqueDefaultData UniqueDefaultData = new UniqueDefaultData();
+
+        private static readonly List<Type> EnumerationTypes = new List<Type>
+        {
+            typeof(ArrayList),
+            typeof(Hashtable),
+            typeof(Queue),
+            typeof(SortedList),
+            typeof(Stack),
+            typeof(HybridDictionary),
+            typeof(ListDictionary),
+            typeof(NameValueCollection),
+            typeof(OrderedDictionary),
+            typeof(StringCollection),
+            typeof(StringDictionary),
+            typeof(UriSchemeKeyedCollection),
+            typeof(IEnumerable),
+            typeof(ICollection),
+            typeof(IList),
+            typeof(IDictionary),
+            typeof(IOrderedDictionary)
+        };
+
+
+        [TestMethod]
+        public void TestEnumerationWithAnyItems()
+        {
+            var analyzeResult = Analyze(EnumerationTypes);
+
+            Assert.IsFalse(analyzeResult.Any(), ToErrorString(analyzeResult));
+        }
+
+        private static IEnumerable<string> Analyze(List<Type> typesToCreate)
+        {
+            foreach (var type in typesToCreate)
+            {
+                var result = type.Create(UniqueDefaultData, ObjectCreationStrategy).Cast<IEnumerable>().OfType<object>();
+
+                if (result.Count() != ObjectCreationStrategy.EnumerationCount)
+                {
+                    yield return $"Expected type:{type} has not expected items count {ObjectCreationStrategy.EnumerationCount}";
+                }
+            }
+        }
+
+        private static string ToErrorString(IEnumerable<string> errors)
+        {
+            var stringBuilder = new StringBuilder();
+            errors.ForEach(e => stringBuilder.AppendLine(e));
+            return stringBuilder.ToString();
+        }
+    }
 }

@@ -96,5 +96,11 @@ namespace ObjectCreatorTest.Test
         {
             Assert.AreNotEqual(default(ulong), ObjectCreatorExtensions.Create<ulong>());
         }
+
+        [TestMethod]
+        public void TestGuid()
+        {
+            Assert.AreNotEqual(Guid.Empty, ObjectCreatorExtensions.Create<Guid>());
+        }
     }
 }

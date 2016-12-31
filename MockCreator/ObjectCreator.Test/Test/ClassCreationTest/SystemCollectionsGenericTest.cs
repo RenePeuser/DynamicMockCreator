@@ -1,8 +1,16 @@
 using System;
+using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.ServiceModel;
+using System.Text;
+using Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ObjectCreator.Extensions;
+using ObjectCreator.Helper;
 
 namespace ObjectCreatorTest.Test.ClassCreationTest
 {
@@ -107,7 +115,7 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
 
         [TestMethod]
         public void TestUriSchemeKeyedCollection()
-        {            
+        {
             Assert.IsNotNull(ObjectCreatorExtensions.Create<UriSchemeKeyedCollection>());
         }
 
@@ -279,6 +287,95 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
         public void TestISet()
         {
             Assert.IsNotNull(ObjectCreatorExtensions.Create<ISet<string>>());
+        }
+    }
+
+    [TestClass]
+    public class SystemCollectionGenericCreateAnyItems
+    {
+        private static readonly ObjectCreationStrategy ObjectCreationStrategy = new ObjectCreationStrategy(false, false, false, 4);
+        private static readonly UniqueDefaultData UniqueDefaultData = new UniqueDefaultData();
+        private static readonly List<Type> EnumerationTypes = new List<Type>
+        {
+           typeof(List<int>),
+           typeof(Collection<int>),
+           typeof(ObservableCollection<int>),
+           typeof(ConcurrentBag<int>),
+           typeof(BlockingCollection<int>),
+           typeof(ReadOnlyCollection<int>),
+           typeof(Queue<int>),
+           typeof(KeyedByTypeCollection<int>),
+           typeof(HashSet<int>),
+           typeof(Stack<int>),
+           typeof(LinkedList<int>),
+           typeof(SynchronizedCollection<int>),
+           typeof(SynchronizedReadOnlyCollection<int>),
+           typeof(SortedSet<int>),
+           typeof(ConcurrentQueue<int>),
+           typeof(ConcurrentStack<int>),
+           typeof(ReadOnlyObservableCollection<int>),
+           typeof(ImmutableList<int>),
+           typeof(ImmutableArray<int>),
+           typeof(ImmutableHashSet<int>),
+           typeof(ImmutableSortedSet<int>),
+           typeof(ImmutableQueue<int>),
+           typeof(ImmutableStack<int>),
+
+           typeof(ImmutableSortedDictionary<int,int>),
+           typeof(ImmutableDictionary<int,int>),
+           typeof(KeyedCollection<int,int>),
+           typeof(ReadOnlyDictionary<int,int>),
+           typeof(SortedDictionary<int,int>),
+           typeof(SortedList<int,int>),
+           typeof(ConcurrentDictionary<int,int>),
+           typeof(Dictionary<int,int>),
+           typeof(SortedDictionary<int,int>.KeyCollection),
+           typeof(SortedDictionary<int,int>.ValueCollection),
+           typeof(Dictionary<int,int>.ValueCollection),
+           typeof(Dictionary<int,int>.KeyCollection),
+           typeof(ReadOnlyDictionary<int,int>.KeyCollection),
+           typeof(ReadOnlyDictionary<int,int>.ValueCollection),
+        };
+
+        [TestMethod]
+        public void TestEnumerationWithAnyItems()
+        {
+            var analyzeResult = AnalyzeEnumerationTypes(EnumerationTypes);
+
+            Assert.IsFalse(analyzeResult.Any(), ToErrorString(analyzeResult));
+        }
+
+        private static IEnumerable<string> AnalyzeEnumerationTypes(List<Type> typesToCreate)
+        {
+            foreach (var type in typesToCreate)
+            {
+                var result = type.Create(UniqueDefaultData, ObjectCreationStrategy).Cast<IEnumerable>().OfType<object>();
+
+                if (result.Count() != ObjectCreationStrategy.EnumerationCount)
+                {
+                    yield return $"Expected type:{type} has not expected items count {ObjectCreationStrategy.EnumerationCount}";
+                }
+            }
+        }
+
+        private static IEnumerable<string> AnalyzeDictionary(List<Type> typesToCreate)
+        {
+            foreach (var type in typesToCreate)
+            {
+                var result = type.Create(UniqueDefaultData, ObjectCreationStrategy).Cast<IDictionary>();
+
+                if (result.Keys.Count != ObjectCreationStrategy.EnumerationCount)
+                {
+                    yield return $"Expected type:{type} has not expected items count {ObjectCreationStrategy.EnumerationCount}";
+                }
+            }
+        }
+
+        private static string ToErrorString(IEnumerable<string> errors)
+        {
+            var stringBuilder = new StringBuilder();
+            errors.ForEach(e => stringBuilder.AppendLine(e));
+            return stringBuilder.ToString();
         }
     }
 }

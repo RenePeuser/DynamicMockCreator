@@ -5,7 +5,6 @@ using ObjectCreator.Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Diagnostics;
 
 namespace ObjectCreator.Creators
@@ -14,7 +13,7 @@ namespace ObjectCreator.Creators
     {
         internal static T Create<T>(Type type, IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
         {
-            if (!type.IsInterfaceImplemented<IEnumerator>())
+            if (!type.IsIEnumerator())
             {
                 return default(T);
             }

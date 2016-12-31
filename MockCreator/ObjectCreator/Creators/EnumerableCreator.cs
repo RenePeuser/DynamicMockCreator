@@ -20,7 +20,7 @@ namespace ObjectCreator.Creators
     {
         internal static T Create<T>(Type type, IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
         {
-            if (type.IsInterfaceImplemented<IEnumerable>())
+            if (type.IsIEnumerable())
             {
                 return CreateEnumerable<T>(type, defaultData, objectCreationStrategy);
             }
@@ -57,16 +57,16 @@ namespace ObjectCreator.Creators
         {
             {typeof(ArrayList), (defaultData, objectCreationStrategy) => new ArrayList(EnumerationCreator.CreateEnumerationWithObjects<object>(defaultData, objectCreationStrategy).ToList())},
             {typeof(BitArray), (defaultData, objectCreationStrategy) => new BitArray(0)},
-            {typeof(Hashtable), (defaultData, objectCreationStrategy) => new Hashtable(EnumerationCreator.CreateDictionaryEntries<object,object>(defaultData, objectCreationStrategy).ToDictionary())},
+            {typeof(Hashtable), (defaultData, objectCreationStrategy) => new Hashtable(EnumerationCreator.CreateDictionaryEntries<int,int>(defaultData, objectCreationStrategy).ToDictionary())},
             {typeof(Queue), (defaultData, objectCreationStrategy) => new Queue(EnumerationCreator.CreateEnumerationWithObjects<object>(defaultData, objectCreationStrategy).ToList())},
-            {typeof(SortedList), (defaultData, objectCreationStrategy) => new SortedList(EnumerationCreator.CreateDictionaryEntries<object,object>(defaultData, objectCreationStrategy).ToDictionary())},
+            {typeof(SortedList), (defaultData, objectCreationStrategy) => new SortedList(EnumerationCreator.CreateDictionaryEntries<int,int>(defaultData, objectCreationStrategy).ToDictionary())},
             {typeof(Stack), (defaultData, objectCreationStrategy) => new Stack(EnumerationCreator.CreateEnumerationWithObjects<object>(defaultData, objectCreationStrategy).ToList())},
-            {typeof(HybridDictionary), (defaultData, objectCreationStrategy) => EnumerationCreator.CreateDictionaryEntries<object,object>(defaultData, objectCreationStrategy).ToHybridDictionary()},
-            {typeof(ListDictionary), (defaultData, objectCreationStrategy) => EnumerationCreator.CreateDictionaryEntries<object,object>(defaultData, objectCreationStrategy).ToDictionary()},
-            {typeof(NameValueCollection), (defaultData, objectCreationStrategy) => EnumerationCreator.CreateDictionaryEntries<object,object>(defaultData, objectCreationStrategy).ToDictionary().ToNameValueCollection()},
-            {typeof(OrderedDictionary), (defaultData, objectCreationStrategy) => EnumerationCreator.CreateDictionaryEntries<object,object>(defaultData, objectCreationStrategy).ToOrderedDictionary()},
+            {typeof(HybridDictionary), (defaultData, objectCreationStrategy) => EnumerationCreator.CreateDictionaryEntries<int,int>(defaultData, objectCreationStrategy).ToHybridDictionary()},
+            {typeof(ListDictionary), (defaultData, objectCreationStrategy) => EnumerationCreator.CreateDictionaryEntries<int,int>(defaultData, objectCreationStrategy).ToListDictionary()},
+            {typeof(NameValueCollection), (defaultData, objectCreationStrategy) => EnumerationCreator.CreateDictionaryEntries<int,int>(defaultData, objectCreationStrategy).ToDictionary().ToNameValueCollection()},
+            {typeof(OrderedDictionary), (defaultData, objectCreationStrategy) => EnumerationCreator.CreateDictionaryEntries<int,int>(defaultData, objectCreationStrategy).ToOrderedDictionary()},
             {typeof(StringCollection), (defaultData, objectCreationStrategy) => EnumerationCreator.CreateEnumerationWithObjects<object>(defaultData, objectCreationStrategy).ToStringCollection()},
-            {typeof(StringDictionary), (defaultData, objectCreationStrategy) => EnumerationCreator.CreateDictionaryEntries<object,object>(defaultData, objectCreationStrategy).ToStringDictionary()},
+            {typeof(StringDictionary), (defaultData, objectCreationStrategy) => EnumerationCreator.CreateDictionaryEntries<int,int>(defaultData, objectCreationStrategy).ToStringDictionary()},
             {typeof(UriSchemeKeyedCollection), (defaultData, objectCreationStrategy) => new UriSchemeKeyedCollection(EnumerationCreator.CreateEnumerationWithObjects<Uri>(defaultData, objectCreationStrategy).ToArray()) },
             {typeof(NameObjectCollectionBase), (defaultData, objectCreationStrategy) => Substitute.ForPartsOf<NameObjectCollectionBase>() },
             {typeof(CollectionBase), (defaultData, objectCreationStrategy) => Substitute.ForPartsOf<CollectionBase>()},
@@ -79,8 +79,8 @@ namespace ObjectCreator.Creators
             {typeof(IEnumerable), (defaultData, objectCreationStrategy) => new List<object>(EnumerationCreator.CreateEnumerationWithObjects<object>(defaultData, objectCreationStrategy))},
             {typeof(ICollection), (defaultData, objectCreationStrategy) => new List<object>(EnumerationCreator.CreateEnumerationWithObjects<object>(defaultData, objectCreationStrategy))},
             {typeof(IList), (defaultData, objectCreationStrategy) => new List<object>(EnumerationCreator.CreateEnumerationWithObjects<object>(defaultData, objectCreationStrategy))},
-            {typeof(IDictionary), (defaultData, objectCreationStrategy) => new Dictionary<object, object>(EnumerationCreator.CreateDictionaryEntries<object,object>(defaultData, objectCreationStrategy).ToDictionary())},
-            {typeof(IOrderedDictionary), (defaultData, objectCreationStrategy) => EnumerationCreator.CreateDictionaryEntries<object,object>(defaultData, objectCreationStrategy).ToOrderedDictionary()},
+            {typeof(IDictionary), (defaultData, objectCreationStrategy) => new Dictionary<int,int>(EnumerationCreator.CreateDictionaryEntries<int,int>(defaultData, objectCreationStrategy).ToDictionary())},
+            {typeof(IOrderedDictionary), (defaultData, objectCreationStrategy) => EnumerationCreator.CreateDictionaryEntries<int,int>(defaultData, objectCreationStrategy).ToOrderedDictionary()},
         };
     }
 
@@ -114,7 +114,6 @@ namespace ObjectCreator.Creators
                         var returnValue = Activator.CreateInstance(typeof(ReadOnlyCollection<>).MakeGenericType(genericArguments), parameter);
                         return returnValue;
                     }},
-                { typeof(KeyValuePair<,>), type => Activator.CreateInstance(type, type.GetGenericArguments().Select(arg => arg.Create()).ToArray()) },
                 { typeof(Queue<>), Activator.CreateInstance },
                 { typeof(KeyedByTypeCollection<>), Activator.CreateInstance },
                 { typeof(HashSet<>), Activator.CreateInstance},
@@ -127,7 +126,6 @@ namespace ObjectCreator.Creators
                 { typeof(SortedDictionary<,>), Activator.CreateInstance },
                 { typeof(ConcurrentQueue<>), Activator.CreateInstance },
                 { typeof(ConcurrentStack<>), Activator.CreateInstance },
-                { typeof(Partitioner<>), Activator.CreateInstance },
                 { typeof(ReadOnlyObservableCollection<>), type =>
                     {
                         var genericArguments = type.GetGenericArguments();
@@ -144,7 +142,6 @@ namespace ObjectCreator.Creators
                 }},
                 { typeof(ImmutableList<>), type => typeof(ImmutableList).InvokeGenericMethod(nameof(ImmutableList.Create), type.GetGenericArguments())},
                 { typeof(KeyedCollection<,>),  type => ForPartsOfFunc(type, new object[] {}) },
-                { typeof(LinkedListNode<>), type => Activator.CreateInstance(type, type.GetGenericArguments().First().Create()) },
                 { typeof(ImmutableArray<>), type => typeof(ImmutableArray).InvokeGenericMethod(nameof(ImmutableArray.Create), type.GetGenericArguments())},
                 { typeof(ImmutableDictionary<,>), type => typeof(ImmutableDictionary).InvokeGenericMethod(nameof(ImmutableArray.Create), type.GetGenericArguments())},
                 { typeof(ImmutableHashSet<>), type => typeof(ImmutableHashSet).InvokeGenericMethod(nameof(ImmutableHashSet.Create), type.GetGenericArguments())},
