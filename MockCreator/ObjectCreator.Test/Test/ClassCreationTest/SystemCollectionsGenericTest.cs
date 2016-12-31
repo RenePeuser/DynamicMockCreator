@@ -303,7 +303,7 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
            typeof(BlockingCollection<int>),
            typeof(ReadOnlyCollection<int>),
            typeof(Queue<int>),
-           typeof(KeyedByTypeCollection<int>),
+           //typeof(KeyedByTypeCollection<object>),
            typeof(HashSet<int>),
            typeof(Stack<int>),
            typeof(LinkedList<int>),
@@ -322,7 +322,7 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
 
            typeof(ImmutableSortedDictionary<int,int>),
            typeof(ImmutableDictionary<int,int>),
-           typeof(KeyedCollection<int,int>),
+           //typeof(KeyedCollection<int,int>),
            typeof(ReadOnlyDictionary<int,int>),
            typeof(SortedDictionary<int,int>),
            typeof(SortedList<int,int>),
@@ -334,7 +334,19 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
            typeof(Dictionary<int,int>.KeyCollection),
            typeof(ReadOnlyDictionary<int,int>.KeyCollection),
            typeof(ReadOnlyDictionary<int,int>.ValueCollection),
+           typeof(IEnumerable<int>),
+           typeof(ICollection<int>),
+           typeof(IList<int>),
+           typeof(IReadOnlyCollection<int>),
+           typeof(IReadOnlyList<int>),
+           typeof(ISet<int>),
+           typeof(IProducerConsumerCollection<int>),
+           typeof(IImmutableList<int>),
+           typeof(IImmutableQueue<int>),
+           typeof(IImmutableSet<int>),
+           typeof(IImmutableStack<int>),
         };
+
 
         [TestMethod]
         public void TestEnumerationWithAnyItems()

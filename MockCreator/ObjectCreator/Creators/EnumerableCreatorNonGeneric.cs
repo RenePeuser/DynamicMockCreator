@@ -28,6 +28,7 @@ namespace ObjectCreator.Creators
             {typeof(Queue), (defaultData, objectCreationStrategy) => new Queue(EnumerationCreator.CreateEnumerationWithObjects<object>(defaultData, objectCreationStrategy).ToList())},
             {typeof(Stack), (defaultData, objectCreationStrategy) => new Stack(EnumerationCreator.CreateEnumerationWithObjects<object>(defaultData, objectCreationStrategy).ToList())},
             {typeof(StringCollection), (defaultData, objectCreationStrategy) => EnumerationCreator.CreateEnumerationWithObjects<object>(defaultData, objectCreationStrategy).ToStringCollection()},
+            {typeof(StringDictionary), (defaultData, objectCreationStrategy) => EnumerationCreator.CreateDictionaryEntries<int,int>(defaultData, objectCreationStrategy).ToStringDictionary()},
             {typeof(UriSchemeKeyedCollection), (defaultData, objectCreationStrategy) => new UriSchemeKeyedCollection(EnumerationCreator.CreateEnumerationWithObjects<Uri>(defaultData, objectCreationStrategy).ToArray()) },
             {typeof(NameValueCollection), (defaultData, objectCreationStrategy) => EnumerationCreator.CreateDictionaryEntries<int,int>(defaultData, objectCreationStrategy).ToDictionary().ToNameValueCollection()},
             {typeof(NameObjectCollectionBase), (defaultData, objectCreationStrategy) => Substitute.ForPartsOf<NameObjectCollectionBase>() },

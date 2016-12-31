@@ -7,7 +7,7 @@
         xmlns:markupExtensions="clr-namespace:ObjectCreator.MarkupExtensions;assembly=ObjectCreator"
         mc:Ignorable="d"
         Title="MainWindow" Height="549.2" Width="520.2"
-        markupExtensions:DesignTimeAttachedProperties.DesignTimeType="{x:Type local:IMainWindowViewModel}">
+        markupExtensions:DesignTimeAttachedProperties.DesignTimeType="{x:Type local:MainWindowViewModel}">
     <StackPanel>
         <TextBlock Text="{Binding Path=IntValue}"/>
         <TextBlock Text="{Binding Path=DoubleValue}"/>

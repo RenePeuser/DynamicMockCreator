@@ -15,8 +15,8 @@ namespace ObjectCreator.Creators
             }
 
             var elementType = type.GetElementType();
-            var array = Array.CreateInstance(elementType, 5);
-            for (var i = 0; i < 3; i++)
+            var array = Array.CreateInstance(elementType, objectCreationStrategy.EnumerationCount);
+            for (var i = 0; i < objectCreationStrategy.EnumerationCount; i++)
             {
                 var arrayItem = elementType.Create(defaultData, objectCreationStrategy);
                 array.SetValue(arrayItem, i);

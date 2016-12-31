@@ -41,5 +41,12 @@ namespace ObjectCreator.Creators
                 yield return new KeyValuePair<TKey, TValue>(key, value);
             }
         }
+
+        internal static IDictionary<TKey, TValue> CreateDictionary<TKey, TValue>(IDefaultData defaultData,
+            ObjectCreationStrategy objectCreationStrategy)
+        {
+            var items = CreateDictionaryEntries<TKey, TValue>(defaultData, objectCreationStrategy);
+            return items.ToDictionary();
+        }
     }
 }
