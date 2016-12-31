@@ -70,9 +70,14 @@
   <ItemGroup>
     <Compile Include="Creators\EnumeratorCreator.cs" />
     <Compile Include="Extensions\ActionExtensions.cs" />
+    <Compile Include="Extensions\DictionaryExtensions.cs" />
+    <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\FuncExtensions.cs" />
+    <Compile Include="Extensions\GenericTypeExtensions.cs" />
+    <Compile Include="Extensions\KeyValuePairExtensions.cs" />
     <Compile Include="Extensions\ObjectCreatorSetupExtensions.cs" />
     <Compile Include="Extensions\ObjectCreatorExtensions.cs" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\TaskExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Creators\AbstractClassCreator.cs" />
@@ -95,12 +100,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Extensions\Extensions\Extensions\Extensions.csproj">
-      <Project>{2501b7b9-a28d-4614-b357-134080d9d70d}</Project>
-      <Name>Extensions</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

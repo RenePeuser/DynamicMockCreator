@@ -67,6 +67,8 @@
     <Compile Include="DataClasses\ClassWithInterfaces.cs" />
     <Compile Include="DataClasses\ClassWithPrimitiveTypes.cs" />
     <Compile Include="DataClasses\Container.cs" />
+    <Compile Include="Extensions\GenericTypeExtensions.cs" />
+    <Compile Include="Extensions\PrivateObjectExtensions.cs" />
     <Compile Include="Interfaces\IInterfaceWithInterfaces.cs" />
     <Compile Include="Interfaces\IMethodWithPrimitiveTypesInterface.cs" />
     <Compile Include="Interfaces\InterfaceWithEnumerations.cs" />
@@ -100,14 +102,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Extensions\Extensions\Extensions\Extensions.csproj">
-      <Project>{2501b7b9-a28d-4614-b357-134080d9d70d}</Project>
-      <Name>Extensions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Extensions\Extensions\TestExtension\TestExtension.csproj">
-      <Project>{cb7669a4-e13a-4488-9f8f-15502051d044}</Project>
-      <Name>TestExtension</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ObjectCreator\ObjectCreator.csproj">
       <Project>{7833c2c1-4f55-4589-b905-340c373448da}</Project>
       <Name>ObjectCreator</Name>

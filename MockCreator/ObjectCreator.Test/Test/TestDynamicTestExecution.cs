@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ObjectCreator.Extensions;
 using ObjectCreator.Helper;
-using TestExtension;
+using ObjectCreatorTest.Extensions;
 
 namespace ObjectCreatorTest.Test
 {
@@ -59,7 +58,7 @@ namespace ObjectCreatorTest.Test
                 var result = typeof(ObjectCreatorExtensions).InvokeExpectedMethod(nameof(ObjectCreatorExtensions.Create),
                     new[] { keyValuePair.Key }, CustomData, objectCreationStrategy);
 
-                if (CustomData.GetDefaultValue(keyValuePair.Key).NotEqualityEquals(result))
+                if (CustomData.GetDefaultValue(keyValuePair.Key).NotEquals(result))
                 {
                     yield return $"Expected type:{keyValuePair.Key} has not expected {result}";
                 }

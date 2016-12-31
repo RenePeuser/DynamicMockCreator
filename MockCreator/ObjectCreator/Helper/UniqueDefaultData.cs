@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Ink;
-using Extensions;
 using ObjectCreator.Interfaces;
+using ObjectCreator.Extensions;
 
 namespace ObjectCreator.Helper
 {

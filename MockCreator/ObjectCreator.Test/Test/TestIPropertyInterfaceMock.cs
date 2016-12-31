@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ObjectCreator.Extensions;
 using ObjectCreator.Helper;
+using ObjectCreatorTest.Extensions;
 using ObjectCreatorTest.Interfaces;
-using TestExtension;
 
 namespace ObjectCreatorTest.Test
 {
@@ -63,7 +62,7 @@ namespace ObjectCreatorTest.Test
                 var expectedPropertyValue = dictionary[propertyInfo.PropertyType];
                 var propertyValue = mock.GetType().GetProperty(propertyInfo.Name).GetValue(mock);
 
-                if (expectedPropertyValue.NotEqualityEquals(propertyValue))
+                if (expectedPropertyValue.NotEquals(propertyValue))
                 {
                     yield return
                         $"Expected property:{propertyInfo.Name} has not expected value {expectedPropertyValue} current value {propertyValue}"

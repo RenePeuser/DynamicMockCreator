@@ -79,7 +79,9 @@ namespace ObjectCreator.Extensions
                     returnValue.SetupProperties(defaultData, objectCreationStrategy);
                 }
                 else
+                {
                     returnValue = methodReturnType.Create(defaultData, objectCreationStrategy);
+                }
 
                 var arguments = methodInfo.CreateAnyArgs();
                 var methodReturnValue = methodInfo.Invoke(mock, arguments);
@@ -90,11 +92,6 @@ namespace ObjectCreator.Extensions
             return mock;
         }
 
-        /// <summary>
-        /// Creates any arguments from <see cref="Arg.Any{T}"/>
-        /// </summary>
-        /// <param name="methodBase">The method base.</param>
-        /// <returns>The parameter array for a specific method.</returns>
         private static object[] CreateAnyArgs(this MethodBase methodBase)
         {
             var parameterInfos = methodBase.GetParameters();

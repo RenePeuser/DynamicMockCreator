@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ObjectCreator.Extensions;
 using ObjectCreator.Helper;
+using ObjectCreatorTest.Extensions;
 using ObjectCreatorTest.Interfaces;
-using TestExtension;
 
 namespace ObjectCreatorTest.Test
 {
@@ -63,7 +62,7 @@ namespace ObjectCreatorTest.Test
                 var expectedValue = dictionary[methodInfo.ReturnType];
                 var currentValue = mock.GetType().GetMethod(methodInfo.Name).Invoke(mock, new object[] { });
 
-                if (expectedValue.NotEqualityEquals(currentValue))
+                if (expectedValue.NotEquals(currentValue))
                 {
                     yield return
                         $"Expected method:{methodInfo.Name} has not expected return value {expectedValue} current return value {currentValue}"

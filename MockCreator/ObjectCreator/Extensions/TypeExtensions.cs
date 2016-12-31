@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -71,6 +72,34 @@ namespace ObjectCreator.Extensions
         public static bool IsStatic(this Type type)
         {
             return type.IsClass && type.IsAbstract && type.IsSealed;
+        }
+
+        public static bool IsIEnumerable(this Type type)
+        {
+            return type.IsInterfaceImplemented<IEnumerable>() || type == typeof(IEnumerable);
+        }
+
+        public static bool IsIEnumerator(this Type type)
+        {
+            return type.IsInterfaceImplemented<IEnumerator>() || type == typeof(IEnumerator);
+        }
+
+        public static bool IsInterfaceImplemented<T>(this Type type) where T : class
+        {
+            var result = type.GetInterface<T>();
+            return result != null;
+        }
+
+        public static Type GetInterface<T>(this Type type) where T : class
+        {
+            var genericType = typeof(T);
+            if (!genericType.IsInterface)
+            {
+                throw new ArgumentException($"The generic type '{typeof(T).Name}' is not an interface");
+            }
+
+            var result = type.GetInterface(genericType.Name);
+            return result;
         }
 
         public static Array ToArray(this Type type, int length)

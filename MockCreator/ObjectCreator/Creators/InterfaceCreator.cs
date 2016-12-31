@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using Extensions;
 using NSubstitute;
 using ObjectCreator.Extensions;
 using ObjectCreator.Helper;

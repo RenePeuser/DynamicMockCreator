@@ -8,7 +8,6 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
-using Extensions;
 using NSubstitute;
 using ObjectCreator.Extensions;
 using ObjectCreator.Helper;

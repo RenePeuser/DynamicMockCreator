@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Extensions;
 using ObjectCreator.Interfaces;
+using ObjectCreator.Extensions;
 
 namespace ObjectCreator.Helper
 {

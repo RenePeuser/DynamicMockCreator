@@ -4,9 +4,8 @@ using System.Collections.ObjectModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ObjectCreator.Extensions;
 using ObjectCreator.Helper;
+using ObjectCreatorTest.Extensions;
 using ObjectCreatorTest.Interfaces;
-using TestExtension;
-
 namespace ObjectCreatorTest.Test
 {
     [TestClass]
