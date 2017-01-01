@@ -131,7 +131,7 @@ namespace ObjectCreatorTest.Test
             for (int i = 0; i < 1000; i++)
             {
                 // Think in productive mode you have always different types.
-                var genericMethod = methodInfo.MakeGenericMethod(new[] { typeof(string) });
+                var genericMethod = methodInfo.MakeGenericMethod(typeof(string));
                 Assert.IsNotNull(genericMethod.Invoke(null, new object[] { value }));
             }
         }
@@ -144,7 +144,7 @@ namespace ObjectCreatorTest.Test
             for (int i = 0; i < 1000; i++)
             {
                 // Think in productive mode you have always different types.
-                var genericMethod = methodInfo.MakeGenericMethod(new[] { typeof(string) });
+                var genericMethod = methodInfo.MakeGenericMethod(typeof(string));
                 var toListDelegate =
                     (Func<IEnumerable<string>, List<string>>)
                     Delegate.CreateDelegate(typeof(Func<IEnumerable<string>, List<string>>), null, genericMethod);
@@ -159,7 +159,7 @@ namespace ObjectCreatorTest.Test
             var collection = new Collection<string>();
             for (int i = 0; i < 10000; i++)
             {
-                var type = typeof(List<>).MakeGenericType(new[] { typeof(string) });
+                var type = typeof(List<>).MakeGenericType(typeof(string));
                 Assert.IsNotNull(Activator.CreateInstance(type, collection));
             }
         }

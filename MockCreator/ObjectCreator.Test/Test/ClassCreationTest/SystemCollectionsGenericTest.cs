@@ -349,7 +349,7 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
         [TestMethod]
         public void TestEnumerationWithAnyItems()
         {
-            var analyzeResult = AnalyzeEnumerationTypes(EnumerationTypes);
+            var analyzeResult = AnalyzeEnumerationTypes(EnumerationTypes).ToList();
 
             Assert.IsFalse(analyzeResult.Any(), ToErrorString(analyzeResult));
         }

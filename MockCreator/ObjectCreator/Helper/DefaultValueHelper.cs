@@ -15,7 +15,7 @@ namespace ObjectCreator.Helper
             new TypeToValue(typeof(uint), (uint)1),
             new TypeToValue(typeof(long), (long)1.1),
             new TypeToValue(typeof(ulong), (ulong)1.2),
-            new TypeToValue(typeof(char), (char)'c'),
+            new TypeToValue(typeof(char), 'c'),
             new TypeToValue(typeof(float), (float)1.3),
             new TypeToValue(typeof(bool), true),
             new TypeToValue(typeof(decimal), new decimal(1.5)),

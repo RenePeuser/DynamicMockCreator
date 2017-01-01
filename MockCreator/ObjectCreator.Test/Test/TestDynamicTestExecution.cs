@@ -45,7 +45,7 @@ namespace ObjectCreatorTest.Test
         [TestMethod]
         public void TestFor()
         {
-            var errors = Analyze(_dictionary);
+            var errors = Analyze(_dictionary).ToList();
 
             Assert.IsFalse(errors.Any(), ToErrorString(errors));
         }

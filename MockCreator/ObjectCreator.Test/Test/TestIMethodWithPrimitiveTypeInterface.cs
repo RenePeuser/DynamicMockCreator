@@ -48,7 +48,7 @@ namespace ObjectCreatorTest.Test
         {
             var objectCreationStrategy = new ObjectCreationStrategy(false, true, 0, null);
             var mock = ObjectCreatorExtensions.Create<IMethodWithPrimitiveTypesInterface>(CustomData, objectCreationStrategy);
-            var errors = Analyze(mock, _dictionary);
+            var errors = Analyze(mock, _dictionary).ToList();
 
             Assert.IsFalse(errors.Any(), ToErrorString(errors));
         }

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.ServiceModel;
-using NSubstitute;
 using ObjectCreator.Extensions;
 using ObjectCreator.Helper;
 using ObjectCreator.Interfaces;

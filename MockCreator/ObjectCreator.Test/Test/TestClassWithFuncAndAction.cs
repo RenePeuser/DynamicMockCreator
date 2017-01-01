@@ -39,32 +39,32 @@ namespace ObjectCreatorTest.Test
     [TestClass]
     public class TestClassWithFuncAndAction
     {
-        private static ObjectCreationStrategy objectCreationStrategy = new ObjectCreationStrategy(true, false, 0, null);
+        private static readonly ObjectCreationStrategy ObjectCreationStrategy = new ObjectCreationStrategy(true, false, 0, null);
 
         [TestMethod]
         public void TestClassWithActionAndFunc()
         {
-            Assert.IsNotNull(ObjectCreatorExtensions.Create<ActionAndFunc>(objectCreationStrategy));
+            Assert.IsNotNull(ObjectCreatorExtensions.Create<ActionAndFunc>(ObjectCreationStrategy));
         }
 
         [TestMethod]
         public void TestActionWasSet()
         {
-            var result = ObjectCreatorExtensions.Create<ActionAndFunc>(objectCreationStrategy);
+            var result = ObjectCreatorExtensions.Create<ActionAndFunc>(ObjectCreationStrategy);
             Assert.IsNotNull(result.Action);
         }
 
         [TestMethod]
         public void TestFuncWasSet()
         {
-            var result = ObjectCreatorExtensions.Create<ActionAndFunc>(objectCreationStrategy);
+            var result = ObjectCreatorExtensions.Create<ActionAndFunc>(ObjectCreationStrategy);
             Assert.IsNotNull(result.Func);
         }
 
         [TestMethod]
         public void TestFuncHasResult()
         {
-            var result = ObjectCreatorExtensions.Create<ActionAndFunc>(objectCreationStrategy);
+            var result = ObjectCreatorExtensions.Create<ActionAndFunc>(ObjectCreationStrategy);
             Assert.IsNotNull(result.Func.Invoke("a"));
         }
     }

@@ -52,7 +52,7 @@ namespace ObjectCreatorTest.Test
         [TestMethod]
         public void TestItEnumerableIsNotNull()
         {
-            Assert.IsNotNull(_mock.IList);
+            Assert.IsNotNull(_mock.Strings);
         }
 
         [TestMethod]

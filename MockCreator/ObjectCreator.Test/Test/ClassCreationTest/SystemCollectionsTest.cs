@@ -206,7 +206,7 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
         [TestMethod]
         public void TestEnumerationWithAnyItems()
         {
-            var analyzeResult = Analyze(EnumerationTypes);
+            var analyzeResult = Analyze(EnumerationTypes).ToList();
 
             Assert.IsFalse(analyzeResult.Any(), ToErrorString(analyzeResult));
         }

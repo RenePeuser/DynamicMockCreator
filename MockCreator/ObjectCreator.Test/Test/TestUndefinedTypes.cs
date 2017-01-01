@@ -25,13 +25,13 @@ namespace ObjectCreatorTest.Test
         [TestMethod]
         public void TestInterfaceWithUndefinedTypeMethods()
         {
-            Assert.IsNotNull(ObjectCreatorExtensions.Create<InterfaceWithUndefinedMethods>());
+            Assert.IsNotNull(ObjectCreatorExtensions.Create<IWithUndefinedMethods>());
         }
 
         [TestMethod]
         public void TestUndefinedMethodsOnInterface()
         {
-            var result = ObjectCreatorExtensions.Create<InterfaceWithUndefinedMethods>();
+            var result = ObjectCreatorExtensions.Create<IWithUndefinedMethods>();
 
             Assert.IsNull(result.CreateType<object>());
         }
@@ -57,7 +57,7 @@ namespace ObjectCreatorTest.Test
         [TestMethod]
         public void TestInterfaceWithUndefinedTypeMethods()
         {
-            Assert.IsNotNull(ObjectCreatorExtensions.Create<InterfaceWithUndefinedMethods>());
+            Assert.IsNotNull(ObjectCreatorExtensions.Create<IWithUndefinedMethods>());
         }
 
     }

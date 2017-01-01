@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Windows.Ink;
 using ObjectCreator.Interfaces;
 using ObjectCreator.Extensions;
 
@@ -9,7 +8,7 @@ namespace ObjectCreator.Helper
 {
     public class UniqueDefaultData : IDefaultData
     {
-        private static long _currentValue = 0;
+        private static long _currentValue;
         private static readonly Dictionary<Type, Func<object>> UniqueDataDictionary = new Dictionary<Type, Func<object>>()
         {
             { typeof(sbyte), () => (sbyte)NextDouble() },

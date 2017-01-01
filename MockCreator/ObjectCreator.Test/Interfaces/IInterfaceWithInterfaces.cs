@@ -7,7 +7,7 @@ namespace ObjectCreatorTest.Interfaces
     {
         ICloneable Cloneable { get; }
 
-        IList<string> IList { get; }
+        IList<string> Strings { get; }
 
         IPrimitivePropertyInterface PrimitivePropertyInterface { get; }
 

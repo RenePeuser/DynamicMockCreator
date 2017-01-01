@@ -1,6 +1,6 @@
 ﻿namespace ObjectCreatorTest.Interfaces
 {
-    public interface InterfaceWithUndefinedMethods
+    public interface IWithUndefinedMethods
     {
         T CreateType<T>();
 
