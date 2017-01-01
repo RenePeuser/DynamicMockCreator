@@ -1,29 +1,20 @@
-﻿using System.Windows.Media.Media3D;
+﻿using System;
 
 namespace ObjectCreator.Helper
 {
-    //public enum ObjectCreationStrategy
-    //{
-    //    None,
-    //    SetupProperties,
-    //    SetupMethods,
-    //    SetupEnumerations,
-    //    All
-    //}
-
     public struct ObjectCreationStrategy
     {
-        public ObjectCreationStrategy(bool setupProperties, bool setupMethods, bool setupEnumerations, int enumerationCount)
+        public ObjectCreationStrategy(bool setupProperties, bool setupMethods, int enumerationCount, Type undefinedType)
         {
             SetupProperties = setupProperties;
             SetupMethods = setupMethods;
-            SetupEnumerations = setupEnumerations;
             EnumerationCount = enumerationCount;
+            UndefinedType = undefinedType;
         }
 
         public bool SetupProperties { get; }
         public bool SetupMethods { get; }
-        public bool SetupEnumerations { get; }
         public int EnumerationCount { get; }
+        public Type UndefinedType { get; }
     }
 }

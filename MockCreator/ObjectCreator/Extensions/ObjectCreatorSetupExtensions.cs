@@ -12,6 +12,7 @@ namespace ObjectCreator.Extensions
         private static readonly Action<Type, object, object, Array> ReturnsFunc = (methodReturnType, source, returnValue, array) => typeof(SubstituteExtensions).InvokeGenericMethod(nameof(SubstituteExtensions.Returns), new[] { methodReturnType }, source, returnValue, array);
         private static readonly Func<Type, object> ArgAnyFunc = parameterType => typeof(Arg).InvokeGenericMethod(nameof(Arg.Any), new[] { parameterType });
         private static readonly Func<Type, object> ForFunc = genericType => typeof(Substitute).InvokeGenericMethod(nameof(Substitute.For), new[] { genericType }, new object[] { new object[] { } });
+        //private static readonly Func<Type, object> ForFunc = genericType => Substitute.For(new Type[] { genericType }, new object[] { });
 
         internal static T InitProperties<T>(this T source, IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
         {

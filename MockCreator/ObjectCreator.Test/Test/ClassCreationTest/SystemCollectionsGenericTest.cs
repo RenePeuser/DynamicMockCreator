@@ -10,7 +10,6 @@ using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ObjectCreator.Extensions;
 using ObjectCreator.Helper;
-using ObjectCreatorTest.Interfaces;
 
 namespace ObjectCreatorTest.Test.ClassCreationTest
 {
@@ -293,7 +292,7 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
     [TestClass]
     public class SystemCollectionGenericCreateAnyItems
     {
-        private static readonly ObjectCreationStrategy ObjectCreationStrategy = new ObjectCreationStrategy(false, false, false, 4);
+        private static readonly ObjectCreationStrategy ObjectCreationStrategy = new ObjectCreationStrategy(false, false, 4, null);
         private static readonly UniqueDefaultData UniqueDefaultData = new UniqueDefaultData();
         private static readonly List<Type> EnumerationTypes = new List<Type>
         {
@@ -320,7 +319,6 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
            typeof(ImmutableSortedSet<int>),
            typeof(ImmutableQueue<int>),
            typeof(ImmutableStack<int>),
-
            typeof(ImmutableSortedDictionary<int,int>),
            typeof(ImmutableDictionary<int,int>),
            //typeof(KeyedCollection<int,int>),

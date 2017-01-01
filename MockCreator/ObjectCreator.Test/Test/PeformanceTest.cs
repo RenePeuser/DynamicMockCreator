@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NSubstitute;
+using ObjectCreatorTest.Interfaces;
 
 namespace ObjectCreatorTest.Test
 {
@@ -176,6 +178,15 @@ namespace ObjectCreatorTest.Test
                 genericMethod.Invoke(null, new object[] { collection });
                 Assert.IsNotNull(genericMethod.Invoke(null, new object[] { collection }));
             }
+        }
+
+        [TestMethod]
+        public void SubstituteFor()
+        {
+            var result = Substitute.For(new Type[] { typeof(IMyInterfaceWithEnumerations) }, new object[] { });
+
+            var test = Substitute.For<IMyInterfaceWithEnumerations>();
+
         }
 
     }

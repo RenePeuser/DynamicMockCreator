@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NSubstitute;
-using NSubstitute.Core;
 using ObjectCreator.Extensions;
 using ObjectCreator.Helper;
 using ObjectCreatorTest.Interfaces;
@@ -38,12 +35,30 @@ namespace ObjectCreatorTest.Test
 
             Assert.IsNull(result.CreateType<object>());
         }
+    }
+
+    [TestClass]
+    public class TestUndefinedTypeInitialization
+    {
+        private static readonly ObjectCreationStrategy ObjectCreationStrategy = new ObjectCreationStrategy(true, true, 0, typeof(string));
 
         [TestMethod]
-        public void TestGenericCallsWithArguments()
+        public void TestUndefinedGenericType()
         {
-            var mock = Substitute.For<InterfaceWithUndefinedMethods>();
-            var resultGeneirc = mock.CreateType<string>();
+            Assert.IsNotNull(typeof(IEnumerable<>).Create(ObjectCreationStrategy));
         }
+
+        [TestMethod]
+        public void TestExpectedGenericType()
+        {
+            Assert.IsTrue(typeof(IEnumerable<>).Create(ObjectCreationStrategy) is IEnumerable<string>);
+        }
+
+        [TestMethod]
+        public void TestInterfaceWithUndefinedTypeMethods()
+        {
+            Assert.IsNotNull(ObjectCreatorExtensions.Create<InterfaceWithUndefinedMethods>());
+        }
+
     }
 }

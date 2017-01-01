@@ -39,7 +39,7 @@ namespace ObjectCreatorTest.Test
     [TestClass]
     public class TestClassWithFuncAndAction
     {
-        private static ObjectCreationStrategy objectCreationStrategy = new ObjectCreationStrategy(true, false, false, 0);
+        private static ObjectCreationStrategy objectCreationStrategy = new ObjectCreationStrategy(true, false, 0, null);
 
         [TestMethod]
         public void TestClassWithActionAndFunc()

@@ -16,9 +16,12 @@ namespace ObjectCreator.Creators
         internal static T Create<T>(IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
         {
             var type = typeof(T);
-            return type.IsInterface ?
-                (T)NonGenericInterfaceTypeCreator.GetValueOrDefault(type)?.Invoke(defaultData, objectCreationStrategy) :
-                (T)NonGenericTypeCreator.GetValueOrDefault(type)?.Invoke(defaultData, objectCreationStrategy);
+            if (type.IsInterface)
+            {
+                return (T)NonGenericInterfaceTypeCreator.GetValueOrDefault(type)?.Invoke(defaultData, objectCreationStrategy);
+            }
+
+            return (T)NonGenericTypeCreator.GetValueOrDefault(type)?.Invoke(defaultData, objectCreationStrategy);
         }
 
         private static readonly Dictionary<Type, Func<IDefaultData, ObjectCreationStrategy, object>> NonGenericTypeCreator = new Dictionary<Type, Func<IDefaultData, ObjectCreationStrategy, object>>
@@ -31,10 +34,6 @@ namespace ObjectCreator.Creators
             {typeof(StringDictionary), (defaultData, objectCreationStrategy) => EnumerationCreator.CreateDictionaryEntries<int,int>(defaultData, objectCreationStrategy).ToStringDictionary()},
             {typeof(UriSchemeKeyedCollection), (defaultData, objectCreationStrategy) => new UriSchemeKeyedCollection(EnumerationCreator.CreateEnumerationWithObjects<Uri>(defaultData, objectCreationStrategy).ToArray()) },
             {typeof(NameValueCollection), (defaultData, objectCreationStrategy) => EnumerationCreator.CreateDictionaryEntries<int,int>(defaultData, objectCreationStrategy).ToDictionary().ToNameValueCollection()},
-            {typeof(NameObjectCollectionBase), (defaultData, objectCreationStrategy) => Substitute.ForPartsOf<NameObjectCollectionBase>() },
-            {typeof(CollectionBase), (defaultData, objectCreationStrategy) => Substitute.ForPartsOf<CollectionBase>()},
-            {typeof(DictionaryBase), (defaultData, objectCreationStrategy) => Substitute.ForPartsOf<DictionaryBase>()},
-            {typeof(ReadOnlyCollectionBase), (defaultData, objectCreationStrategy) => Substitute.ForPartsOf<ReadOnlyCollectionBase>()},
         };
 
         private static readonly Dictionary<Type, Func<IDefaultData, ObjectCreationStrategy, object>> NonGenericInterfaceTypeCreator = new Dictionary<Type, Func<IDefaultData, ObjectCreationStrategy, object>>

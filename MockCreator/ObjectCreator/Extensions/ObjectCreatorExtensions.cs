@@ -105,7 +105,7 @@ namespace ObjectCreator.Extensions
 
             if (type.IsUndefined())
             {
-                return null;
+                return UndefinedTypeCreator.Create(type, defaultData, objectCreationStrategy);
             }
 
             return CreateFunc(new[] { type }, defaultData, objectCreationStrategy);

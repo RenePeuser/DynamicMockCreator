@@ -10,6 +10,11 @@ namespace ObjectCreator.Creators
     {
         private static readonly Func<Type, object> ForFunc = genericType => typeof(Substitute).InvokeGenericMethod(nameof(Substitute.For), new[] { genericType }, new object[] { new object[] { } });
 
+        //private static readonly Func<Type, object> ForFunc = genericType => Substitute.For(new Type[] { genericType }, new object[] { });
+
+
+
+
         internal static T Create<T>(Type type, IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
         {
             if (!type.IsInterface)

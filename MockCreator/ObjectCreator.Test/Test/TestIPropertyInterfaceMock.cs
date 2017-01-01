@@ -46,7 +46,7 @@ namespace ObjectCreatorTest.Test
         [TestMethod]
         public void TestFor()
         {
-            var objectCreationStrategy = new ObjectCreationStrategy(true, false, false, 0);
+            var objectCreationStrategy = new ObjectCreationStrategy(true, false, 0, null);
             var mock = ObjectCreatorExtensions.Create<IPrimitivePropertyInterface>(CustomData, objectCreationStrategy);
             var errors = Analyze(mock, _dictionary);
 

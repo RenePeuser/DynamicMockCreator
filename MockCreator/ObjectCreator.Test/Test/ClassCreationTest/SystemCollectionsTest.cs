@@ -178,7 +178,7 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
     [TestClass]
     public class SystemCollectionCreateAnyItems
     {
-        private static readonly ObjectCreationStrategy ObjectCreationStrategy = new ObjectCreationStrategy(false, false, false, 4);
+        private static readonly ObjectCreationStrategy ObjectCreationStrategy = new ObjectCreationStrategy(false, false, 4, null);
         private static readonly UniqueDefaultData UniqueDefaultData = new UniqueDefaultData();
 
         private static readonly List<Type> EnumerationTypes = new List<Type>

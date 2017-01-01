@@ -39,7 +39,7 @@ namespace ObjectCreatorTest.Test
         {
             var privateObject = CustomData.ToPrivateObject();
             _dictionary = privateObject.GetField<Dictionary<Type, object>>("_defaultData");
-            var objectCreationStrategy = new ObjectCreationStrategy(true, false, false, 0);
+            var objectCreationStrategy = new ObjectCreationStrategy(true, false, 0, null);
             _mock = ObjectCreatorExtensions.Create<IInterfaceWithInterfaces>(CustomData, objectCreationStrategy);
         }
 

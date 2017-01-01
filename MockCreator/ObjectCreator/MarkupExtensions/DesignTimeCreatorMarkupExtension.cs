@@ -13,7 +13,7 @@ namespace ObjectCreator.MarkupExtensions
             "DesignTimeType", typeof(Type), typeof(DesignTimeAttachedProperties), new PropertyMetadata(default(Type), PropertyChangedCallbackAsync));
 
         private static readonly RandomDefaultData RandomDefaultData = new RandomDefaultData();
-        private static readonly ObjectCreationStrategy ObjectCreationStrategy = new ObjectCreationStrategy(true, true, true, 4);
+        private static readonly ObjectCreationStrategy ObjectCreationStrategy = new ObjectCreationStrategy(true, true, 4, null);
 
         private static async void PropertyChangedCallbackAsync(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {

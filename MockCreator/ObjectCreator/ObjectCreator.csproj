@@ -74,6 +74,7 @@
     <Compile Include="Creators\EnumerableCreatorNonGeneric.cs" />
     <Compile Include="Creators\EnumerationCreator.cs" />
     <Compile Include="Creators\EnumeratorCreator.cs" />
+    <Compile Include="Creators\UndefinedTypeCreator.cs" />
     <Compile Include="Extensions\ActionExtensions.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
