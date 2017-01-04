@@ -6,4 +6,9 @@
 
         T CreateTypeWithArgs<T>(T item);
     }
+
+    public interface IUndefinedGenericInterface<out T>
+    {
+        T Property { get; }
+    }
 }

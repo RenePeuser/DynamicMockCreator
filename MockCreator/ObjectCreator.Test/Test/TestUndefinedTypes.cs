@@ -60,5 +60,19 @@ namespace ObjectCreatorTest.Test
             Assert.IsNotNull(ObjectCreatorExtensions.Create<IWithUndefinedMethods>());
         }
 
+        [TestMethod]
+        public void TestSetupMethodOnUndefinedType()
+        {
+            var result = ObjectCreatorExtensions.Create<IWithUndefinedMethods>(ObjectCreationStrategy);
+            Assert.IsFalse(string.IsNullOrEmpty(result.CreateType<string>()));
+        }
+
+        [TestMethod]
+        public void TestSetupUndefinedGenericInterface()
+        {
+            var result = (IUndefinedGenericInterface<string>)typeof(IUndefinedGenericInterface<>).Create(ObjectCreationStrategy);
+            Assert.IsFalse(string.IsNullOrEmpty(result.Property));
+        }
+
     }
 }

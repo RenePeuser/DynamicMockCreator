@@ -73,7 +73,7 @@
     <Compile Include="Extensions\FuncExtensions.cs" />
     <Compile Include="Extensions\GenericTypeExtensions.cs" />
     <Compile Include="Extensions\KeyValuePairExtensions.cs" />
-    <Compile Include="Extensions\ObjectCreatorSetupExtensions.cs" />
+    <Compile Include="Extensions\SetupExtensions.cs" />
     <Compile Include="Extensions\ObjectCreatorExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\TaskExtensions.cs" />

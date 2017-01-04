@@ -7,12 +7,11 @@ using System.Reflection;
 
 namespace ObjectCreator.Extensions
 {
-    internal static class ObjectCreatorSetupExtensions
+    internal static class SetupExtensions
     {
         private static readonly Action<Type, object, object, Array> ReturnsFunc = (methodReturnType, source, returnValue, array) => typeof(SubstituteExtensions).InvokeGenericMethod(nameof(SubstituteExtensions.Returns), new[] { methodReturnType }, source, returnValue, array);
         private static readonly Func<Type, object> ArgAnyFunc = parameterType => typeof(Arg).InvokeGenericMethod(nameof(Arg.Any), new[] { parameterType });
         private static readonly Func<Type, object> ForFunc = genericType => typeof(Substitute).InvokeGenericMethod(nameof(Substitute.For), new[] { genericType }, new object[] { new object[] { } });
-        //private static readonly Func<Type, object> ForFunc = genericType => Substitute.For(new Type[] { genericType }, new object[] { });
 
         internal static T InitProperties<T>(this T source, IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy)
         {
@@ -71,35 +70,48 @@ namespace ObjectCreator.Extensions
 
             foreach (var methodInfo in allMethods)
             {
-                var methodReturnType = methodInfo.ReturnType;
-                if (methodReturnType == typeof(void))
+                if (methodInfo.ReturnType == typeof(void))
                 {
                     continue;
                 }
 
-                if (methodReturnType.IsUndefined())
+                if (methodInfo.ReturnType.IsUndefined())
                 {
-                    continue;
-                }
+                    if (objectCreationStrategy.UndefinedType == null)
+                    {
+                        continue;
+                    }
 
-                object returnValue;
-                if (methodReturnType.IsInterface)
-                {
-                    returnValue = ForFunc(methodReturnType);
-                    returnValue.SetupProperties(defaultData, objectCreationStrategy);
+                    var newMethodInfo = methodInfo.MakeGenericMethod(objectCreationStrategy.UndefinedType);
+                    SetupMethod(mock, defaultData, objectCreationStrategy, newMethodInfo);
                 }
                 else
                 {
-                    returnValue = methodReturnType.Create(defaultData, objectCreationStrategy);
+                    SetupMethod(mock, defaultData, objectCreationStrategy, methodInfo);
                 }
-
-                var arguments = methodInfo.CreateAnyArgs();
-                var methodReturnValue = methodInfo.Invoke(mock, arguments);
-                var array = methodReturnType.ToArray(0);
-                ReturnsFunc(methodReturnType, methodReturnValue, returnValue, array);
             }
 
             return mock;
+        }
+
+        private static void SetupMethod<T>(this T mock, IDefaultData defaultData, ObjectCreationStrategy objectCreationStrategy, MethodInfo methodInfo)
+        {
+            object returnValue;
+            var methodReturnType = methodInfo.ReturnType;
+            if (methodReturnType.IsInterface)
+            {
+                returnValue = ForFunc(methodReturnType);
+                returnValue.SetupProperties(defaultData, objectCreationStrategy);
+            }
+            else
+            {
+                returnValue = methodReturnType.Create(defaultData, objectCreationStrategy);
+            }
+
+            var arguments = methodInfo.CreateAnyArgs();
+            var methodReturnValue = methodInfo.Invoke(mock, arguments);
+            var array = methodReturnType.ToArray(0);
+            ReturnsFunc(methodReturnType, methodReturnValue, returnValue, array);
         }
 
         private static object[] CreateAnyArgs(this MethodBase methodBase)
