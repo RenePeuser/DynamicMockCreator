@@ -85,9 +85,9 @@ namespace ObjectCreator.Creators
 
         private static readonly Dictionary<Type, Func<Type, IDefaultData, ObjectCreationStrategy, object>> GenericInterfaceCollectionTypes = new Dictionary<Type, Func<Type, IDefaultData, ObjectCreationStrategy, object>>
         {
-            { typeof(IDictionary<,>), (type, defaultData, objectCreationStrategy) => Activator.CreateInstance(typeof(Dictionary<,>).MakeGenericType(type.GetGenericArguments()))},
-            { typeof(IReadOnlyDictionary<,>), (type, defaultData, objectCreationStrategy) => typeof(ReadOnlyDictionary<,>).MakeGenericType(type.GetGenericArguments()).Create()},
-            { typeof(IImmutableDictionary<,>), (type, defaultData, objectCreationStrategy) => typeof(ImmutableDictionary<,>).MakeGenericType(type.GetGenericArguments()).Create()},
+            { typeof(IDictionary<,>), (type, defaultData, objectCreationStrategy) => typeof(Dictionary<,>).MakeGenericType(type.GetGenericArguments()).Create(defaultData, objectCreationStrategy)},
+            { typeof(IReadOnlyDictionary<,>), (type, defaultData, objectCreationStrategy) => typeof(ReadOnlyDictionary<,>).MakeGenericType(type.GetGenericArguments()).Create(defaultData, objectCreationStrategy)},
+            { typeof(IImmutableDictionary<,>), (type, defaultData, objectCreationStrategy) => typeof(ImmutableDictionary<,>).MakeGenericType(type.GetGenericArguments()).Create(defaultData, objectCreationStrategy)},
         };
     }
 }

@@ -91,12 +91,34 @@ namespace ObjectCreator.Extensions
 
         public static bool IsIEnumerable(this Type type)
         {
-            return type.IsInterfaceImplemented<IEnumerable>() || type == typeof(IEnumerable);
+            return typeof(IEnumerable).IsAssignableFrom(type);
+            // return type.IsInterfaceImplemented<IEnumerable>() || type == typeof(IEnumerable);
         }
+
+        private static readonly IEnumerable<Type> DictionaryGenericTypeDefinitions = new[]
+        {
+            typeof(IDictionary<,>),
+            typeof(IReadOnlyDictionary<,>),
+        };
 
         public static bool IsIDictionary(this Type type)
         {
-            return type.IsInterfaceImplemented<IDictionary>() || type == typeof(IDictionary);
+            if (type == typeof(IDictionary))
+            {
+                return true;
+            }
+
+            if (type.IsInterfaceImplemented<IDictionary>())
+            {
+                return true;
+            }
+
+            if (type.IsGenericType)
+            {
+                return DictionaryGenericTypeDefinitions.Contains(type.GetGenericTypeDefinition());
+            }
+
+            return false;
         }
 
         public static bool IsIEnumerator(this Type type)

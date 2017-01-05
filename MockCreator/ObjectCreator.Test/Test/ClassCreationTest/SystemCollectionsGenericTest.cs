@@ -235,15 +235,15 @@ namespace ObjectCreatorTest.Test.ClassCreationTest
         }
 
         [TestMethod]
-        public void TestIDictionary()
-        {
-            Assert.IsNotNull(ObjectCreatorExtensions.Create<IDictionary<string, int>>());
-        }
-
-        [TestMethod]
         public void TestIEnumerable()
         {
             Assert.IsNotNull(ObjectCreatorExtensions.Create<IEnumerable<string>>());
+        }
+
+        [TestMethod]
+        public void TestIDictionary()
+        {
+            Assert.IsNotNull(ObjectCreatorExtensions.Create<IDictionary<string, int>>());
         }
 
         [TestMethod]

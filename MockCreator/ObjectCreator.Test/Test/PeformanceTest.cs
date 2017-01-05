@@ -20,7 +20,7 @@ namespace ObjectCreatorTest.Test
         [TestMethod]
         public void CreateListByActivator()
         {
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 Assert.IsNotNull(Activator.CreateInstance(typeof(List<string>)));
             }
@@ -29,7 +29,7 @@ namespace ObjectCreatorTest.Test
         public void CreateListWithItemsByActivatorWithCtorParameter()
         {
             var items = new List<string>() { "a", "b", "c" };
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 Assert.IsNotNull(Activator.CreateInstance(typeof(List<string>), items));
             }
@@ -38,7 +38,7 @@ namespace ObjectCreatorTest.Test
         [TestMethod]
         public void CreateListWithItemsByAdding()
         {
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 var list = (List<string>)Activator.CreateInstance(typeof(List<string>));
                 list.Add("a");
@@ -51,7 +51,7 @@ namespace ObjectCreatorTest.Test
         [TestMethod]
         public void CreateListByMethodWithReflection()
         {
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 Assert.IsNotNull(typeof(PerformanceTest).GetMethod(nameof(PerformanceTest.CreateListMethod),
                         BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)
@@ -67,7 +67,7 @@ namespace ObjectCreatorTest.Test
         [TestMethod]
         public void CreateListWithNewOperator()
         {
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 Assert.IsNotNull(new List<string>());
             }
@@ -76,7 +76,7 @@ namespace ObjectCreatorTest.Test
         [TestMethod]
         public void CreateListWithMakeGenericType()
         {
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 var type = typeof(List<>).MakeGenericType(typeof(string));
                 Assert.IsNotNull(Activator.CreateInstance(type));
@@ -86,7 +86,7 @@ namespace ObjectCreatorTest.Test
         [TestMethod]
         public void CreateListWithMakeGenericTypeWithAddingItems()
         {
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 var type = typeof(List<>).MakeGenericType(typeof(string));
                 var list = (IList)Activator.CreateInstance(type);
@@ -102,7 +102,7 @@ namespace ObjectCreatorTest.Test
             var value = "hello";
             var methodInfo = typeof(string).GetMethod(nameof(string.IndexOf), new[] { typeof(char) });
 
-            for (int i = 0; i < 100000; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 Assert.AreEqual(4, methodInfo.Invoke(value, new object[] { 'o' }));
             }
@@ -115,7 +115,7 @@ namespace ObjectCreatorTest.Test
             var methodInfo = typeof(string).GetMethod(nameof(string.IndexOf), new[] { typeof(char) });
             var indexOfDelegate = (Func<char, int>)Delegate.CreateDelegate(typeof(Func<char, int>), value, methodInfo);
 
-            for (int i = 0; i < 100000; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 Assert.AreEqual(4, indexOfDelegate('o'));
             }
@@ -157,7 +157,7 @@ namespace ObjectCreatorTest.Test
         public void CreateListWithCtorParamByMakeGenericType()
         {
             var collection = new Collection<string>();
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 var type = typeof(List<>).MakeGenericType(typeof(string));
                 Assert.IsNotNull(Activator.CreateInstance(type, collection));
@@ -170,7 +170,7 @@ namespace ObjectCreatorTest.Test
             var collection = new Collection<string>();
             var methodInfo = typeof(MethodSample).GetMethod(nameof(MethodSample.ToList), BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
 
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 var genericMethod = methodInfo.MakeGenericMethod(typeof(string));
                 genericMethod.Invoke(null, new object[] { collection });
